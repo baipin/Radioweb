@@ -451,28 +451,53 @@
 
         // 保存/更新
         document.getElementById('btn-save').onclick = () => {
-            const s = {
-                name: document.getElementById('f-name').value.trim(),
-                url: document.getElementById('f-url').value.trim(),
-                category: document.getElementById('f-cat').value.trim() || "默认",
-                logo: document.getElementById('f-logo').value.trim()
-            };
+    const s = {
+        name: document.getElementById('f-name').value.trim(),
+        url: document.getElementById('f-url').value.trim(),
+        category: document.getElementById('f-cat').value.trim() || "默认",
+        logo: document.getElementById('f-logo').value.trim()
+    };
 
-            if (!s.name || !s.url) {
-                alert("名称和链接不能为空");
-                return;
-            }
+    if (!s.name || !s.url) {
+        alert("名称和链接不能为空");
+        return;
+    }
 
-            // 如果正在编辑，先移除旧的自定义数据（如果存在）
-            if (editingUrl) {
-                customData = customData.filter(x => x.url !== editingUrl);
+    // 如果正在编辑
+    if (editingUrl) {
+        // 如果用户修改了 URL
+        if (editingUrl !== s.url) {
+            // 1. 把旧 URL 加入删除黑名单（防止预置电台再次出现）
+            if (!deletedUrls.includes(editingUrl)) {
+                deletedUrls.push(editingUrl);
+                localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
             }
+            // 2. 从自定义数据中移除旧 URL 的记录
+            customData = customData.filter(x => x.url !== editingUrl);
             
-            customData.push(s);
-            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-            diag.open = false;
-            refresh();
-        };
+            // 3. 如果旧 URL 在收藏夹里，更新为新 URL
+            if (favorites.includes(editingUrl)) {
+                favorites = favorites.filter(u => u !== editingUrl);
+                favorites.push(s.url);
+                localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
+            }
+        } else {
+            // URL 没变，仅修改了名称/分类/Logo，先移除旧的自定义记录准备覆盖
+            customData = customData.filter(x => x.url !== editingUrl);
+        }
+    }
+    
+    // 将新数据存入自定义库
+    customData.push(s);
+    localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+    
+    // 如果该 URL 曾经在黑名单里（比如删了又加回来），则从黑名单移除
+    deletedUrls = deletedUrls.filter(u => u !== s.url);
+    localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+
+    diag.open = false;
+    refresh();
+};
 
         // 核心修复：整合删除逻辑
         document.getElementById('btn-delete-station').onclick = () => {
