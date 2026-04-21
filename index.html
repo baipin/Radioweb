@@ -350,32 +350,43 @@
 
         // --- 播放与收藏逻辑 ---
         function play(s, el) {
-            currentUrl = s.url;
-            document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
-            if(el) el.classList.add('active');
-           
-            document.getElementById('current-name').innerText = s.name;
-            document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
-            statusText.innerText = "缓冲中...";
-            updateFavBtnState();
+    let targetUrl = s.url;
+    
+    // 核心逻辑：如果是 http 链接，通过本地 api 代理访问
+    if (targetUrl.startsWith('http://')) {
+        console.log("正在通过 HTTPS 代理播放 HTTP 流...");
+        // 这里的 /api/proxy 是你在 Vercel 中部署的路径
+        targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+    }
 
-            if (s.url.includes('.m3u8')) {
-                if (Hls.isSupported()) {
-                    if (hls) hls.destroy();
-                    hls = new Hls();
-                    hls.loadSource(s.url);
-                    hls.attachMedia(audio);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
-                } else {
-                    audio.src = s.url;
-                    audio.play();
-                }
-            } else {
-                if (hls) hls.destroy();
-                audio.src = s.url;
-                audio.play();
-            }
+    currentUrl = targetUrl; // 注意：currentUrl 存储代理后的地址，以便收藏等逻辑使用原始地址时需注意区分
+    
+    // ... 以下保持原有的播放器逻辑 (Hls.js 加载或直接播放) ...
+    document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
+    if(el) el.classList.add('active');
+   
+    document.getElementById('current-name').innerText = s.name;
+    document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
+    statusText.innerText = "缓冲中...";
+    updateFavBtnState();
+
+    if (targetUrl.includes('.m3u8') || s.url.includes('.m3u8')) {
+        if (Hls.isSupported()) {
+            if (hls) hls.destroy();
+            hls = new Hls();
+            hls.loadSource(targetUrl);
+            hls.attachMedia(audio);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+        } else {
+            audio.src = targetUrl;
+            audio.play();
         }
+    } else {
+        if (hls) hls.destroy();
+        audio.src = targetUrl;
+        audio.play();
+    }
+}
 
         function updateFavBtnState() {
             const btn = document.getElementById('fav-btn-main');
