@@ -177,6 +177,7 @@
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台 / 批量导入"></mdui-button-icon>
+                <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道"></mdui-button-icon>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode"></mdui-button-icon>
             </div>
         </div>
@@ -476,6 +477,39 @@ function loadSource(url, isM3U8) {
             const isFav = favorites.includes(currentUrl);
             btn.icon = isFav ? "favorite" : "favorite_border";
         }
+
+                    function forceReloadRadios() {
+                // 1. 移除旧的脚本节点（可选，为了保持 DOM 整洁）
+                const oldScript = document.getElementById('radio-data-script');
+                if (oldScript) {
+                    oldScript.remove();
+                }
+            
+                // 2. 创建新脚本标签
+                const script = document.createElement('script');
+                script.id = 'radio-data-script';
+                
+                // 3. 关键：添加时间戳防止缓存 (?t=1234567)
+                const timestamp = new Date().getTime();
+                script.src = `radio.js?t=${timestamp}`;
+            
+                // 4. 脚本加载完成后的回调
+                script.onload = function() {
+                    console.log("新的电台列表加载成功！");
+                    // 这里调用你页面中渲染电台列表的初始化函数
+                    if (typeof renderRadioList === 'function') {
+                        renderRadioList(window.allRadios); 
+                    }
+                };
+            
+                script.onerror = function() {
+                    alert("更新失败，请检查 radio.js 文件路径是否正确。");
+                };
+            
+                // 5. 插入到页面
+                document.head.appendChild(script);
+            }
+         // 结束
 
         document.getElementById('fav-btn-main').onclick = () => {
             if (!currentUrl) return;
