@@ -113,15 +113,17 @@
 
     /* ==================== 修复部分 ==================== */
 
-    /* 1. 百品电台标题文字（白天模式清晰） */
-    .nav-content span {
+    /* 电台列表文字（解决你当前问题） */
+    .radio-item span {
         color: #1f1f1f !important;
+        font-weight: 600;
+        opacity: 1;
     }
-    .mdui-theme-dark .nav-content span {
+    .mdui-theme-dark .radio-item span {
         color: #ffffff !important;
     }
 
-    /* 2. 收藏按钮改为红色 */
+    /* 收藏按钮保持红色 */
     #fav-btn-main {
         color: #ff5252 !important;
     }
@@ -129,7 +131,7 @@
         color: #ff5252 !important;
     }
 
-    /* 3. 暂停/播放按钮白天模式可见（强制深色） */
+    /* 播放/暂停按钮白天模式可见 */
     #master-play-btn {
         color: #1f1f1f !important;
     }
@@ -137,7 +139,7 @@
         color: #ffffff !important;
     }
 
-    /* 4. 其他所有按钮图标（音量、设置、添加、主题切换等）保持正常 */
+    /* 其他按钮正常 */
     mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
         color: #1f1f1f !important;
     }
@@ -145,11 +147,13 @@
         color: #e0e0e0 !important;
     }
 
-    /* 5. 当前电台名称和状态文字（避免发淡） */
-    #current-name, #play-status {
+    /* 标题和当前电台名称 */
+    .nav-content span,
+    #current-name, 
+    #play-status {
         color: #1f1f1f !important;
-        opacity: 1;
     }
+    .mdui-theme-dark .nav-content span,
     .mdui-theme-dark #current-name,
     .mdui-theme-dark #play-status {
         color: #ffffff !important;
