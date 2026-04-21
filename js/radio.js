@@ -1,7 +1,7 @@
 /**
  * 电台数据配置 - 百品专用
  */
-const radioStations = [
+var radioStations = [
     // === 香港 ===
     { name: "香港电台第一台", url: "https://rthkaudio1-lh.akamaihd.net/i/radio1_1@355864/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
     { name: "香港电台第二台", url: "https://rthkaudio2-lh.akamaihd.net/i/radio2_1@355865/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
