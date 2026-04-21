@@ -148,8 +148,8 @@ var radioStations = [
     { name: "181.FM 90's Country", url: "http://relay.181.fm:8050", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
     { name: "Nashville FM (荷兰纳什维尔)", url: "https://stream.nashvillefm.nl/nashvillefm.mp3", logo: "https://nashvillefm.nl/favicon.ico", category: "网络音乐" },
     { name: "Country 108 (德国网络音乐台)", url: "http://country108.de/stream.mp3", logo: "http://country108.de/favicon.ico", category: "网络音乐" },
-    { name: "Truckers.FM (全球卡车社区)", url: "https://broadcast.truckers.fm/stream.mp3", logo: "https://truckers.fm/favicon.ico", category: "网络音乐" },
-    { name: "BigRigFM (卡车乡村音乐专用)", url: "https://broadcast.bigrig.fm/stream.mp3", logo: "https://bigrig.fm/favicon.ico", category: "网络音乐" },
+    { name: "Truckers.FM (全球卡车社区)", url: "https://live.truckers.fm/", logo: "https://truckers.fm/favicon.ico", category: "网络音乐" },
+    { name: "BigRigFM (卡车乡村音乐专用)", url: "https://radio.bigrig.fm/", logo: "https://bigrig.fm/favicon.ico", category: "网络音乐" },
     { name: "Simulator Radio (模拟飞行与卡车)", url: "https://stream.simulatorradio.com/stream.mp3", logo: "https://www.simulatorradio.com/favicon.ico", category: "网络音乐" }
 ];
 
