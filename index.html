@@ -349,41 +349,67 @@
         }
 
         // --- 播放与收藏逻辑 ---
-        function play(s, el) {
+        let isRetrying = false; // 标记是否正在尝试代理重试
+
+function play(s, el) {
     let targetUrl = s.url;
-    
-    // 核心逻辑：如果是 http 链接，通过本地 api 代理访问
+    isRetrying = false; // 每次点击新频道，重置重试状态
+
+    // 保留你原本的 HTTPS 代理逻辑：如果是 http 链接，直接走代理
     if (targetUrl.startsWith('http://')) {
-        console.log("正在通过 HTTPS 代理播放 HTTP 流...");
-        // 这里的 /api/proxy 是你在 Vercel 中部署的路径
+        console.log("检测到不安全链接，强制走代理...");
         targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+        isRetrying = true; // 已处于代理模式
     }
 
-    currentUrl = targetUrl; // 注意：currentUrl 存储代理后的地址，以便收藏等逻辑使用原始地址时需注意区分
+    currentUrl = targetUrl;
     
-    // ... 以下保持原有的播放器逻辑 (Hls.js 加载或直接播放) ...
+    // UI 更新
     document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
     if(el) el.classList.add('active');
-   
     document.getElementById('current-name').innerText = s.name;
     document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
     statusText.innerText = "缓冲中...";
-    updateFavBtnState();
 
-    if (targetUrl.includes('.m3u8') || s.url.includes('.m3u8')) {
+    loadSource(targetUrl, s.url.includes('.m3u8'));
+}
+
+// 核心：错误监听与自动重试
+audio.onerror = function() {
+    // 如果播放失败，且当前还没有尝试过代理
+    if (!isRetrying) {
+        console.warn("播放失败，尝试通过代理绕过限制...");
+        isRetrying = true;
+        statusText.innerText = "尝试代理重试...";
+        
+        // 使用原始地址构建代理链接
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
+        loadSource(proxyUrl, currentUrl.includes('.m3u8'));
+    } else {
+        statusText.innerText = "播放失败，请尝试其他频道";
+        console.error("代理模式下依然无法播放。");
+    }
+};
+
+// 封装加载逻辑
+function loadSource(url, isM3U8) {
+    if (isM3U8) {
         if (Hls.isSupported()) {
             if (hls) hls.destroy();
             hls = new Hls();
-            hls.loadSource(targetUrl);
+            hls.loadSource(url);
             hls.attachMedia(audio);
             hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal && !isRetrying) { audio.onerror(); }
+            });
         } else {
-            audio.src = targetUrl;
+            audio.src = url;
             audio.play();
         }
     } else {
         if (hls) hls.destroy();
-        audio.src = targetUrl;
+        audio.src = url;
         audio.play();
     }
 }
