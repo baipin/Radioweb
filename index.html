@@ -491,7 +491,7 @@ function loadSource(url, isM3U8) {
                 
                 // 3. 关键：添加时间戳防止缓存 (?t=1234567)
                 const timestamp = new Date().getTime();
-                script.src = `radio.js?t=${timestamp}`;
+                script.src = `js/radio.js?t=${timestamp}`;
             
                 // 4. 脚本加载完成后的回调
                 script.onload = function() {
