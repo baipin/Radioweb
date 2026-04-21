@@ -114,37 +114,8 @@
     .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0 24px; }
     .tab-btn { padding: 8px 18px; border-radius: 99px; border: none; background: rgba(128,128,128,0.12); cursor: pointer; color: inherit; transition: 0.3s; }
     .tab-btn.active { background: var(--accent-color); color: white; }
+    .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
     
-    /* 列表区域 */
-    .radio-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-        gap: 20px;
-        min-height: 300px;
-    }
-    
-    /* 修复 Bug：数据载入前的视觉反馈 */
-    .radio-grid:empty::after {
-        content: "正在获取电台列表...";
-        grid-column: 1 / -1;
-        text-align: center;
-        padding-top: 100px;
-        opacity: 0.5;
-        font-size: 1.1rem;
-    }
-    
-    /* 入场动画 */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* 音频缓冲呼吸动画 */
-    @keyframes breath {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.6; transform: scale(0.95); }
-    }
-
     .radio-item {
         display: flex; flex-direction: column; align-items: center; padding: 20px;
         border-radius: 24px; cursor: pointer;
@@ -152,7 +123,7 @@
         transition: 0.3s;
         position: relative;
         border: 2px solid transparent;
-        animation: fadeInUp 0.5s ease backwards; /* 应用入场动画 */
+        /* min-height: 140px; /* 防止瀑布流加载时高度塌陷 */
     }
     .mdui-theme-dark .radio-item {
         background: rgba(45,45,55,0.95) !important;
@@ -161,13 +132,9 @@
     .mdui-theme-dark .radio-item:hover { background: rgba(55,55,65,0.98) !important; }
     .radio-item.active { border-color: var(--accent-color); }
     
-    /* 正在加载音频时的状态 */
-    .radio-item.is-loading .dynamic-logo {
-        animation: breath 1.2s infinite ease-in-out;
-    }
-
     .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; flex-direction: column; }
     body.is-admin-mode .admin-actions { display: flex; }
+    /* 拖拽时的样式 */
     body.is-admin-mode .radio-item { cursor: move; }
     .sortable-ghost { opacity: 0.4; }
 
@@ -218,10 +185,10 @@
                 <div style="flex: 1; min-width: 150px; display: flex; align-items: center; gap: 10px;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span id="current-name" style="font-size: 1.2rem; font-weight: 900;">百品收音机</span>
+                            <span id="current-name" style="font-size: 1.2rem; font-weight: 900;">准备就绪</span>
                             <mdui-button-icon id="fav-btn-main" icon="favorite_border" style="color: #ff5252;"></mdui-button-icon>
                         </div>
-                        <div id="play-status" style="font-size: 0.85rem; opacity: 0.7;">正在初始化系统...</div>
+                        <div id="play-status" style="font-size: 0.85rem; opacity: 0.7;">请选择电台</div>
                     </div>
                 </div>
                 <div class="wave-box" id="playing-anim"><span></span><span></span><span></span></div>
@@ -281,7 +248,6 @@
         let currentUrl = "";
         let hls = null;
         let editingUrl = null;
-        let currentActiveItem = null;
 
         // 初始化延迟加载观察器
         const lazyObserver = new IntersectionObserver((entries) => {
@@ -294,6 +260,8 @@
                         <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${stationData.name}</span>
                         <div class="admin-actions">
                             <mdui-button-icon icon="edit" size="small" onclick="openEdit('${stationData.url}'); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_up" size="small" onclick="moveStation('${stationData.url}', -1); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_down" size="small" onclick="moveStation('${stationData.url}', 1); event.stopPropagation();"></mdui-button-icon>
                         </div>
                     `;
                     lazyObserver.unobserve(item);
@@ -305,7 +273,7 @@
         const sortable = new Sortable(listDiv, {
             animation: 150,
             ghostClass: 'sortable-ghost',
-            disabled: true, 
+            disabled: true, // 初始禁用，仅在管理模式开启
             onEnd: function() {
                 const newOrder = Array.from(listDiv.querySelectorAll('.radio-item')).map(el => {
                     return JSON.parse(el.dataset.info).url;
@@ -316,7 +284,11 @@
         });
 
         window.addEventListener('scroll', () => {
-            stickyWrapper.classList.toggle('is-sticky', window.scrollY > 40);
+            if (window.scrollY > 40) {
+                stickyWrapper.classList.add('is-sticky');
+            } else {
+                stickyWrapper.classList.remove('is-sticky');
+            }
         });
 
         function getLogoHTML(logo, name) {
@@ -354,7 +326,7 @@
            
             let cats = ['全部'];
             if(favorites.length > 0) cats.push('我的收藏');
-            const allCategories = [...new Set(allStations.map(s => s.category || '未分类'))].sort();
+            const allCategories = allStations.map(s => s.category || '未分类').filter((v, i, self) => self.indexOf(v) === i).sort();
             cats = [...cats, ...allCategories];
 
             const tabBox = document.getElementById('category-tabs');
@@ -382,115 +354,120 @@
                 filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
             }
 
-            // 瀑布流逐个加载逻辑
-            filtered.forEach((s, index) => {
+            filtered.forEach((s) => {
                 const item = document.createElement('div');
                 item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
-                item.style.animationDelay = `${index * 0.05}s`; // 关键：动态设置延迟时间
-                item.dataset.info = JSON.stringify(s);
+                item.dataset.info = JSON.stringify(s); // 存储数据供延迟加载和排序使用
+                
+                // 初始显示占位内容，待滚动到位置后加载
                 item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
+                
                 item.onclick = () => play(s, item);
                 listDiv.appendChild(item);
                 lazyObserver.observe(item);
             });
         }
 
+        // 兼容原有的手动移动功能
+        function moveStation(url, direction) {
+            let currentOrder = allStations.map(s => s.url);
+            let index = currentOrder.indexOf(url);
+            if (index === -1) return;
+            let newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= currentOrder.length) return;
+            [currentOrder[index], currentOrder[newIndex]] = [currentOrder[newIndex], currentOrder[index]];
+            sortOrder = currentOrder;
+            localStorage.setItem('bp_radios_sort_order', JSON.stringify(sortOrder));
+            refresh();
+        }
+
         let isRetrying = false; 
 
-        function play(s, el) {
-            let targetUrl = s.url;
-            isRetrying = false; 
+function play(s, el) {
+    let targetUrl = s.url;
+    isRetrying = false; 
 
-            if (targetUrl.startsWith('http://')) {
-                targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
-                isRetrying = true; 
-            }
+    if (targetUrl.startsWith('http://')) {
+        targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+        isRetrying = true; 
+    }
 
-            currentUrl = targetUrl;
-            document.querySelectorAll('.radio-item').forEach(i => {
-                i.classList.remove('active');
-                i.classList.remove('is-loading');
+    currentUrl = targetUrl;
+    document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
+    if(el) el.classList.add('active');
+    document.getElementById('current-name').innerText = s.name;
+    document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
+    statusText.innerText = "缓冲中...";
+    loadSource(targetUrl, s.url.includes('.m3u8'));
+    updateFavBtnState();
+}
+
+audio.onerror = async function() {
+    if (!isRetrying) {
+        isRetrying = true;
+        statusText.innerText = "切换代理模式中...";
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
+        loadSource(proxyUrl, currentUrl.includes('.m3u8'));
+    } else {
+        statusText.innerText = "频道暂时不可用";
+    }
+};
+
+function loadSource(url, isM3U8) {
+    if (isM3U8) {
+        if (Hls.isSupported()) {
+            if (hls) hls.destroy();
+            hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(audio);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal && !isRetrying) { audio.onerror(); }
             });
-            
-            currentActiveItem = el;
-            if(el) {
-                el.classList.add('active');
-                el.classList.add('is-loading'); // 开启呼吸动画
-            }
-
-            document.getElementById('current-name').innerText = s.name;
-            document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
-            statusText.innerText = "连接中...";
-            loadSource(targetUrl, s.url.includes('.m3u8'));
-            updateFavBtnState();
+        } else {
+            audio.src = url;
+            audio.play();
         }
-
-        // 音频状态更新函数
-        const updateAudioStatus = (text, isPlaying) => {
-            statusText.innerText = text;
-            masterBtn.icon = isPlaying ? "pause" : "play_arrow";
-            waveAnim.style.display = isPlaying ? "flex" : "none";
-            if (!isPlaying && currentActiveItem) currentActiveItem.classList.remove('is-loading');
-        };
-
-        audio.onplaying = () => updateAudioStatus("正在播放", true);
-        audio.onpause = () => updateAudioStatus("已暂停", false);
-        audio.onwaiting = () => {
-            statusText.innerText = "缓冲中...";
-            if(currentActiveItem) currentActiveItem.classList.add('is-loading');
-        };
-        audio.oncanplay = () => {
-            if(currentActiveItem) currentActiveItem.classList.remove('is-loading');
-        };
-
-        audio.onerror = async function() {
-            if (!isRetrying) {
-                isRetrying = true;
-                statusText.innerText = "尝试代理模式中......";
-                const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
-                loadSource(proxyUrl, currentUrl.includes('.m3u8'));
-            } else {
-                updateAudioStatus("频道暂时不可用", false);
-            }
-        };
-
-        function loadSource(url, isM3U8) {
-            if (isM3U8 && Hls.isSupported()) {
-                if (hls) hls.destroy();
-                hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(audio);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
-            } else {
-                if (hls) hls.destroy();
-                audio.src = url;
-                audio.play().catch(() => statusText.innerText = "点击播放键激活");
-            }
-        }
+    } else {
+        if (hls) hls.destroy();
+        audio.src = url;
+        audio.play();
+    }
+}
 
         function updateFavBtnState() {
             const btn = document.getElementById('fav-btn-main');
             if (!currentUrl) { btn.style.display = "none"; return; }
             btn.style.display = "inline-flex";
-            btn.icon = favorites.includes(currentUrl) ? "favorite" : "favorite_border";
+            const isFav = favorites.includes(currentUrl);
+            btn.icon = isFav ? "favorite" : "favorite_border";
         }
 
         document.getElementById('fav-btn-main').onclick = () => {
             if (!currentUrl) return;
-            const idx = favorites.indexOf(currentUrl);
-            if (idx > -1) favorites.splice(idx, 1);
-            else favorites.push(currentUrl);
+            if (favorites.includes(currentUrl)) {
+                favorites = favorites.filter(u => u !== currentUrl);
+            } else {
+                favorites.push(currentUrl);
+            }
             localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
             refresh();
         };
 
         const diag = document.getElementById('station-dialog');
+
         document.getElementById('open-add').onclick = () => {
             editingUrl = null;
             document.getElementById('diag-title').innerText = "添加电台";
             document.getElementById('f-name').value = "";
             document.getElementById('f-url').value = "";
             document.getElementById('f-url').disabled = false;
+            document.getElementById('f-cat').value = "";
+            document.getElementById('f-logo').value = "";
+            document.getElementById('import-area-wrapper').style.display = "none";
+            document.getElementById('btn-save').style.display = "inline-flex";
+            document.getElementById('btn-do-import').style.display = "none";
+            document.getElementById('btn-delete-station').style.display = "none";
             diag.open = true;
         };
 
@@ -498,55 +475,148 @@
             const s = allStations.find(x => x.url === url);
             if (!s) return;
             editingUrl = url;
+            const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
+            const isPreset = base.some(p => p.url === url);
             document.getElementById('diag-title').innerText = "编辑电台";
             document.getElementById('f-name').value = s.name;
-            document.getElementById('f-url').value = s.url;
+            document.getElementById('f-cat').value = s.category || "";
+            document.getElementById('f-logo').value = s.logo || "";
+            const urlField = document.getElementById('f-url');
+            if (isPreset) {
+                urlField.value = "预置电台";
+                urlField.disabled = true;
+            } else {
+                urlField.value = s.url;
+                urlField.disabled = false;
+            }
+            document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-delete-station').style.display = "inline-flex";
             diag.open = true;
         };
 
         document.getElementById('btn-save').onclick = () => {
+            const urlInput = document.getElementById('f-url');
             const s = {
                 name: document.getElementById('f-name').value.trim(),
-                url: document.getElementById('f-url').value.trim(),
+                url: urlInput.disabled ? editingUrl : urlInput.value.trim(),
                 category: document.getElementById('f-cat').value.trim() || "默认",
                 logo: document.getElementById('f-logo').value.trim()
             };
-            if (!s.name || !s.url) return;
+            if (!s.name || !s.url) return alert("必填项不能为空");
+            if (editingUrl && editingUrl !== s.url) {
+                if (!deletedUrls.includes(editingUrl)) deletedUrls.push(editingUrl);
+                customData = customData.filter(x => x.url !== editingUrl);
+            }
+            customData = customData.filter(x => x.url !== s.url);
             customData.push(s);
             localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+            deletedUrls = deletedUrls.filter(u => u !== s.url);
+            localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
             diag.open = false;
             refresh();
         };
 
-        document.getElementById('toggle-admin').onclick = () => {
-            const isAdmin = document.body.classList.toggle('is-admin-mode');
-            sortable.option("disabled", !isAdmin);
+        document.getElementById('btn-delete-station').onclick = () => {
+            if (confirm("确定删除吗？")) {
+                customData = customData.filter(x => x.url !== editingUrl);
+                localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+                if (!deletedUrls.includes(editingUrl)) deletedUrls.push(editingUrl);
+                localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+                diag.open = false;
+                refresh();
+            }
         };
 
-        masterBtn.onclick = () => {
-            if (!audio.src || audio.src === window.location.href) return;
-            audio.paused ? audio.play() : audio.pause();
+        document.getElementById('show-import-area').onclick = () => {
+            document.getElementById('import-area-wrapper').style.display = "block";
+            document.getElementById('btn-save').style.display = "none";
+            document.getElementById('btn-do-import').style.display = "inline-flex";
+        };
+
+        document.getElementById('btn-do-import').onclick = () => {
+            try {
+                const imported = JSON.parse(document.getElementById('import-area').value);
+                customData = [...customData, ...imported];
+                localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+                diag.open = false;
+                refresh();
+            } catch (e) { alert("JSON 格式错误"); }
+        };
+
+        function closeDialog() { diag.open = false; }
+
+        document.getElementById('toggle-admin').onclick = () => {
+            const isAdmin = document.body.classList.toggle('is-admin-mode');
+            document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
+            sortable.option("disabled", !isAdmin); // 只有管理模式允许拖拽
+        };
+
+       // --- 兼容性增强版播放控制 ---
+
+        // 统一的播放/暂停逻辑
+        const togglePlay = () => {
+            if (!audio.src || audio.src === window.location.href) {
+                statusText.innerText = "请先选择电台";
+                return;
+            }
+        
+            if (audio.paused) {
+                // 播放逻辑
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error("Safari 播放拦截:", error);
+                        statusText.innerText = "点击图标以激活播放";
+                    });
+                }
+            } else {
+                // 暂停逻辑：针对 Safari 优化
+                audio.pause();
+                
+                // 如果是直播流，暂停后重置 src 往往能解决恢复播放时的卡死问题
+                // 但为了不删除无关代码，我们通过判断原生 HLS 还是 hls.js 来处理
+                if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Safari 原生 HLS 环境下，暂停直播建议“停止加载”
+                    // 这样下次播放会重新拉取最新切片，防止卡死在旧进度
+                    const currentSrc = audio.src;
+                    audio.src = ''; 
+                    audio.load();
+                    audio.src = currentSrc;
+                }
+            }
         };
         
+        // 绑定按钮
+        masterBtn.onclick = (e) => {
+            e.preventDefault();
+            togglePlay();
+        };
+        
+        // 增加对音频对象的事件监听兼容性
+        audio.onplaying = () => { 
+            statusText.innerText = "正在直播"; 
+            masterBtn.icon = "pause"; 
+            waveAnim.style.display = "flex"; 
+        };
+        
+        audio.onpause = () => { 
+            masterBtn.icon = "play_arrow"; 
+            waveAnim.style.display = "none"; 
+            statusText.innerText = "已暂停"; 
+        };
+        
+        // 修复 Safari 锁屏或控制中心操作导致的同步问题
+        audio.onabort = () => {
+            masterBtn.icon = "play_arrow";
+            waveAnim.style.display = "none";
+        };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
         document.getElementById('theme-toggle').onclick = () => {
             const isDark = document.body.classList.toggle('mdui-theme-dark');
             document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
         };
 
-        function closeDialog() { diag.open = false; }
-
-        // 关键修复：主动接管页面加载状态
-        window.onload = () => {
-            statusText.innerText = "数据载入中...";
-            setTimeout(() => {
-                refresh();
-                if (!currentUrl) {
-                    statusText.innerText = "请从下方选择频道";
-                }
-            }, 100);
-        };
+        window.onload = () => { setTimeout(refresh, 100); };
     </script>
 </body>
 </html>
