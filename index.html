@@ -3,43 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百品电台 - 极简收音机</title>
+    <title>百品电台 - 网络收音机</title>
     <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="js/radio.js"></script>
     <style>
-        :root { --glass-bg: rgba(255, 255, 255, 0.88); --glass-border: rgba(255, 255, 255, 0.5); --accent-color: #0081ff; }
-        .mdui-theme-dark { --glass-bg: rgba(28, 28, 35, 0.92); --glass-border: rgba(255, 255, 255, 0.1); }
-        body { margin: 0; min-height: 100vh; background: #f5f5f7 !important; display: flex; flex-direction: column; }
-        .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px; }
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.88);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --accent-color: #0081ff;
+        }
+        .mdui-theme-dark {
+            --glass-bg: rgba(28, 28, 35, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body { margin: 0; min-height: 100vh; background: transparent !important; display: flex; flex-direction: column; }
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('img/home.jpg') center/cover no-repeat; z-index: -2; filter: brightness(0.9);
+        }
+        
+        /* 导航栏 */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
+            background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px;
+        }
         .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 100%; }
-        .radio-container { width: 95%; max-width: 1200px; margin: 90px auto 40px; padding: 32px; background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 28px; border: 1px solid var(--glass-border); flex: 1; }
 
-        /* 播放器 */
-        .player-card { display: flex; align-items: center; gap: 20px; padding: 24px; background: rgba(128,128,128,0.08); border-radius: 24px; margin-bottom: 32px; flex-wrap: wrap; }
-        .dynamic-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; background: #ccc; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; font-size: 1.5rem; }
+        /* 悬浮播放器容器 */
+        .player-wrapper {
+            position: sticky;
+            top: 64px; /* 紧跟在导航栏下方 */
+            z-index: 1000;
+            padding: 16px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* 当页面滚动时，增加背景和阴影 */
+        .player-wrapper.is-sticky {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--glass-border);
+        }
 
-        /* 网格与项目 */
-        .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
-        .radio-item { display: flex; flex-direction: column; align-items: center; padding: 18px; border-radius: 20px; cursor: pointer; background: rgba(128,128,128,0.05); transition: all 0.3s; position: relative; }
-        .radio-item:hover { background: rgba(128,128,128,0.1); transform: translateY(-3px); }
-        .radio-item.active { border: 2px solid var(--accent-color); }
+        .radio-container { width: 95%; max-width: 1200px; margin: 80px auto 40px; flex: 1; }
 
-        /* 收藏与管理按钮 */
-        .fav-btn { position: absolute; top: 8px; left: 8px; color: #ff5252; --mdui-color-primary: #ff5252; opacity: 0.3; transition: opacity 0.3s; }
-        .radio-item:hover .fav-btn, .fav-btn.is-fav { opacity: 1; }
-        .admin-actions { position: absolute; top: 8px; right: 8px; display: none; gap: 4px; }
-        body.is-admin-mode .admin-actions { display: flex; }
+        /* 播放器卡片 */
+        .player-card { 
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; gap: 20px; padding: 20px 32px; 
+            background: rgba(128,128,128,0.08); border-radius: 24px; 
+            flex-wrap: wrap; 
+        }
+        .player-wrapper.is-sticky .player-card { background: transparent; padding: 10px 32px; }
 
-        .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
-        .tab-btn { padding: 6px 16px; border-radius: 99px; border: none; background: rgba(128,128,128,0.1); cursor: pointer; color: inherit; }
+        .logo-box { width: 65px; height: 65px; transition: 0.3s; }
+        .player-wrapper.is-sticky .logo-box { width: 45px; height: 45px; }
+
+        .dynamic-logo { 
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden; background: #ccc; font-size: 1.3rem;
+        }
+
+        .volume-box { display: flex; align-items: center; gap: 8px; width: 140px; margin-left: auto; }
+        
+        .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0 24px; }
+        .tab-btn { padding: 8px 18px; border-radius: 99px; border: none; background: rgba(128,128,128,0.1); cursor: pointer; color: inherit; transition: 0.3s; }
         .tab-btn.active { background: var(--accent-color); color: white; }
 
-        .wave-box { display: none; align-items: flex-end; gap: 3px; height: 18px; margin-right: 10px; }
+        .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .radio-item { display: flex; flex-direction: column; align-items: center; padding: 20px; border-radius: 24px; cursor: pointer; background: rgba(128,128,128,0.05); transition: 0.3s; position: relative; border: 2px solid transparent; }
+        .radio-item:hover { transform: translateY(-5px); background: rgba(128,128,128,0.1); }
+        .radio-item.active { border-color: var(--accent-color); }
+
+        /* 管理按钮 */
+        .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
+        body.is-admin-mode .admin-actions { display: flex; }
+
+        .wave-box { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-right: 10px; }
         .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
-        @keyframes wave { from { height: 3px; } to { height: 18px; } }
+        @keyframes wave { from { height: 3px; } to { height: 16px; } }
     </style>
 </head>
 <body class="mdui-theme-auto">
@@ -48,7 +95,7 @@
         <div class="nav-content">
             <span style="font-weight: 900; font-size: 1.3rem;">百品电台</span>
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
-                <mdui-button-icon icon="settings" id="toggle-admin" title="进入管理模式"></mdui-button-icon>
+                <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="file_upload" id="open-import" title="批量导入"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台"></mdui-button-icon>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode"></mdui-button-icon>
@@ -57,43 +104,79 @@
     </div>
 
     <div class="radio-container">
-        <div class="player-card">
-            <div id="player-logo-box" class="dynamic-logo">待</div>
-            <div style="flex: 1;">
-                <div id="current-name" style="font-size: 1.2rem; font-weight: 800;">未在播放</div>
-                <div id="play-status" style="font-size: 0.85rem; opacity: 0.6;">请选择一个频道</div>
+        <div class="player-wrapper" id="player-sticky-wrapper">
+            <div class="player-card">
+                <div class="logo-box" id="player-logo">
+                    <div class="dynamic-logo">待</div>
+                </div>
+                <div style="flex: 1; min-width: 150px; display: flex; align-items: center; gap: 10px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="current-name" style="font-size: 1.2rem; font-weight: 900;">准备就绪</span>
+                            <mdui-button-icon id="fav-btn-main" icon="favorite_border" style="color: #ff5252;"></mdui-button-icon>
+                        </div>
+                        <div id="play-status" style="font-size: 0.85rem; opacity: 0.7;">请选择电台</div>
+                    </div>
+                </div>
+                <div class="wave-box" id="playing-anim"><span></span><span></span><span></span></div>
+                <div class="volume-box">
+                    <mdui-button-icon id="mute-btn" icon="volume_up"></mdui-button-icon>
+                    <mdui-slider id="volume-slider" value="80"></mdui-slider>
+                </div>
+                <mdui-button-icon id="master-play-btn" icon="play_arrow" variant="filled" style="--mdui-color-primary: var(--accent-color); width: 48px; height: 48px;"></mdui-button-icon>
             </div>
-            <div class="wave-box" id="playing-anim"><span></span><span></span><span></span></div>
-            <mdui-slider id="volume-slider" value="80" style="width: 120px;"></mdui-slider>
-            <mdui-button-icon id="master-play-btn" icon="play_arrow" variant="filled" style="--mdui-color-primary: var(--accent-color)"></mdui-button-icon>
         </div>
 
+        <audio id="audio-player"></audio>
         <div class="category-tabs" id="category-tabs"></div>
         <div class="radio-grid" id="station-list"></div>
     </div>
 
     <mdui-dialog id="station-dialog">
         <span slot="headline" id="diag-title">电台设置</span>
-        <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 10px;">
             <mdui-text-field label="名称" id="f-name"></mdui-text-field>
-            <mdui-text-field label="链接 (URL)" id="f-url"></mdui-text-field>
+            <mdui-text-field label="链接" id="f-url"></mdui-text-field>
             <mdui-text-field label="分类" id="f-cat"></mdui-text-field>
-            <mdui-text-field label="Logo 链接" id="f-logo"></mdui-text-field>
+            <mdui-text-field label="Logo 地址" id="f-logo"></mdui-text-field>
         </div>
         <mdui-button slot="action" variant="text" onclick="diag.open=false">取消</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-save">保存</mdui-button>
     </mdui-dialog>
 
+    <mdui-dialog id="import-dialog">
+        <span slot="headline">批量导入 JSON</span>
+        <mdui-text-field label="粘贴 JSON 数组" rows="6" id="import-area"></mdui-text-field>
+        <mdui-button slot="action" variant="text" onclick="document.getElementById('import-dialog').open=false">取消</mdui-button>
+        <mdui-button slot="action" variant="filled" id="btn-do-import">开始导入</mdui-button>
+    </mdui-dialog>
+
     <script>
-        const audio = new Audio();
-        let customData = JSON.parse(localStorage.getItem('bp_v2_custom') || '[]');
-        let favorites = JSON.parse(localStorage.getItem('bp_v2_favs') || '[]');
+        const audio = document.getElementById('audio-player');
+        const listDiv = document.getElementById('station-list');
+        const masterBtn = document.getElementById('master-play-btn');
+        const statusText = document.getElementById('play-status');
+        const waveAnim = document.getElementById('playing-anim');
+        const stickyWrapper = document.getElementById('player-sticky-wrapper');
+        
+        let customData = JSON.parse(localStorage.getItem('bp_radios_custom') || '[]');
+        let favorites = JSON.parse(localStorage.getItem('bp_radios_favs') || '[]');
         let allStations = [];
         let currentFilter = '全部';
-        let editingUrl = null;
+        let currentUrl = ""; // 记录当前播放的URL
+        let hls = null;
 
-        // --- 核心：Logo 渲染 ---
-        function renderLogo(logo, name) {
+        // --- 悬浮逻辑 ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                stickyWrapper.classList.add('is-sticky');
+            } else {
+                stickyWrapper.classList.remove('is-sticky');
+            }
+        });
+
+        // --- Logo 渲染 ---
+        function getLogoHTML(logo, name) {
             if (logo && logo.trim() !== '') {
                 return `<img src="${logo}" class="dynamic-logo" onerror="this.replaceWith(createPlaceholder('${name}'))">`;
             }
@@ -102,93 +185,109 @@
 
         function createPlaceholder(name) {
             const char = name ? name.charAt(0) : '?';
-            const colors = ['#5c6bc0', '#ef5350', '#66bb6a', '#ffa726', '#ab47bc'];
-            const color = colors[Math.abs(name.length) % colors.length];
+            const colors = ['#5e7eff', '#ff6b6b', '#4ecdc4', '#f9a825', '#ab47bc'];
             const div = document.createElement('div');
             div.className = 'dynamic-logo';
-            div.style.background = color;
+            div.style.background = colors[Math.abs(name.length) % colors.length];
             div.innerText = char;
             return div;
         }
 
-        // --- 数据加载与分类获取 ---
+        // --- 数据加载 ---
         function refresh() {
-            // 确保能获取到 radio.js 的数据
-            const jsData = (typeof radioStations !== 'undefined') ? radioStations : [];
-            allStations = [...jsData, ...customData];
-
-            // 自动提取全部分类
+            const base = (typeof radioStations !== 'undefined') ? radioStations : [];
+            allStations = [...base, ...customData];
+            
             let cats = ['全部'];
-            if (favorites.length > 0) cats.push('我的收藏');
+            if(favorites.length > 0) cats.push('我的收藏');
             const otherCats = [...new Set(allStations.map(s => s.category || '未分类'))];
             cats = [...cats, ...otherCats];
 
-            // 渲染分类
             const tabBox = document.getElementById('category-tabs');
             tabBox.innerHTML = '';
             cats.forEach(c => {
-                const b = document.createElement('button');
-                b.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
-                b.textContent = c;
-                b.onclick = () => { currentFilter = c; refresh(); };
-                tabBox.appendChild(b);
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
+                btn.textContent = c;
+                btn.onclick = () => { currentFilter = c; refresh(); };
+                tabBox.appendChild(btn);
             });
 
-            // 渲染列表
             renderList();
+            updateFavBtnState();
         }
 
         function renderList() {
-            const list = document.getElementById('station-list');
-            list.innerHTML = '';
-            
+            listDiv.innerHTML = '';
             let filtered = allStations;
-            if (currentFilter === '我的收藏') {
+            if(currentFilter === '我的收藏') {
                 filtered = allStations.filter(s => favorites.includes(s.url));
-            } else if (currentFilter !== '全部') {
+            } else if(currentFilter !== '全部') {
                 filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
             }
 
             filtered.forEach(s => {
-                const isFav = favorites.includes(s.url);
-                const isCustom = customData.some(c => c.url === s.url);
                 const item = document.createElement('div');
-                item.className = 'radio-item';
+                item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
                 item.innerHTML = `
-                    <div style="width:50px;height:50px;">${renderLogo(s.logo, s.name)}</div>
-                    <span style="font-weight:600;margin-top:10px;font-size:0.9rem;">${s.name}</span>
-                    <mdui-button-icon icon="${isFav ? 'favorite' : 'favorite_border'}" class="fav-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav('${s.url}');event.stopPropagation();"></mdui-button-icon>
+                    <div style="width:52px;height:52px;">${getLogoHTML(s.logo, s.name)}</div>
+                    <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${s.name}</span>
                     <div class="admin-actions">
-                        <mdui-button-icon icon="edit" size="small" onclick="openEdit('${s.url}');event.stopPropagation();"></mdui-button-icon>
-                        ${isCustom ? `<mdui-button-icon icon="delete" size="small" onclick="deleteStation('${s.url}');event.stopPropagation();"></mdui-button-icon>` : ''}
+                        <mdui-button-icon icon="edit" size="small" onclick="openEdit('${s.url}'); event.stopPropagation();"></mdui-button-icon>
+                        <mdui-button-icon icon="delete" size="small" onclick="deleteStation('${s.url}'); event.stopPropagation();"></mdui-button-icon>
                     </div>
                 `;
                 item.onclick = () => play(s, item);
-                list.appendChild(item);
+                listDiv.appendChild(item);
             });
         }
 
-        // --- 功能函数 ---
+        // --- 播放与收藏逻辑 ---
         function play(s, el) {
+            currentUrl = s.url;
             document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
             if(el) el.classList.add('active');
+            
             document.getElementById('current-name').innerText = s.name;
-            document.getElementById('player-logo-box').innerHTML = renderLogo(s.logo, s.name);
-            document.getElementById('play-status').innerText = "加载中...";
-            audio.src = s.url;
-            audio.play().catch(e => { document.getElementById('play-status').innerText = "地址失效或不支持"; });
+            document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
+            statusText.innerText = "缓冲中...";
+            updateFavBtnState();
+
+            if (s.url.includes('.m3u8')) {
+                if (Hls.isSupported()) {
+                    if (hls) hls.destroy();
+                    hls = new Hls(); hls.loadSource(s.url); hls.attachMedia(audio);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+                } else { audio.src = s.url; audio.play(); }
+            } else {
+                if (hls) hls.destroy();
+                audio.src = s.url; audio.play();
+            }
         }
 
-        window.toggleFav = (url) => {
-            if (favorites.includes(url)) favorites = favorites.filter(u => u !== url);
-            else favorites.push(url);
-            localStorage.setItem('bp_v2_favs', JSON.stringify(favorites));
+        function updateFavBtnState() {
+            const btn = document.getElementById('fav-btn-main');
+            if (!currentUrl) { btn.style.display = "none"; return; }
+            btn.style.display = "inline-flex";
+            const isFav = favorites.includes(currentUrl);
+            btn.icon = isFav ? "favorite" : "favorite_border";
+        }
+
+        document.getElementById('fav-btn-main').onclick = () => {
+            if (!currentUrl) return;
+            if (favorites.includes(currentUrl)) {
+                favorites = favorites.filter(u => u !== currentUrl);
+            } else {
+                favorites.push(currentUrl);
+            }
+            localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
             refresh();
         };
 
+        // --- 其余管理功能 ---
         const diag = document.getElementById('station-dialog');
         document.getElementById('open-add').onclick = () => {
-            editingUrl = null;
+            editingIndex = -1;
             document.getElementById('f-name').value = "";
             document.getElementById('f-url').value = "";
             diag.open = true;
@@ -196,7 +295,7 @@
 
         window.openEdit = (url) => {
             const s = allStations.find(x => x.url === url);
-            editingUrl = url;
+            const idx = customData.findIndex(x => x.url === url);
             document.getElementById('f-name').value = s.name;
             document.getElementById('f-url').value = s.url;
             document.getElementById('f-cat').value = s.category || "";
@@ -205,18 +304,17 @@
         };
 
         document.getElementById('btn-save').onclick = () => {
-            const s = { 
-                name: document.getElementById('f-name').value, 
-                url: document.getElementById('f-url').value,
-                category: document.getElementById('f-cat').value || "默认",
-                logo: document.getElementById('f-logo').value
-            };
-            if (editingUrl) {
-                customData = customData.filter(x => x.url !== editingUrl);
-            }
+            const s = { name: document.getElementById('f-name').value, url: document.getElementById('f-url').value, category: document.getElementById('f-cat').value || "默认", logo: document.getElementById('f-logo').value };
+            customData = customData.filter(x => x.url !== s.url); // 先移除同名/同URL
             customData.push(s);
-            localStorage.setItem('bp_v2_custom', JSON.stringify(customData));
+            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
             diag.open = false;
+            refresh();
+        };
+
+        window.deleteStation = (url) => {
+            customData = customData.filter(c => c.url !== url);
+            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
             refresh();
         };
 
@@ -225,18 +323,25 @@
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
         };
 
-        // --- 监听播放状态 ---
-        audio.onplaying = () => {
-            document.getElementById('play-status').innerText = "正在播放";
-            document.getElementById('playing-anim').style.display = "flex";
-            document.getElementById('master-play-btn').icon = "pause";
+        document.getElementById('open-import').onclick = () => document.getElementById('import-dialog').open = true;
+        document.getElementById('btn-do-import').onclick = () => {
+            try {
+                const json = JSON.parse(document.getElementById('import-area').value);
+                customData = [...customData, ...json];
+                localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+                document.getElementById('import-dialog').open = false;
+                refresh();
+            } catch (e) { alert("格式错误"); }
         };
-        audio.onpause = () => {
-            document.getElementById('playing-anim').style.display = "none";
-            document.getElementById('master-play-btn').icon = "play_arrow";
-        };
-        document.getElementById('master-play-btn').onclick = () => audio.paused ? audio.play() : audio.pause();
+
+        audio.onplaying = () => { statusText.innerText = "正在直播"; masterBtn.icon = "pause"; waveAnim.style.display = "flex"; };
+        audio.onpause = () => { masterBtn.icon = "play_arrow"; waveAnim.style.display = "none"; statusText.innerText = "已暂停"; };
+        masterBtn.onclick = () => audio.src && (audio.paused ? audio.play() : audio.pause());
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
+        document.getElementById('theme-toggle').onclick = () => {
+            const isDark = document.body.classList.toggle('mdui-theme-dark');
+            document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
+        };
 
         window.onload = refresh;
     </script>
