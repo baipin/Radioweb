@@ -488,42 +488,26 @@ function loadSource(url, isM3U8) {
             btn.icon = isFav ? "favorite" : "favorite_border";
         }
 
-                    function forceReloadRadios() {
-                // 1. 移除旧的脚本节点（可选，为了保持 DOM 整洁）
-                function forceReloadRadios() {
-    // 旋转图标逻辑 (可选)
-    const btnIcon = document.querySelector('button .mdui-icon');
-    if(btnIcon) btnIcon.classList.add('mdui-animation-spin'); 
-
-    const script = document.createElement('script');
-    script.src = `js/radio.js?t=${Date.now()}`;
-
-    script.onload = function() {
-        if(btnIcon) btnIcon.classList.remove('mdui-animation-spin');
-
-        // === 关键：调用 MDUI Snackbar ===
-        mdui.snackbar({
-            message: '电台频道已更新',
-            position: 'right-top', // 提示位置：右上角
-            timeout: 2000,         // 2秒后自动消失
-            buttonText: '知道了'    // 右侧按钮文字
-        });
-
-        // 重新渲染列表
-        if (typeof renderRadioList === 'function') {
-            renderRadioList(radioStations); 
-        }
+        function forceReloadRadios() {
+            const btnIcon = document.querySelector('#refresh');
+            // 注意：mdui v2 使用的是图标名，这里确保选择器正确
+            if(btnIcon) btnIcon.classList.add('rotate-anim'); 
+        
+            const script = document.createElement('script');
+            script.src = `js/radio.js?t=${Date.now()}`;
+        
+            script.onload = function() {
+                if(btnIcon) btnIcon.classList.remove('rotate-anim');
+                
+                // 关键：脚本加载后，先手动刷新一下全局变量（如果需要）
+                // 然后执行 refresh() 重新构建 DOM
+                refresh();
+        
+                mdui.snackbar({
+                    message: '电台频道已同步',
+                    position: 'right-top'
+                });
     };
-
-    script.onerror = function() {
-        if(btnIcon) btnIcon.classList.remove('mdui-animation-spin');
-        mdui.snackbar({
-            message: '同步失败，请检查网络',
-            buttonText: '重试',
-            onButtonClick: function(){ forceReloadRadios(); }
-        });
-    };
-
     document.head.appendChild(script);
 }
          // 结束
@@ -701,7 +685,18 @@ function loadSource(url, isM3U8) {
             document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
         };
 
-        window.onload = () => { setTimeout(refresh, 100); };
+        window.onload = () => {
+            // 检查数据是否加载，如果没有，等待 500ms 再试
+            const checkData = setInterval(() => {
+                if (typeof radioStations !== 'undefined') {
+                    refresh();
+                    clearInterval(checkData);
+                }
+            }, 100);
+            
+            // 5秒后如果还没加载就停止，防止死循环
+            setTimeout(() => clearInterval(checkData), 5000);
+        };
     </script>
 </body>
 </html>
