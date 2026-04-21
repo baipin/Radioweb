@@ -37,7 +37,7 @@ var radioStations = [
     { name: "文艺之声", url: "https://ngcdn010.cnr.cn/live/wyzs/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
     { name: "阅读之声", url: "https://ngcdn014.cnr.cn/live/ylgb/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
     { name: "中国交通广播", url: "https://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
-    { name: "中国乡村之声", url: "https://ngcdn017.cnr.cn/live/xczs/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
+    { name: "中国网络音乐之声", url: "https://ngcdn017.cnr.cn/live/xczs/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
 
     { name: "华语环球广播 (CRI)", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "环球资讯广播", url: "http://sk.cri.cn/905.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
@@ -124,9 +124,33 @@ var radioStations = [
     { name: "AsiaFM 亚洲粤语", url: "http://yyt.asiafm.net:8000/asiafm", logo: "", category: "网络音乐" },
     { name: "80后音悦台", url: "http://stream3.hndt.com/now/SFZeH2cb/playlist.m3u8", logo: "", category: "网络音乐" },
     { name: "500首华语经典", url: "http://ls.qingting.fm/live/3412131.m3u8?bitrate=64", logo: "", category: "网络音乐" },
-    { name: "Big B Radio 中文流行", url: "http://cpop.bigbradio.net/s", logo: "", category: "网络音乐" },
-    { name: "Big B Radio 韩语流行", url: "http://kpop.bigbradio.net/s", logo: "", category: "网络音乐" },
-    { name: "Big B Radio 日语流行", url: "http://jpop.bigbradio.net/s", logo: "", category: "网络音乐" }
+    { name: "Big B Radio 中文流行", url: "https://antares.dribbcast.com/proxy/cpop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
+    { name: "Big B Radio 韩语流行", url: "https://antares.dribbcast.com/proxy/kpop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
+    { name: "Big B Radio 日语流行", url: "https://antares.dribbcast.com/proxy/jpop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
+    { name: "Big B Radio 亚洲流行", url: "https://antares.dribbcast.com/proxy/apop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
+    
+    // === 美国 (USA) ===
+    { name: "NPR News (美国全国公共广播)", url: "https://npr-ice.streamguys1.com/live.mp3", logo: "https://www.npr.org/favicon.ico", category: "美国" },
+    { name: "WNYC New York (纽约公共广播)", url: "https://wnyc.streaming.adswizz.com/wnycfm-mobile.mp3", logo: "https://www.wnyc.org/favicon.ico", category: "美国" },
+    { name: "KEXP Seattle (西雅图独立音乐)", url: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3", logo: "https://www.kexp.org/favicon.ico", category: "美国" },
+    { name: "Smooth Jazz 74 (纽约爵士)", url: "https://sj74.streamguys1.com/sj74mp3", logo: "https://www.smoothjazz74.com/favicon.ico", category: "美国" },
+    { name: "WQXR (纽约古典音乐台)", url: "https://wqxr.streaming.adswizz.com/wqxr-mobile.mp3", logo: "https://www.wqxr.org/favicon.ico", category: "美国" },
+    { name: "SomaFM Groove Salad (旧金山电子)", url: "http://ice1.somafm.com/groovesalad-128-mp3", logo: "https://somafm.com/favicon.ico", category: "美国" },
+    { name: "Bloomberg Radio (彭博财经)", url: "https://bloombergradio.atunne.com/bloomberg_radio.mp3", logo: "https://www.bloomberg.com/favicon.ico", category: "美国" },
+    { name: "Jazz24 (全天候爵士乐)", url: "https://live.wpmucdn.com/kplu/jazz24-mp3-128", logo: "https://www.jazz24.org/favicon.ico", category: "美国" },
+
+    { name: "Rock Antenne (德国摇滚)", url: "https://mp3channels.webradio.antenne.de/rockantenne", logo: "https://www.rockantenne.de/favicon.ico", category: "网络音乐"},
+    { name: "Klassik Radio (德国古典)", url: "http://edge.live.mp3.mdn.newmedia.nacamar.net/klassikradio128/livestream.mp3", logo: "https://www.klassikradio.de/favicon.ico", category: "网络音乐" },
+    { name: "Radio 10 (荷兰经典流行)", url: "https://stream.radio10.nl/radio10", logo: "https://www.radio10.nl/favicon.ico",  category: "网络音乐" },
+    { name: "Hot Hitz Radio (美国劲爆流行)", url: "https://hothitzradio.com/stream.mp3", logo: "https://hothitzradio.com/favicon.ico", category: "网络音乐" },
+    { name: "181.FM Kickin' Country", url: "http://relay.181.fm:8130", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
+    { name: "181.FM Highway 181", url: "http://relay.181.fm:8018", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
+    { name: "181.FM 90's Country", url: "http://relay.181.fm:8050", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
+    { name: "Nashville FM (荷兰纳什维尔)", url: "https://stream.nashvillefm.nl/nashvillefm.mp3", logo: "https://nashvillefm.nl/favicon.ico", category: "网络音乐" },
+    { name: "Country 108 (德国网络音乐台)", url: "http://country108.de/stream.mp3", logo: "http://country108.de/favicon.ico", category: "网络音乐" },
+    { name: "Truckers.FM (全球卡车社区)", url: "https://broadcast.truckers.fm/stream.mp3", logo: "https://truckers.fm/favicon.ico", category: "网络音乐" },
+    { name: "BigRigFM (卡车乡村音乐专用)", url: "https://broadcast.bigrig.fm/stream.mp3", logo: "https://bigrig.fm/favicon.ico", category: "网络音乐" },
+    { name: "Simulator Radio (模拟飞行与卡车)", url: "https://stream.simulatorradio.com/stream.mp3", logo: "https://www.simulatorradio.com/favicon.ico", category: "网络音乐" }
 ];
 
 console.log("Loaded at" + new Date().getTime());
