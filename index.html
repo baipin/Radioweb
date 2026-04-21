@@ -69,6 +69,16 @@
     }
     .nav-logo { height: 40px; margin-right: 12px; }
 
+            /* 刷新动画 */
+    .rotate-anim {
+            animation: rotation 1s infinite linear;
+        }
+        @keyframes rotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(359deg); }
+}
+}
+
     /* 悬浮播放器 */
     .player-wrapper {
         position: sticky;
@@ -480,35 +490,42 @@ function loadSource(url, isM3U8) {
 
                     function forceReloadRadios() {
                 // 1. 移除旧的脚本节点（可选，为了保持 DOM 整洁）
-                const oldScript = document.getElementById('radio-data-script');
-                if (oldScript) {
-                    oldScript.remove();
-                }
-            
-                // 2. 创建新脚本标签
-                const script = document.createElement('script');
-                script.id = 'radio-data-script';
-                
-                // 3. 关键：添加时间戳防止缓存 (?t=1234567)
-                const timestamp = new Date().getTime();
-                script.src = `js/radio.js?t=${timestamp}`;
-            
-                // 4. 脚本加载完成后的回调
-                script.onload = function() {
-                    console.log("新的电台列表加载成功！");
-                    // 这里调用你页面中渲染电台列表的初始化函数
-                    if (typeof renderRadioList === 'function') {
-                        renderRadioList(window.allRadios); 
-                    }
-                };
-            
-                script.onerror = function() {
-                    alert("更新失败，请检查 radio.js 文件路径是否正确。");
-                };
-            
-                // 5. 插入到页面
-                document.head.appendChild(script);
-            }
+                function forceReloadRadios() {
+    // 旋转图标逻辑 (可选)
+    const btnIcon = document.querySelector('button .mdui-icon');
+    if(btnIcon) btnIcon.classList.add('mdui-animation-spin'); 
+
+    const script = document.createElement('script');
+    script.src = `js/radio.js?t=${Date.now()}`;
+
+    script.onload = function() {
+        if(btnIcon) btnIcon.classList.remove('mdui-animation-spin');
+
+        // === 关键：调用 MDUI Snackbar ===
+        mdui.snackbar({
+            message: '电台频道已更新',
+            position: 'right-top', // 提示位置：右上角
+            timeout: 2000,         // 2秒后自动消失
+            buttonText: '知道了'    // 右侧按钮文字
+        });
+
+        // 重新渲染列表
+        if (typeof renderRadioList === 'function') {
+            renderRadioList(radioStations); 
+        }
+    };
+
+    script.onerror = function() {
+        if(btnIcon) btnIcon.classList.remove('mdui-animation-spin');
+        mdui.snackbar({
+            message: '同步失败，请检查网络',
+            buttonText: '重试',
+            onButtonClick: function(){ forceReloadRadios(); }
+        });
+    };
+
+    document.head.appendChild(script);
+}
          // 结束
 
         document.getElementById('fav-btn-main').onclick = () => {
