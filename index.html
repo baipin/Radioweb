@@ -43,12 +43,9 @@
         .nav-links {
             margin-left: 60px; display: flex; gap: 32px; font-size: 1.05rem; font-weight: 500;
         }
-        .nav-links a {
-            color: inherit; text-decoration: none;
-        }
-        .nav-links a.active {
-            color: var(--accent-color); font-weight: 600;
-        }
+        .nav-links a { color: inherit; text-decoration: none; }
+        .nav-links a.active { color: var(--accent-color); font-weight: 600; }
+
         .radio-container {
             width: 95%; max-width: 1200px; margin: 90px auto 40px; padding: 32px;
             background: var(--glass-bg); backdrop-filter: blur(25px);
@@ -104,25 +101,24 @@
             text-align: center; padding: 24px; color: #888; font-size: 0.9rem;
             background: rgba(0,0,0,0.12); margin-top: auto;
         }
+        .add-btn { position: fixed; bottom: 30px; right: 30px; z-index: 999; }
     </style>
 </head>
 <body class="mdui-theme-auto">
 
-    <!-- 仿 123.baipon.com 导航栏 -->
+    <!-- 导航栏 -->
     <div class="top-nav">
         <div class="nav-content">
             <a href="https://www.baipon.com" class="logo-title">
                 <img src="img/logo.png" alt="百品" style="height: 38px;">
                 <span>百品电台</span>
             </a>
-            
             <div class="nav-links">
                 <a href="https://www.baipon.com">首页</a>
                 <a href="#" class="active">电台</a>
                 <a href="#">电视</a>
                 <a href="#">更多</a>
             </div>
-
             <div style="margin-left: auto; display: flex; align-items: center; gap: 16px;">
                 <mdui-button-icon id="theme-toggle" icon="dark_mode"></mdui-button-icon>
                 <a href="https://www.baipon.com">
@@ -145,8 +141,10 @@
 
         <audio id="audio-player"></audio>
 
-        <!-- 分类标签 -->
-        <div class="category-tabs" id="category-tabs"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div class="category-tabs" id="category-tabs"></div>
+            <mdui-button variant="outlined" onclick="showAddDialog()">+ 添加电台</mdui-button>
+        </div>
 
         <div class="radio-grid" id="station-list"></div>
     </div>
@@ -155,42 +153,58 @@
         <p>© 2026 百品导航 · 百品电台 | 仅供学习交流 · 直播流地址来源于公开网络</p>
     </footer>
 
+    <!-- 添加电台对话框 -->
+    <mdui-dialog id="add-dialog" headline="添加自定义电台">
+        <mdui-text-field id="add-name" label="电台名称 *" variant="outlined"></mdui-text-field>
+        <mdui-text-field id="add-url" label="直播地址 (m3u8 / mp3) *" variant="outlined" style="margin-top: 16px;"></mdui-text-field>
+        <mdui-text-field id="add-logo" label="Logo 地址 (可选)" variant="outlined" style="margin-top: 16px;"></mdui-text-field>
+        <mdui-text-field id="add-category" label="分类 (如 台湾、网络音乐)" variant="outlined" style="margin-top: 16px;"></mdui-text-field>
+        
+        <mdui-button slot="action" variant="text" onclick="closeAddDialog()">取消</mdui-button>
+        <mdui-button slot="action" onclick="addCustomStation()">添加</mdui-button>
+    </mdui-dialog>
+
     <script>
         const audio = document.getElementById('audio-player');
         const listDiv = document.getElementById('station-list');
         const masterBtn = document.getElementById('master-play-btn');
-        const currentLogo = document.getElementById('current-logo');
+        const currentLogoContainer = document.getElementById('current-logo').parentElement; // 用于替换 logo
         const currentName = document.getElementById('current-name');
         const statusText = document.getElementById('play-status');
         const waveAnim = document.getElementById('playing-anim');
         const themeToggle = document.getElementById('theme-toggle');
 
-        let allStations = [...radioStations];
+        let allStations = [...(typeof radioStations !== 'undefined' ? radioStations : [])];
         let currentFilter = '全部';
 
-        // 生成随机柔和颜色
+        // 加载自定义电台
+        function loadCustomStations() {
+            const saved = localStorage.getItem('customRadioStations');
+            if (saved) {
+                allStations = [...allStations, ...JSON.parse(saved)];
+            }
+        }
+
         function getRandomColor() {
             const colors = ['#5e7eff', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96c93d', '#f9a825', '#ab47bc'];
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
-        // 渲染 Logo（支持空值占位）
-        function getLogoHTML(logo, name) {
-            if (logo && logo.trim() !== '') {
-                return `<img src="${logo}" onerror="this.outerHTML = getPlaceholder('${name}')" style="width:52px;height:52px;border-radius:50%;object-fit:contain;background:white;">`;
-            }
-            return getPlaceholder(name);
-        }
-
         function getPlaceholder(name) {
-            const firstChar = name.charAt(0);
+            const firstChar = name ? name.charAt(0) : '?';
             const color = getRandomColor();
             return `<div class="placeholder-logo" style="background:${color};">${firstChar}</div>`;
         }
 
-        // 渲染分类标签
+        function getLogoHTML(logo, name) {
+            if (logo && logo.trim() !== '') {
+                return `<img src="${logo}" onerror="this.outerHTML = getPlaceholder('${name}')" style="width:80px;height:80px;border-radius:50%;object-fit:cover;background:white;box-shadow:0 8px 20px rgba(0,0,0,0.15);">`;
+            }
+            return getPlaceholder(name);
+        }
+
         function renderCategories() {
-            const categories = ['全部', ...new Set(allStations.map(s => s.category))];
+            const categories = ['全部', ...new Set(allStations.map(s => s.category || '未分类'))];
             const tabs = document.getElementById('category-tabs');
             tabs.innerHTML = '';
             categories.forEach(cat => {
@@ -206,12 +220,11 @@
             });
         }
 
-        // 渲染电台列表
         function renderStations() {
             listDiv.innerHTML = '';
             const filtered = currentFilter === '全部' 
                 ? allStations 
-                : allStations.filter(s => s.category === currentFilter);
+                : allStations.filter(s => (s.category || '未分类') === currentFilter);
 
             filtered.forEach(s => {
                 const item = document.createElement('div');
@@ -226,24 +239,48 @@
         }
 
         function playStation(s, element) {
+            // 清除激活状态
             document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
+            // 更新名称
             currentName.innerText = s.name;
-            currentLogo.outerHTML = getLogoHTML(s.logo, s.name);   // 替换当前播放 Logo
-            document.getElementById('current-logo').id = 'current-logo'; // 恢复 id
+
+            // 安全替换 Logo（修复之前 outerHTML 问题）
+            const newLogo = document.createElement('div');
+            newLogo.innerHTML = getLogoHTML(s.logo, s.name);
+            const logoElement = newLogo.firstChild;
+            logoElement.id = 'current-logo';
+            document.getElementById('current-logo').replaceWith(logoElement);
 
             statusText.innerText = "正在连接...";
-            audio.src = s.url;
-            audio.play().catch(() => {
-                statusText.innerText = "播放失败，地址可能已失效";
+
+            // 播放逻辑优化
+            audio.src = s.url || '';
+            audio.load();
+            audio.play().then(() => {
+                // 成功不做额外处理，由 onplaying 事件处理
+            }).catch(err => {
+                console.error(err);
+                statusText.innerText = "播放失败，地址可能已失效或不支持";
             });
         }
 
-        // 播放器控制
-        audio.onplaying = () => { statusText.innerText = "正在直播"; masterBtn.icon = "pause"; waveAnim.style.display = "flex"; };
-        audio.onpause = () => { masterBtn.icon = "play_arrow"; waveAnim.style.display = "none"; statusText.innerText = "已暂停"; };
-        masterBtn.onclick = () => audio.src && (audio.paused ? audio.play() : audio.pause());
+        // 播放器事件
+        audio.onplaying = () => {
+            statusText.innerText = "正在直播";
+            masterBtn.icon = "pause";
+            waveAnim.style.display = "flex";
+        };
+        audio.onpause = () => {
+            masterBtn.icon = "play_arrow";
+            waveAnim.style.display = "none";
+            statusText.innerText = "已暂停";
+        };
+        masterBtn.onclick = () => {
+            if (!audio.src) return;
+            audio.paused ? audio.play() : audio.pause();
+        };
 
         // 夜间模式
         function toggleTheme() {
@@ -252,8 +289,44 @@
             localStorage.setItem('radioThemeDark', isDark);
         }
 
+        // 添加自定义电台
+        function showAddDialog() {
+            document.getElementById('add-dialog').open = true;
+        }
+        function closeAddDialog() {
+            document.getElementById('add-dialog').open = false;
+        }
+        function addCustomStation() {
+            const name = document.getElementById('add-name').value.trim();
+            const url = document.getElementById('add-url').value.trim();
+            const logo = document.getElementById('add-logo').value.trim();
+            let category = document.getElementById('add-category').value.trim();
+
+            if (!name || !url) {
+                mdui.alert("电台名称和直播地址不能为空！");
+                return;
+            }
+            if (!category) category = "自定义";
+
+            const newStation = { name, url, logo, category };
+
+            // 保存到 localStorage
+            let customList = JSON.parse(localStorage.getItem('customRadioStations') || '[]');
+            customList.push(newStation);
+            localStorage.setItem('customRadioStations', JSON.stringify(customList));
+
+            allStations.push(newStation);
+            renderCategories();
+            renderStations();
+
+            closeAddDialog();
+            mdui.snackbar({ message: `已添加：${name}` });
+        }
+
         // 初始化
         function init() {
+            loadCustomStations();
+
             if (localStorage.getItem('radioThemeDark') === 'true') {
                 document.body.classList.add('mdui-theme-dark');
                 themeToggle.icon = 'light_mode';
