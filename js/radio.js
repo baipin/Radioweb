@@ -75,7 +75,7 @@ const radioStations = [
 
     { name: "Classical FM 97.7", url: "https://onair.family977.com.tw:8977/live.mp3", logo: "https://www.family977.com.tw/apple-touch-icon.png", category: "台湾" },
     { name: "Bravo FM 91.3", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "https://www.bravo913.com.tw/lazyweb/images/logo.png", category: "台湾" },
-    { name: "ICRT", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico, category: "台湾" },
+    { name: "ICRT", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
     { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "https://www.news98.com.tw/images/logo.png", category: "台湾" },
     { name: "城市廣播網台北90.1", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "http://www.cityfm.tw/img/logo.png", category: "台湾" },
     { name: "IC之音", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.ic975.com/wp-content/themes/ic975/images/logo.png", category: "台湾" },
