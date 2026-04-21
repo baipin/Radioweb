@@ -11,12 +11,12 @@
     <script src="js/radio.js"></script>
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.95);     /* 提高不透明度 */
+            --glass-bg: rgba(255, 255, 255, 0.95);
             --glass-border: rgba(255, 255, 255, 0.6);
             --accent-color: #0081ff;
         }
         .mdui-theme-dark {
-            --glass-bg: rgba(28, 28, 35, 0.95);       /* 提高不透明度 */
+            --glass-bg: rgba(28, 28, 35, 0.95);
             --glass-border: rgba(255, 255, 255, 0.15);
         }
 
@@ -31,7 +31,11 @@
             position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
             background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px;
         }
-        .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 100%; }
+        .nav-content { 
+            max-width: 1200px; margin: 0 auto; padding: 0 24px; 
+            display: flex; align-items: center; height: 100%; 
+        }
+        .nav-logo { height: 40px; margin-right: 12px; }
 
         /* 悬浮播放器 */
         .player-wrapper {
@@ -50,7 +54,6 @@
 
         .radio-container { width: 95%; max-width: 1200px; margin: 80px auto 40px; flex: 1; }
 
-        /* 播放器卡片 - 提高不透明度 */
         .player-card {
             max-width: 1200px; margin: 0 auto;
             display: flex; align-items: center; gap: 20px; padding: 20px 32px;
@@ -100,7 +103,6 @@
 
         .radio-item.active { border-color: var(--accent-color); }
 
-        /* 管理按钮 */
         .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
         body.is-admin-mode .admin-actions { display: flex; }
 
@@ -112,6 +114,7 @@
 <body class="mdui-theme-auto">
     <div class="top-nav">
         <div class="nav-content">
+            <img src="img/logo.png" class="nav-logo" alt="百品电台" onerror="this.style.display='none';">
             <span style="font-weight: 900; font-size: 1.3rem;">百品电台</span>
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
@@ -208,7 +211,7 @@
         let currentFilter = '全部';
         let currentUrl = "";
         let hls = null;
-        let editingUrl = null;   // 用于编辑时记录URL
+        let editingUrl = null;
 
         // --- 悬浮逻辑 ---
         window.addEventListener('scroll', () => {
@@ -222,31 +225,37 @@
         // --- Logo 渲染 ---
         function getLogoHTML(logo, name) {
             if (logo && logo.trim() !== '') {
-                return `<img src="${logo}" class="dynamic-logo" onerror="this.replaceWith(createPlaceholder('${name}'))">`;
+                return `<img src="${logo}" class="dynamic-logo" onerror="this.outerHTML = createPlaceholder('${name.replace(/'/g, "\\'")}').outerHTML">`;
             }
             return createPlaceholder(name).outerHTML;
         }
 
         function createPlaceholder(name) {
-            const char = name ? name.charAt(0) : '?';
+            const char = (name && name.length > 0) ? name.charAt(0).toUpperCase() : '?';
             const colors = ['#5e7eff', '#ff6b6b', '#4ecdc4', '#f9a825', '#ab47bc'];
+            const colorIndex = Math.abs(name ? name.length : 0) % colors.length;
             const div = document.createElement('div');
             div.className = 'dynamic-logo';
-            div.style.background = colors[Math.abs(name.length) % colors.length];
+            div.style.background = colors[colorIndex];
             div.innerText = char;
             return div;
         }
 
-        // --- 数据加载 ---
+        // --- 数据加载（修复：分类同时包含 radio.js 和自定义电台）---
         function refresh() {
-            // 确保 radioStations 已加载（来自 radio.js）
             const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
             allStations = [...base, ...customData];
            
             let cats = ['全部'];
             if(favorites.length > 0) cats.push('我的收藏');
-            const otherCats = [...new Set(allStations.map(s => s.category || '未分类'))].sort();
-            cats = [...cats, ...otherCats];
+            
+            // 同时遍历 radio.js 和 customData 中的所有分类
+            const allCategories = [...base, ...customData]
+                .map(s => s.category || '未分类')
+                .filter((v, i, self) => self.indexOf(v) === i)  // 去重
+                .sort();
+            
+            cats = [...cats, ...allCategories];
 
             const tabBox = document.getElementById('category-tabs');
             tabBox.innerHTML = '';
@@ -339,10 +348,9 @@
             refresh();
         };
 
-        // ====================== 对话框逻辑（合并版） ======================
+        // ====================== 对话框逻辑 ======================
         const diag = document.getElementById('station-dialog');
 
-        // 打开对话框（新增 / 编辑）
         document.getElementById('open-add').onclick = () => {
             editingUrl = null;
             document.getElementById('diag-title').innerText = "添加电台";
@@ -351,7 +359,6 @@
             document.getElementById('f-cat').value = "";
             document.getElementById('f-logo').value = "";
             
-            // 重置批量导入区域
             document.getElementById('import-area').value = "";
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
@@ -371,7 +378,6 @@
             document.getElementById('f-cat').value = s.category || "";
             document.getElementById('f-logo').value = s.logo || "";
 
-            // 隐藏批量导入
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-do-import').style.display = "none";
@@ -379,7 +385,6 @@
             diag.open = true;
         };
 
-        // 保存单个电台
         document.getElementById('btn-save').onclick = () => {
             const s = {
                 name: document.getElementById('f-name').value.trim(),
@@ -400,14 +405,12 @@
             refresh();
         };
 
-        // 显示批量导入区域
         document.getElementById('show-import-area').onclick = () => {
             document.getElementById('import-area-wrapper').style.display = "block";
             document.getElementById('btn-save').style.display = "none";
             document.getElementById('btn-do-import').style.display = "inline-flex";
         };
 
-        // 执行批量导入
         document.getElementById('btn-do-import').onclick = () => {
             const jsonStr = document.getElementById('import-area').value.trim();
             if (!jsonStr) {
@@ -464,9 +467,7 @@
             document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
         };
 
-        // 确保 radio.js 加载完成后刷新
         window.onload = () => {
-            // 给 radioStations 一点加载缓冲时间（保险起见）
             setTimeout(refresh, 100);
         };
     </script>
