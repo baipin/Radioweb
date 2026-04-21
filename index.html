@@ -9,7 +9,156 @@
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="js/radio.js"></script>
+    <style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: rgba(255, 255, 255, 0.6);
+        --accent-color: #0081ff;
+    }
+    .mdui-theme-dark {
+        --glass-bg: rgba(28, 28, 35, 0.95);
+        --glass-border: rgba(255, 255, 255, 0.15);
+    }
+    body { 
+        margin: 0; 
+        min-height: 100vh; 
+        background: transparent !important; 
+        display: flex; 
+        flex-direction: column; 
+        color: #1f1f1f;
+    }
+      
+    body::before {
+        content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: url('img/home.jpg') center/cover no-repeat; z-index: -2; filter: brightness(0.9);
+    }
+      
+    /* 导航栏 */
+    .top-nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
+        background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px;
+    }
+    .nav-content {
+        max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        display: flex; align-items: center; height: 100%;
+    }
+    .nav-logo { height: 40px; margin-right: 12px; }
+
+    /* 悬浮播放器 */
+    .player-wrapper {
+        position: sticky;
+        top: 64px;
+        z-index: 1000;
+        padding: 16px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .player-wrapper.is-sticky {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        border-bottom: 1px solid var(--glass-border);
+    }
+    .radio-container { width: 95%; max-width: 1200px; margin: 80px auto 40px; flex: 1; }
     
+    .player-card {
+        max-width: 1200px; margin: 0 auto;
+        display: flex; align-items: center; gap: 20px; padding: 20px 32px;
+        background: rgba(255,255,255,0.98) !important;
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        flex-wrap: wrap;
+    }
+    .mdui-theme-dark .player-card {
+        background: rgba(40,40,48,0.98) !important;
+    }
+
+    .player-wrapper.is-sticky .player-card {
+        background: transparent;
+        padding: 10px 32px;
+    }
+    .logo-box { width: 65px; height: 65px; transition: 0.3s; }
+    .player-wrapper.is-sticky .logo-box { width: 45px; height: 45px; }
+    .dynamic-logo {
+        width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden; background: #ccc; font-size: 1.3rem;
+    }
+    .volume-box { display: flex; align-items: center; gap: 8px; width: 140px; margin-left: auto; }
+      
+    .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0 24px; }
+    .tab-btn { padding: 8px 18px; border-radius: 99px; border: none; background: rgba(128,128,128,0.12); cursor: pointer; color: inherit; transition: 0.3s; }
+    .tab-btn.active { background: var(--accent-color); color: white; }
+    .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+    
+    .radio-item {
+        display: flex; flex-direction: column; align-items: center; padding: 20px;
+        border-radius: 24px; cursor: pointer;
+        background: rgba(255,255,255,0.95) !important;
+        transition: 0.3s;
+        position: relative;
+        border: 2px solid transparent;
+    }
+    .mdui-theme-dark .radio-item {
+        background: rgba(45,45,55,0.95) !important;
+    }
+    .radio-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.98) !important; }
+    .mdui-theme-dark .radio-item:hover { background: rgba(55,55,65,0.98) !important; }
+    .radio-item.active { border-color: var(--accent-color); }
+    .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
+    body.is-admin-mode .admin-actions { display: flex; }
+    .wave-box { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-right: 10px; }
+    .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
+    @keyframes wave { from { height: 3px; } to { height: 16px; } }
+
+    /* ==================== 修复部分 ==================== */
+
+    /* 电台列表文字（解决你当前问题） */
+    .radio-item span {
+        color: #1f1f1f !important;
+        font-weight: 600;
+        opacity: 1;
+    }
+    .mdui-theme-dark .radio-item span {
+        color: #ffffff !important;
+    }
+
+    /* 收藏按钮保持红色 */
+    #fav-btn-main {
+        color: #ff5252 !important;
+    }
+    .mdui-theme-dark #fav-btn-main {
+        color: #ff5252 !important;
+    }
+
+    /* 播放/暂停按钮白天模式可见 */
+    #master-play-btn {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark #master-play-btn {
+        color: #ffffff !important;
+    }
+
+    /* 其他按钮正常 */
+    mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #e0e0e0 !important;
+    }
+
+    /* 标题和当前电台名称 */
+    .nav-content span,
+    #current-name, 
+    #play-status {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark .nav-content span,
+    .mdui-theme-dark #current-name,
+    .mdui-theme-dark #play-status {
+        color: #ffffff !important;
+    }
+</style>
 </head>
 <body class="mdui-theme-auto">
     <div class="top-nav">
