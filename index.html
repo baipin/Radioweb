@@ -9,9 +9,156 @@
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="js/radio.js"></script>
+    <style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: rgba(255, 255, 255, 0.6);
+        --accent-color: #0081ff;
+    }
+    .mdui-theme-dark {
+        --glass-bg: rgba(28, 28, 35, 0.95);
+        --glass-border: rgba(255, 255, 255, 0.15);
+    }
+    body { 
+        margin: 0; 
+        min-height: 100vh; 
+        background: transparent !important; 
+        display: flex; 
+        flex-direction: column; 
+        color: #1f1f1f;
+    }
+      
+    body::before {
+        content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: url('img/home.jpg') center/cover no-repeat; z-index: -2; filter: brightness(0.9);
+    }
+      
+    /* 导航栏 */
+    .top-nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
+        background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px;
+    }
+    .nav-content {
+        max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        display: flex; align-items: center; height: 100%;
+    }
+    .nav-logo { height: 40px; margin-right: 12px; }
 
-    <!-- 外部样式文件（推荐方式） -->
-    <link rel="stylesheet" href="style.css">
+    /* 悬浮播放器 */
+    .player-wrapper {
+        position: sticky;
+        top: 64px;
+        z-index: 1000;
+        padding: 16px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .player-wrapper.is-sticky {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        border-bottom: 1px solid var(--glass-border);
+    }
+    .radio-container { width: 95%; max-width: 1200px; margin: 80px auto 40px; flex: 1; }
+    
+    .player-card {
+        max-width: 1200px; margin: 0 auto;
+        display: flex; align-items: center; gap: 20px; padding: 20px 32px;
+        background: rgba(255,255,255,0.98) !important;
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        flex-wrap: wrap;
+    }
+    .mdui-theme-dark .player-card {
+        background: rgba(40,40,48,0.98) !important;
+    }
+
+    .player-wrapper.is-sticky .player-card {
+        background: transparent;
+        padding: 10px 32px;
+    }
+    .logo-box { width: 65px; height: 65px; transition: 0.3s; }
+    .player-wrapper.is-sticky .logo-box { width: 45px; height: 45px; }
+    .dynamic-logo {
+        width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden; background: #ccc; font-size: 1.3rem;
+    }
+    .volume-box { display: flex; align-items: center; gap: 8px; width: 140px; margin-left: auto; }
+      
+    .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0 24px; }
+    .tab-btn { padding: 8px 18px; border-radius: 99px; border: none; background: rgba(128,128,128,0.12); cursor: pointer; color: inherit; transition: 0.3s; }
+    .tab-btn.active { background: var(--accent-color); color: white; }
+    .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+    
+    .radio-item {
+        display: flex; flex-direction: column; align-items: center; padding: 20px;
+        border-radius: 24px; cursor: pointer;
+        background: rgba(255,255,255,0.95) !important;
+        transition: 0.3s;
+        position: relative;
+        border: 2px solid transparent;
+    }
+    .mdui-theme-dark .radio-item {
+        background: rgba(45,45,55,0.95) !important;
+    }
+    .radio-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.98) !important; }
+    .mdui-theme-dark .radio-item:hover { background: rgba(55,55,65,0.98) !important; }
+    .radio-item.active { border-color: var(--accent-color); }
+    .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
+    body.is-admin-mode .admin-actions { display: flex; }
+    .wave-box { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-right: 10px; }
+    .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
+    @keyframes wave { from { height: 3px; } to { height: 16px; } }
+
+    /* ==================== 修复部分 ==================== */
+
+    /* 电台列表文字（解决你当前问题） */
+    .radio-item span {
+        color: #1f1f1f !important;
+        font-weight: 600;
+        opacity: 1;
+    }
+    .mdui-theme-dark .radio-item span {
+        color: #ffffff !important;
+    }
+
+    /* 收藏按钮保持红色 */
+    #fav-btn-main {
+        color: #ff5252 !important;
+    }
+    .mdui-theme-dark #fav-btn-main {
+        color: #ff5252 !important;
+    }
+
+    /* 播放/暂停按钮白天模式可见 */
+    #master-play-btn {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark #master-play-btn {
+        color: #ffffff !important;
+    }
+
+    /* 其他按钮正常 */
+    mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #e0e0e0 !important;
+    }
+
+    /* 标题和当前电台名称 */
+    .nav-content span,
+    #current-name, 
+    #play-status {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark .nav-content span,
+    .mdui-theme-dark #current-name,
+    .mdui-theme-dark #play-status {
+        color: #ffffff !important;
+    }
+</style>
 </head>
 <body class="mdui-theme-auto">
     <div class="top-nav">
@@ -36,7 +183,7 @@
                     <div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span id="current-name" style="font-size: 1.2rem; font-weight: 900;">准备就绪</span>
-                            <mdui-button-icon id="fav-btn-main" icon="favorite_border"></mdui-button-icon>
+                            <mdui-button-icon id="fav-btn-main" icon="favorite_border" style="color: #ff5252;"></mdui-button-icon>
                         </div>
                         <div id="play-status" style="font-size: 0.85rem; opacity: 0.7;">请选择电台</div>
                     </div>
@@ -55,11 +202,12 @@
         <div class="radio-grid" id="station-list"></div>
     </div>
 
-    <!-- 编辑/添加对话框（已增加删除按钮） -->
+    <!-- 合并后的对话框：添加电台 + 批量导入 -->
     <mdui-dialog id="station-dialog">
         <span slot="headline" id="diag-title">添加电台</span>
         
         <div style="display: flex; flex-direction: column; gap: 16px; padding: 8px 0;">
+            <!-- 单个添加 -->
             <div>
                 <mdui-text-field label="名称" id="f-name"></mdui-text-field>
                 <mdui-text-field label="链接" id="f-url"></mdui-text-field>
@@ -77,7 +225,15 @@
                         label="粘贴 JSON 数组" 
                         rows="8" 
                         id="import-area"
-                        placeholder='示例：[...]'></mdui-text-field>
+                        placeholder='示例：
+[
+  {
+    "name": "示例电台",
+    "url": "https://example.com/stream.m3u8",
+    "category": "香港",
+    "logo": "https://example.com/logo.png"
+  }
+]'></mdui-text-field>
                     <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 4px;">
                         直接粘贴电台数组，点击下方“导入”按钮
                     </div>
@@ -85,17 +241,9 @@
             </div>
         </div>
 
-        <div slot="action" style="display: flex; gap: 8px; justify-content: space-between; width: 100%;">
-            <!-- 删除按钮（仅编辑模式显示） -->
-            <mdui-button variant="text" id="btn-delete" style="color: #f44336; display: none;">
-                删除此电台
-            </mdui-button>
-            
-            <div style="margin-left: auto; display: flex; gap: 8px;">
-                <mdui-button variant="text" onclick="closeDialog()">取消</mdui-button>
-                <mdui-button variant="filled" id="btn-save">保存</mdui-button>
-            </div>
-        </div>
+        <mdui-button slot="action" variant="text" onclick="closeDialog()">取消</mdui-button>
+        <mdui-button slot="action" variant="filled" id="btn-save">保存单个电台</mdui-button>
+        <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始批量导入</mdui-button>
     </mdui-dialog>
 
     <script>
@@ -112,14 +260,18 @@
         let currentFilter = '全部';
         let currentUrl = "";
         let hls = null;
-        let editingUrl = null;   // 当前正在编辑的电台 URL
+        let editingUrl = null;
 
-        // 悬浮逻辑
+        // --- 悬浮逻辑 ---
         window.addEventListener('scroll', () => {
-            stickyWrapper.classList.toggle('is-sticky', window.scrollY > 40);
+            if (window.scrollY > 40) {
+                stickyWrapper.classList.add('is-sticky');
+            } else {
+                stickyWrapper.classList.remove('is-sticky');
+            }
         });
 
-        // Logo 渲染
+        // --- Logo 渲染 ---
         function getLogoHTML(logo, name) {
             if (logo && logo.trim() !== '') {
                 return `<img src="${logo}" class="dynamic-logo" onerror="this.outerHTML = createPlaceholder('${name.replace(/'/g, "\\'")}').outerHTML">`;
@@ -138,19 +290,20 @@
             return div;
         }
 
-        // 数据刷新
+        // --- 数据加载（修复：分类同时包含 radio.js 和自定义电台）---
         function refresh() {
             const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
             allStations = [...base, ...customData];
            
             let cats = ['全部'];
-            if (favorites.length > 0) cats.push('我的收藏');
+            if(favorites.length > 0) cats.push('我的收藏');
             
+            // 同时遍历 radio.js 和 customData 中的所有分类
             const allCategories = [...base, ...customData]
                 .map(s => s.category || '未分类')
-                .filter((v, i, self) => self.indexOf(v) === i)
+                .filter((v, i, self) => self.indexOf(v) === i)  // 去重
                 .sort();
-
+            
             cats = [...cats, ...allCategories];
 
             const tabBox = document.getElementById('category-tabs');
@@ -171,9 +324,9 @@
             listDiv.innerHTML = '';
             let filtered = allStations;
 
-            if (currentFilter === '我的收藏') {
+            if(currentFilter === '我的收藏') {
                 filtered = allStations.filter(s => favorites.includes(s.url));
-            } else if (currentFilter !== '全部') {
+            } else if(currentFilter !== '全部') {
                 filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
             }
 
@@ -185,6 +338,7 @@
                     <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${s.name}</span>
                     <div class="admin-actions">
                         <mdui-button-icon icon="edit" size="small" onclick="openEdit('${s.url}'); event.stopPropagation();"></mdui-button-icon>
+                        <mdui-button-icon icon="delete" size="small" onclick="deleteStation('${s.url}'); event.stopPropagation();"></mdui-button-icon>
                     </div>
                 `;
                 item.onclick = () => play(s, item);
@@ -192,11 +346,11 @@
             });
         }
 
-        // 播放逻辑
+        // --- 播放与收藏逻辑 ---
         function play(s, el) {
             currentUrl = s.url;
             document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
-            if (el) el.classList.add('active');
+            if(el) el.classList.add('active');
            
             document.getElementById('current-name').innerText = s.name;
             document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
@@ -223,16 +377,15 @@
 
         function updateFavBtnState() {
             const btn = document.getElementById('fav-btn-main');
-            if (!currentUrl) {
-                btn.style.display = "none";
-                return;
+            if (!currentUrl) { 
+                btn.style.display = "none"; 
+                return; 
             }
             btn.style.display = "inline-flex";
             const isFav = favorites.includes(currentUrl);
             btn.icon = isFav ? "favorite" : "favorite_border";
         }
 
-        // 收藏功能
         document.getElementById('fav-btn-main').onclick = () => {
             if (!currentUrl) return;
             if (favorites.includes(currentUrl)) {
@@ -246,7 +399,6 @@
 
         // ====================== 对话框逻辑 ======================
         const diag = document.getElementById('station-dialog');
-        const btnDelete = document.getElementById('btn-delete');
 
         document.getElementById('open-add').onclick = () => {
             editingUrl = null;
@@ -258,17 +410,17 @@
             
             document.getElementById('import-area').value = "";
             document.getElementById('import-area-wrapper').style.display = "none";
-            btnDelete.style.display = "none";
-            document.getElementById('btn-save').textContent = "保存";
+            document.getElementById('btn-save').style.display = "inline-flex";
+            document.getElementById('btn-do-import').style.display = "none";
+
             diag.open = true;
         };
 
-        // 打开编辑（只显示编辑按钮，不再有独立删除按钮）
         window.openEdit = (url) => {
             const s = allStations.find(x => x.url === url);
             if (!s) return;
-
             editingUrl = url;
+
             document.getElementById('diag-title').innerText = "编辑电台";
             document.getElementById('f-name').value = s.name;
             document.getElementById('f-url').value = s.url;
@@ -276,12 +428,12 @@
             document.getElementById('f-logo').value = s.logo || "";
 
             document.getElementById('import-area-wrapper').style.display = "none";
-            btnDelete.style.display = "inline-flex";     // 显示删除按钮
-            document.getElementById('btn-save').textContent = "保存修改";
+            document.getElementById('btn-save').style.display = "inline-flex";
+            document.getElementById('btn-do-import').style.display = "none";
+
             diag.open = true;
         };
 
-        // 保存（新增或编辑）
         document.getElementById('btn-save').onclick = () => {
             const s = {
                 name: document.getElementById('f-name').value.trim(),
@@ -295,33 +447,17 @@
                 return;
             }
 
-            // 如果是编辑，先删除旧的
-            if (editingUrl) {
-                customData = customData.filter(x => x.url !== editingUrl);
-            }
-
+            customData = customData.filter(x => x.url !== s.url);
             customData.push(s);
             localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
             diag.open = false;
             refresh();
         };
 
-        // 删除电台（现在放在对话框里）
-        btnDelete.onclick = () => {
-            if (!editingUrl) return;
-            if (!confirm("确定要删除此电台吗？此操作不可恢复。")) return;
-
-            customData = customData.filter(c => c.url !== editingUrl);
-            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-            diag.open = false;
-            refresh();
-        };
-
-        // 批量导入
         document.getElementById('show-import-area').onclick = () => {
             document.getElementById('import-area-wrapper').style.display = "block";
             document.getElementById('btn-save').style.display = "none";
-            btnDelete.style.display = "none";
+            document.getElementById('btn-do-import').style.display = "inline-flex";
         };
 
         document.getElementById('btn-do-import').onclick = () => {
@@ -341,7 +477,7 @@
                 diag.open = false;
                 refresh();
             } catch (e) {
-                alert("JSON格式错误，请检查格式。");
+                alert("JSON格式错误，请检查格式。\n\n示例见上方文本框");
             }
         };
 
@@ -349,13 +485,18 @@
             diag.open = false;
         }
 
-        // 管理模式切换
+        // ====================== 其余原有逻辑 ======================
         document.getElementById('toggle-admin').onclick = () => {
             const isAdmin = document.body.classList.toggle('is-admin-mode');
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
         };
 
-        // 其他事件
+        window.deleteStation = (url) => {
+            customData = customData.filter(c => c.url !== url);
+            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+            refresh();
+        };
+
         audio.onplaying = () => { 
             statusText.innerText = "正在直播"; 
             masterBtn.icon = "pause"; 
