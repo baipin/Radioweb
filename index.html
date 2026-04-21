@@ -78,7 +78,55 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(359deg); }
 }
-
+    /* 页脚 */
+        /* 页脚基础样式 */
+    .main-footer {
+        margin-top: auto; /* 配合 body 的 flex 布局，将页脚推至底部 */
+        padding: 40px 20px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--glass-border);
+        text-align: center;
+        transition: all 0.3s;
+    }
+    
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 8px;
+    }
+    
+    .footer-links a {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .footer-copyright, .footer-beian {
+        font-size: 13px;
+        color: #666; /* 浅色模式文字颜色 */
+    }
+    
+    /* 深色模式文字适配 */
+    .mdui-theme-dark .footer-copyright, 
+    .mdui-theme-dark .footer-beian {
+        color: #aaa;
+    }
+    
+    .footer-beian a {
+        color: inherit;
+        text-decoration: none;
+    }
     /* 悬浮播放器 */
     .player-wrapper {
         position: sticky;
@@ -704,13 +752,10 @@ function loadSource(url, isM3U8) {
         <div class="footer-links">
             <a href="https://www.baipon.com/" target="_blank">百品入口</a>
             <a href="https://baipin.pw/about#%E6%8D%90%E8%B5%A0%E6%88%91%E4%BB%AC" target="_blank">捐赠我们</a>
-            <a href="#">关于我们</a>
+            <a href="https://www.baipon.com/projects.html">其他项目</a>
         </div>
         <div class="footer-copyright">
             &copy; 2026 百品电台 · 基于服务器反代加速的世界电台服务
-        </div>
-        <div class="footer-beian">
-            <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备XXXXXXXX号</a>
         </div>
     </div>
 </footer>
