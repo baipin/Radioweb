@@ -105,15 +105,18 @@
     .radio-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.98) !important; }
     .mdui-theme-dark .radio-item:hover { background: rgba(55,55,65,0.98) !important; }
     .radio-item.active { border-color: var(--accent-color); }
+    
+    /* 修改管理操作：只保留编辑，不再在此处显示删除图标 */
     .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
     body.is-admin-mode .admin-actions { display: flex; }
+
     .wave-box { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-right: 10px; }
     .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
     @keyframes wave { from { height: 3px; } to { height: 16px; } }
 
     /* ==================== 修复部分 ==================== */
 
-    /* 电台列表文字（解决你当前问题） */
+    /* 电台列表文字 */
     .radio-item span {
         color: #1f1f1f !important;
         font-weight: 600;
@@ -202,21 +205,18 @@
         <div class="radio-grid" id="station-list"></div>
     </div>
 
-    <!-- 合并后的对话框：添加电台 + 批量导入 -->
     <mdui-dialog id="station-dialog">
         <span slot="headline" id="diag-title">添加电台</span>
         
         <div style="display: flex; flex-direction: column; gap: 16px; padding: 8px 0;">
-            <!-- 单个添加 -->
-            <div>
+            <div id="single-add-fields">
                 <mdui-text-field label="名称" id="f-name"></mdui-text-field>
                 <mdui-text-field label="链接" id="f-url"></mdui-text-field>
                 <mdui-text-field label="分类" id="f-cat"></mdui-text-field>
                 <mdui-text-field label="Logo 地址" id="f-logo"></mdui-text-field>
             </div>
 
-            <!-- 批量导入区域 -->
-            <div style="border-top: 1px solid rgba(128,128,128,0.2); padding-top: 16px;">
+            <div id="batch-import-section" style="border-top: 1px solid rgba(128,128,128,0.2); padding-top: 16px;">
                 <mdui-button variant="outlined" id="show-import-area" style="margin-bottom: 8px;">
                     批量导入 JSON
                 </mdui-button>
@@ -234,16 +234,14 @@
     "logo": "https://example.com/logo.png"
   }
 ]'></mdui-text-field>
-                    <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 4px;">
-                        直接粘贴电台数组，点击下方“导入”按钮
-                    </div>
                 </div>
             </div>
         </div>
 
+        <mdui-button slot="action" variant="tonal" id="btn-delete-station" style="color: #ff5252; margin-right: auto; display: none;">删除此电台</mdui-button>
         <mdui-button slot="action" variant="text" onclick="closeDialog()">取消</mdui-button>
-        <mdui-button slot="action" variant="filled" id="btn-save">保存单个电台</mdui-button>
-        <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始批量导入</mdui-button>
+        <mdui-button slot="action" variant="filled" id="btn-save">保存</mdui-button>
+        <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始导入</mdui-button>
     </mdui-dialog>
 
     <script>
@@ -256,6 +254,9 @@
        
         let customData = JSON.parse(localStorage.getItem('bp_radios_custom') || '[]');
         let favorites = JSON.parse(localStorage.getItem('bp_radios_favs') || '[]');
+        // 新增：存储被删除的电台 URL（包括 js 导入的）
+        let deletedUrls = JSON.parse(localStorage.getItem('bp_radios_deleted') || '[]');
+        
         let allStations = [];
         let currentFilter = '全部';
         let currentUrl = "";
@@ -290,18 +291,20 @@
             return div;
         }
 
-        // --- 数据加载（修复：分类同时包含 radio.js 和自定义电台）---
+        // --- 数据加载 ---
         function refresh() {
             const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
-            allStations = [...base, ...customData];
+            
+            // 过滤掉已删除的电台
+            const combinedRaw = [...base, ...customData];
+            allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
            
             let cats = ['全部'];
             if(favorites.length > 0) cats.push('我的收藏');
             
-            // 同时遍历 radio.js 和 customData 中的所有分类
-            const allCategories = [...base, ...customData]
+            const allCategories = allStations
                 .map(s => s.category || '未分类')
-                .filter((v, i, self) => self.indexOf(v) === i)  // 去重
+                .filter((v, i, self) => self.indexOf(v) === i)
                 .sort();
             
             cats = [...cats, ...allCategories];
@@ -338,7 +341,6 @@
                     <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${s.name}</span>
                     <div class="admin-actions">
                         <mdui-button-icon icon="edit" size="small" onclick="openEdit('${s.url}'); event.stopPropagation();"></mdui-button-icon>
-                        <mdui-button-icon icon="delete" size="small" onclick="deleteStation('${s.url}'); event.stopPropagation();"></mdui-button-icon>
                     </div>
                 `;
                 item.onclick = () => play(s, item);
@@ -397,7 +399,7 @@
             refresh();
         };
 
-        // ====================== 对话框逻辑 ======================
+        // ====================== 对话框及删除逻辑 ======================
         const diag = document.getElementById('station-dialog');
 
         document.getElementById('open-add').onclick = () => {
@@ -412,6 +414,7 @@
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-do-import').style.display = "none";
+            document.getElementById('btn-delete-station').style.display = "none"; // 添加时不显示删除按钮
 
             diag.open = true;
         };
@@ -430,10 +433,12 @@
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-do-import').style.display = "none";
+            document.getElementById('btn-delete-station').style.display = "inline-flex"; // 编辑时显示删除按钮
 
             diag.open = true;
         };
 
+        // 保存/更新
         document.getElementById('btn-save').onclick = () => {
             const s = {
                 name: document.getElementById('f-name').value.trim(),
@@ -447,11 +452,39 @@
                 return;
             }
 
-            customData = customData.filter(x => x.url !== s.url);
+            // 如果正在编辑，先移除旧的自定义数据（如果存在）
+            if (editingUrl) {
+                customData = customData.filter(x => x.url !== editingUrl);
+            }
+            
             customData.push(s);
             localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
             diag.open = false;
             refresh();
+        };
+
+        // 核心修复：整合删除逻辑
+        document.getElementById('btn-delete-station').onclick = () => {
+            if (!editingUrl) return;
+
+            if (confirm("确定要删除此电台吗？")) {
+                // 1. 从自定义数据中移除（如果是自定义的）
+                customData = customData.filter(x => x.url !== editingUrl);
+                localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+
+                // 2. 记录到删除黑名单（针对 js 导入的预置电台）
+                if (!deletedUrls.includes(editingUrl)) {
+                    deletedUrls.push(editingUrl);
+                    localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+                }
+
+                // 3. 同步移除收藏
+                favorites = favorites.filter(u => u !== editingUrl);
+                localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
+
+                diag.open = false;
+                refresh();
+            }
         };
 
         document.getElementById('show-import-area').onclick = () => {
@@ -477,7 +510,7 @@
                 diag.open = false;
                 refresh();
             } catch (e) {
-                alert("JSON格式错误，请检查格式。\n\n示例见上方文本框");
+                alert("JSON格式错误");
             }
         };
 
@@ -485,16 +518,10 @@
             diag.open = false;
         }
 
-        // ====================== 其余原有逻辑 ======================
+        // ====================== 其余逻辑 ======================
         document.getElementById('toggle-admin').onclick = () => {
             const isAdmin = document.body.classList.toggle('is-admin-mode');
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
-        };
-
-        window.deleteStation = (url) => {
-            customData = customData.filter(c => c.url !== url);
-            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-            refresh();
         };
 
         audio.onplaying = () => { 
