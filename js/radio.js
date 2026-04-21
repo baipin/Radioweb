@@ -21,8 +21,8 @@ const radioStations = [
     { name: "豁达864", url: "https://d3ca3xccq5z5hu.cloudfront.net/radio-HTTP/am864.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
 
     // === 澳门 ===
-    { name: "澳门电台 (中文)", url: "https://live5.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://www.tdm.com.mo/favicon.ico", category: "澳门" },
-    { name: "澳门电台 (葡文)", url: "https://live5.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://www.tdm.com.mo/favicon.ico", category: "澳门" },
+    { name: "澳门电台 (中文)", url: "https://live5.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
+    { name: "澳门电台 (葡文)", url: "https://live5.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
     { name: "中国之声", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "https://www.cnr.cn/favicon.ico", category: "内地" },
