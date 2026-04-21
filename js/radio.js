@@ -128,3 +128,5 @@ const radioStations = [
     { name: "Big B Radio 韩语流行", url: "http://kpop.bigbradio.net/s", logo: "", category: "网络音乐" },
     { name: "Big B Radio 日语流行", url: "http://jpop.bigbradio.net/s", logo: "", category: "网络音乐" }
 ];
+
+console.log("电台列表已加载：" + new Date().getTime());
