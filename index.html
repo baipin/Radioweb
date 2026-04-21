@@ -10,8 +10,7 @@
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="js/radio.js"></script>
-    <!-- Google tag (gtag.js)  -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-328FTWB8G4"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-328FTWB8G4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -112,7 +111,14 @@
         transition: 0.3s;
         position: relative;
         border: 2px solid transparent;
+        /* 瀑布流动画 */
+        animation: itemFadeIn 0.4s ease-out forwards;
     }
+    @keyframes itemFadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .mdui-theme-dark .radio-item {
         background: rgba(45,45,55,0.95) !important;
     }
@@ -120,7 +126,6 @@
     .mdui-theme-dark .radio-item:hover { background: rgba(55,55,65,0.98) !important; }
     .radio-item.active { border-color: var(--accent-color); }
     
-    /* 修改管理操作：只保留编辑，不再在此处显示删除图标 */
     .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; }
     body.is-admin-mode .admin-actions { display: flex; }
 
@@ -128,9 +133,16 @@
     .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
     @keyframes wave { from { height: 3px; } to { height: 16px; } }
 
-    /* ==================== 修复部分 ==================== */
+    /* 加载提示样式 */
+    #loading-indicator {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 30px;
+        opacity: 0.6;
+        font-size: 0.9rem;
+    }
 
-    /* 电台列表文字 */
+    /* ==================== 修复部分 ==================== */
     .radio-item span {
         color: #1f1f1f !important;
         font-weight: 600;
@@ -139,32 +151,24 @@
     .mdui-theme-dark .radio-item span {
         color: #ffffff !important;
     }
-
-    /* 收藏按钮保持红色 */
     #fav-btn-main {
         color: #ff5252 !important;
     }
     .mdui-theme-dark #fav-btn-main {
         color: #ff5252 !important;
     }
-
-    /* 播放/暂停按钮白天模式可见 */
     #master-play-btn {
         color: #1f1f1f !important;
     }
     .mdui-theme-dark #master-play-btn {
         color: #ffffff !important;
     }
-
-    /* 其他按钮正常 */
     mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
         color: #1f1f1f !important;
     }
     .mdui-theme-dark mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
         color: #e0e0e0 !important;
     }
-
-    /* 标题和当前电台名称 */
     .nav-content span,
     #current-name, 
     #play-status {
@@ -217,6 +221,7 @@
         <audio id="audio-player"></audio>
         <div class="category-tabs" id="category-tabs"></div>
         <div class="radio-grid" id="station-list"></div>
+        <div id="loading-indicator"></div>
     </div>
 
     <mdui-dialog id="station-dialog">
@@ -268,21 +273,31 @@
        
         let customData = JSON.parse(localStorage.getItem('bp_radios_custom') || '[]');
         let favorites = JSON.parse(localStorage.getItem('bp_radios_favs') || '[]');
-        // 新增：存储被删除的电台 URL（包括 js 导入的）
         let deletedUrls = JSON.parse(localStorage.getItem('bp_radios_deleted') || '[]');
         
         let allStations = [];
+        let filteredStations = []; // 当前分类下的全量数据
         let currentFilter = '全部';
         let currentUrl = "";
         let hls = null;
         let editingUrl = null;
 
-        // --- 悬浮逻辑 ---
+        // --- 瀑布流控制变量 ---
+        let displayedCount = 0;
+        const PAGE_SIZE = 24; // 每次加载24个电台
+
+        // --- 悬浮与滚动逻辑 ---
         window.addEventListener('scroll', () => {
+            // 吸顶逻辑
             if (window.scrollY > 40) {
                 stickyWrapper.classList.add('is-sticky');
             } else {
                 stickyWrapper.classList.remove('is-sticky');
+            }
+
+            // 瀑布流触底检测
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 400) {
+                loadMoreItems();
             }
         });
 
@@ -305,11 +320,9 @@
             return div;
         }
 
-        // --- 数据加载 ---
+        // --- 数据加载核心 ---
         function refresh() {
             const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
-            
-            // 过滤掉已删除的电台
             const combinedRaw = [...base, ...customData];
             allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
            
@@ -329,27 +342,52 @@
                 const btn = document.createElement('button');
                 btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
                 btn.textContent = c;
-                btn.onclick = () => { currentFilter = c; refresh(); };
+                btn.onclick = () => { 
+                    currentFilter = c; 
+                    displayedCount = 0; // 重置计数
+                    window.scrollTo(0, 0); // 切换分类回到顶部
+                    refresh(); 
+                };
                 tabBox.appendChild(btn);
             });
 
-            renderList();
+            // 先进行全量过滤，但不渲染
+            if(currentFilter === '我的收藏') {
+                filteredStations = allStations.filter(s => favorites.includes(s.url));
+            } else if(currentFilter !== '全部') {
+                filteredStations = allStations.filter(s => (s.category || '未分类') === currentFilter);
+            } else {
+                filteredStations = allStations;
+            }
+
+            renderInitialList();
             updateFavBtnState();
         }
 
-        function renderList() {
+        function renderInitialList() {
             listDiv.innerHTML = '';
-            let filtered = allStations;
+            displayedCount = 0;
+            loadMoreItems();
+        }
 
-            if(currentFilter === '我的收藏') {
-                filtered = allStations.filter(s => favorites.includes(s.url));
-            } else if(currentFilter !== '全部') {
-                filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
+        function loadMoreItems() {
+            if (displayedCount >= filteredStations.length) {
+                document.getElementById('loading-indicator').innerText = "没有更多了";
+                return;
             }
 
-            filtered.forEach(s => {
+            document.getElementById('loading-indicator').innerText = "加载中...";
+            
+            const fragment = document.createDocumentFragment();
+            const limit = Math.min(displayedCount + PAGE_SIZE, filteredStations.length);
+
+            for (let i = displayedCount; i < limit; i++) {
+                const s = filteredStations[i];
                 const item = document.createElement('div');
                 item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
+                // 给每个卡片一点交错的动画延迟
+                item.style.animationDelay = `${(i % PAGE_SIZE) * 0.05}s`;
+                
                 item.innerHTML = `
                     <div style="width:52px;height:52px;">${getLogoHTML(s.logo, s.name)}</div>
                     <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${s.name}</span>
@@ -358,81 +396,74 @@
                     </div>
                 `;
                 item.onclick = () => play(s, item);
-                listDiv.appendChild(item);
-            });
+                fragment.appendChild(item);
+            }
+
+            listDiv.appendChild(fragment);
+            displayedCount = limit;
+
+            if (displayedCount >= filteredStations.length) {
+                document.getElementById('loading-indicator').innerText = "已加载全部 " + filteredStations.length + " 个电台";
+            }
         }
 
-        // --- 播放与收藏逻辑 ---
-        let isRetrying = false; // 标记是否正在尝试代理重试
+        // --- 播放逻辑（保持原样） ---
+        let isRetrying = false; 
 
-function play(s, el) {
-    let targetUrl = s.url;
-    isRetrying = false; // 每次点击新频道，重置重试状态
+        function play(s, el) {
+            let targetUrl = s.url;
+            isRetrying = false; 
 
-    // 保留你原本的 HTTPS 代理逻辑：如果是 http 链接，直接走代理
-    if (targetUrl.startsWith('http://')) {
-        console.log("检测到不安全链接，强制走代理...");
-        targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
-        isRetrying = true; // 已处于代理模式
-    }
+            if (targetUrl.startsWith('http://')) {
+                targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+                isRetrying = true; 
+            }
 
-    currentUrl = targetUrl;
-    
-    // UI 更新
-    document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
-    if(el) el.classList.add('active');
-    document.getElementById('current-name').innerText = s.name;
-    document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
-    statusText.innerText = "缓冲中...";
-
-    loadSource(targetUrl, s.url.includes('.m3u8'));
-}
-
-// 核心：错误监听与自动重试
-audio.onerror = async function() {
-    if (!isRetrying) {
-        console.warn("直连失败，尝试通过代理绕过限制...");
-        isRetrying = true;
-        statusText.innerText = "切换代理模式中...";
-        
-        const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
-        loadSource(proxyUrl, currentUrl.includes('.m3u8'));
-    } else {
-        // 如果代理也失败了，尝试读取后端返回的中文错误内容
-        statusText.innerText = "频道暂时不可用";
-        console.error("代理请求最终失败。");
-    }
-};
-
-// 封装加载逻辑
-function loadSource(url, isM3U8) {
-    if (isM3U8) {
-        if (Hls.isSupported()) {
-            if (hls) hls.destroy();
-            hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(audio);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                if (data.fatal && !isRetrying) { audio.onerror(); }
-            });
-        } else {
-            audio.src = url;
-            audio.play();
+            currentUrl = targetUrl;
+            document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('current-name').innerText = s.name;
+            document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
+            statusText.innerText = "缓冲中...";
+            loadSource(targetUrl, s.url.includes('.m3u8'));
         }
-    } else {
-        if (hls) hls.destroy();
-        audio.src = url;
-        audio.play();
-    }
-}
+
+        audio.onerror = async function() {
+            if (!isRetrying) {
+                isRetrying = true;
+                statusText.innerText = "切换代理模式中...";
+                const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
+                loadSource(proxyUrl, currentUrl.includes('.m3u8'));
+            } else {
+                statusText.innerText = "频道暂时不可用";
+            }
+        };
+
+        function loadSource(url, isM3U8) {
+            if (isM3U8) {
+                if (Hls.isSupported()) {
+                    if (hls) hls.destroy();
+                    hls = new Hls();
+                    hls.loadSource(url);
+                    hls.attachMedia(audio);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        if (data.fatal && !isRetrying) { audio.onerror(); }
+                    });
+                } else {
+                    audio.src = url;
+                    audio.play();
+                }
+            } else {
+                if (hls) hls.destroy();
+                audio.src = url;
+                audio.play();
+            }
+        }
 
         function updateFavBtnState() {
             const btn = document.getElementById('fav-btn-main');
-            if (!currentUrl) { 
-                btn.style.display = "none"; 
-                return; 
-            }
+            if (!currentUrl) { btn.style.display = "none"; return; }
             btn.style.display = "inline-flex";
             const isFav = favorites.includes(currentUrl);
             btn.icon = isFav ? "favorite" : "favorite_border";
@@ -449,7 +480,7 @@ function loadSource(url, isM3U8) {
             refresh();
         };
 
-        // ====================== 对话框及删除逻辑 ======================
+        // --- 后台/管理逻辑（保持原样） ---
         const diag = document.getElementById('station-dialog');
 
         document.getElementById('open-add').onclick = () => {
@@ -459,13 +490,11 @@ function loadSource(url, isM3U8) {
             document.getElementById('f-url').value = "";
             document.getElementById('f-cat').value = "";
             document.getElementById('f-logo').value = "";
-            
             document.getElementById('import-area').value = "";
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-do-import').style.display = "none";
-            document.getElementById('btn-delete-station').style.display = "none"; // 添加时不显示删除按钮
-
+            document.getElementById('btn-delete-station').style.display = "none"; 
             diag.open = true;
         };
 
@@ -473,90 +502,63 @@ function loadSource(url, isM3U8) {
             const s = allStations.find(x => x.url === url);
             if (!s) return;
             editingUrl = url;
-
             document.getElementById('diag-title').innerText = "编辑电台";
             document.getElementById('f-name').value = s.name;
             document.getElementById('f-url').value = s.url;
             document.getElementById('f-cat').value = s.category || "";
             document.getElementById('f-logo').value = s.logo || "";
-
             document.getElementById('import-area-wrapper').style.display = "none";
             document.getElementById('btn-save').style.display = "inline-flex";
             document.getElementById('btn-do-import').style.display = "none";
-            document.getElementById('btn-delete-station').style.display = "inline-flex"; // 编辑时显示删除按钮
-
+            document.getElementById('btn-delete-station').style.display = "inline-flex";
             diag.open = true;
         };
 
-        // 保存/更新
         document.getElementById('btn-save').onclick = () => {
-    const s = {
-        name: document.getElementById('f-name').value.trim(),
-        url: document.getElementById('f-url').value.trim(),
-        category: document.getElementById('f-cat').value.trim() || "默认",
-        logo: document.getElementById('f-logo').value.trim()
-    };
+            const s = {
+                name: document.getElementById('f-name').value.trim(),
+                url: document.getElementById('f-url').value.trim(),
+                category: document.getElementById('f-cat').value.trim() || "默认",
+                logo: document.getElementById('f-logo').value.trim()
+            };
+            if (!s.name || !s.url) { alert("名称和链接不能为空"); return; }
 
-    if (!s.name || !s.url) {
-        alert("名称和链接不能为空");
-        return;
-    }
-
-    // 如果正在编辑
-    if (editingUrl) {
-        // 如果用户修改了 URL
-        if (editingUrl !== s.url) {
-            // 1. 把旧 URL 加入删除黑名单（防止预置电台再次出现）
-            if (!deletedUrls.includes(editingUrl)) {
-                deletedUrls.push(editingUrl);
-                localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+            if (editingUrl) {
+                if (editingUrl !== s.url) {
+                    if (!deletedUrls.includes(editingUrl)) {
+                        deletedUrls.push(editingUrl);
+                        localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+                    }
+                    customData = customData.filter(x => x.url !== editingUrl);
+                    if (favorites.includes(editingUrl)) {
+                        favorites = favorites.filter(u => u !== editingUrl);
+                        favorites.push(s.url);
+                        localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
+                    }
+                } else {
+                    customData = customData.filter(x => x.url !== editingUrl);
+                }
             }
-            // 2. 从自定义数据中移除旧 URL 的记录
-            customData = customData.filter(x => x.url !== editingUrl);
             
-            // 3. 如果旧 URL 在收藏夹里，更新为新 URL
-            if (favorites.includes(editingUrl)) {
-                favorites = favorites.filter(u => u !== editingUrl);
-                favorites.push(s.url);
-                localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
-            }
-        } else {
-            // URL 没变，仅修改了名称/分类/Logo，先移除旧的自定义记录准备覆盖
-            customData = customData.filter(x => x.url !== editingUrl);
-        }
-    }
-    
-    // 将新数据存入自定义库
-    customData.push(s);
-    localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-    
-    // 如果该 URL 曾经在黑名单里（比如删了又加回来），则从黑名单移除
-    deletedUrls = deletedUrls.filter(u => u !== s.url);
-    localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+            customData.push(s);
+            localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
+            deletedUrls = deletedUrls.filter(u => u !== s.url);
+            localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
+            diag.open = false;
+            refresh();
+        };
 
-    diag.open = false;
-    refresh();
-};
-
-        // 核心修复：整合删除逻辑
         document.getElementById('btn-delete-station').onclick = () => {
             if (!editingUrl) return;
-
             if (confirm("确定要删除此电台吗？")) {
-                // 1. 从自定义数据中移除（如果是自定义的）
                 customData = customData.filter(x => x.url !== editingUrl);
                 localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-
-                // 2. 记录到删除黑名单（针对 js 导入的预置电台）
                 if (!deletedUrls.includes(editingUrl)) {
                     deletedUrls.push(editingUrl);
                     localStorage.setItem('bp_radios_deleted', JSON.stringify(deletedUrls));
                 }
-
-                // 3. 同步移除收藏
                 favorites = favorites.filter(u => u !== editingUrl);
                 localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
-
                 diag.open = false;
                 refresh();
             }
@@ -570,30 +572,20 @@ function loadSource(url, isM3U8) {
 
         document.getElementById('btn-do-import').onclick = () => {
             const jsonStr = document.getElementById('import-area').value.trim();
-            if (!jsonStr) {
-                alert("请输入JSON内容");
-                return;
-            }
+            if (!jsonStr) { alert("请输入JSON内容"); return; }
             try {
                 const imported = JSON.parse(jsonStr);
                 if (!Array.isArray(imported)) throw new Error("必须是数组");
-
                 customData = [...customData, ...imported];
                 localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
-                
                 alert(`成功导入 ${imported.length} 个电台`);
                 diag.open = false;
                 refresh();
-            } catch (e) {
-                alert("JSON格式错误");
-            }
+            } catch (e) { alert("JSON格式错误"); }
         };
 
-        function closeDialog() {
-            diag.open = false;
-        }
+        function closeDialog() { diag.open = false; }
 
-        // ====================== 其余逻辑 ======================
         document.getElementById('toggle-admin').onclick = () => {
             const isAdmin = document.body.classList.toggle('is-admin-mode');
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
