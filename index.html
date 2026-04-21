@@ -25,7 +25,7 @@
         background: transparent !important; 
         display: flex; 
         flex-direction: column; 
-        color: #1f1f1f;                    /* 修复白天模式文字太淡 */
+        color: #1f1f1f;
     }
       
     body::before {
@@ -111,9 +111,41 @@
     .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
     @keyframes wave { from { height: 3px; } to { height: 16px; } }
 
-    /* ==================== 以下为新增的修复部分（仅解决你提到的问题） ==================== */
+    /* ==================== 修复部分 ==================== */
 
-    /* 白天模式文字对比度 */
+    /* 1. 百品电台标题文字（白天模式清晰） */
+    .nav-content span {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark .nav-content span {
+        color: #ffffff !important;
+    }
+
+    /* 2. 收藏按钮改为红色 */
+    #fav-btn-main {
+        color: #ff5252 !important;
+    }
+    .mdui-theme-dark #fav-btn-main {
+        color: #ff5252 !important;
+    }
+
+    /* 3. 暂停/播放按钮白天模式可见（强制深色） */
+    #master-play-btn {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark #master-play-btn {
+        color: #ffffff !important;
+    }
+
+    /* 4. 其他所有按钮图标（音量、设置、添加、主题切换等）保持正常 */
+    mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #1f1f1f !important;
+    }
+    .mdui-theme-dark mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) {
+        color: #e0e0e0 !important;
+    }
+
+    /* 5. 当前电台名称和状态文字（避免发淡） */
     #current-name, #play-status {
         color: #1f1f1f !important;
         opacity: 1;
@@ -121,30 +153,6 @@
     .mdui-theme-dark #current-name,
     .mdui-theme-dark #play-status {
         color: #ffffff !important;
-    }
-
-    /* 修复按钮图标颜色反转（播放/暂停、主题切换等） */
-    mdui-button-icon {
-        color: #1f1f1f !important;
-    }
-    .mdui-theme-dark mdui-button-icon {
-        color: #e0e0e0 !important;
-    }
-
-    /* 主播放按钮（蓝色填充按钮） */
-    #master-play-btn {
-        color: #ffffff !important;
-    }
-    .mdui-theme-dark #master-play-btn {
-        color: #ffffff !important;
-    }
-
-    /* 主题切换按钮 */
-    #theme-toggle {
-        color: #1f1f1f !important;
-    }
-    .mdui-theme-dark #theme-toggle {
-        color: #e0e0e0 !important;
     }
 </style>
 </head>
