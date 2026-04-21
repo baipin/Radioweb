@@ -538,9 +538,65 @@ function loadSource(url, isM3U8) {
             sortable.option("disabled", !isAdmin); // 只有管理模式允许拖拽
         };
 
-        audio.onplaying = () => { statusText.innerText = "正在直播"; masterBtn.icon = "pause"; waveAnim.style.display = "flex"; };
-        audio.onpause = () => { masterBtn.icon = "play_arrow"; waveAnim.style.display = "none"; statusText.innerText = "已暂停"; };
-        masterBtn.onclick = () => audio.src && (audio.paused ? audio.play() : audio.pause());
+       // --- 兼容性增强版播放控制 ---
+
+        // 统一的播放/暂停逻辑
+        const togglePlay = () => {
+            if (!audio.src || audio.src === window.location.href) {
+                statusText.innerText = "请先选择电台";
+                return;
+            }
+        
+            if (audio.paused) {
+                // 播放逻辑
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error("Safari 播放拦截:", error);
+                        statusText.innerText = "点击图标以激活播放";
+                    });
+                }
+            } else {
+                // 暂停逻辑：针对 Safari 优化
+                audio.pause();
+                
+                // 如果是直播流，暂停后重置 src 往往能解决恢复播放时的卡死问题
+                // 但为了不删除无关代码，我们通过判断原生 HLS 还是 hls.js 来处理
+                if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Safari 原生 HLS 环境下，暂停直播建议“停止加载”
+                    // 这样下次播放会重新拉取最新切片，防止卡死在旧进度
+                    const currentSrc = audio.src;
+                    audio.src = ''; 
+                    audio.load();
+                    audio.src = currentSrc;
+                }
+            }
+        };
+        
+        // 绑定按钮
+        masterBtn.onclick = (e) => {
+            e.preventDefault();
+            togglePlay();
+        };
+        
+        // 增加对音频对象的事件监听兼容性
+        audio.onplaying = () => { 
+            statusText.innerText = "正在直播"; 
+            masterBtn.icon = "pause"; 
+            waveAnim.style.display = "flex"; 
+        };
+        
+        audio.onpause = () => { 
+            masterBtn.icon = "play_arrow"; 
+            waveAnim.style.display = "none"; 
+            statusText.innerText = "已暂停"; 
+        };
+        
+        // 修复 Safari 锁屏或控制中心操作导致的同步问题
+        audio.onabort = () => {
+            masterBtn.icon = "play_arrow";
+            waveAnim.style.display = "none";
+        };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
         document.getElementById('theme-toggle').onclick = () => {
             const isDark = document.body.classList.toggle('mdui-theme-dark');
