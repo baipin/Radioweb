@@ -48,15 +48,15 @@ const radioStations = [
 
     // === 台湾 ===
     // 警察广播电台（含补充分台）
-    { name: "警察广播电台 全国治安交通网", url: "https://stream.pbs.gov.tw/live/PBS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 台北分台", url: "https://stream.pbs.gov.tw/live/TPS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 台中分台", url: "https://stream.pbs.gov.tw/live/TCS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 台南分台", url: "https://stream.pbs.gov.tw/live/TNS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 高雄分台", url: "https://stream.pbs.gov.tw/live/KSS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 宜兰分台", url: "https://stream.pbs.gov.tw/live/ELS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 花莲分台", url: "https://stream.pbs.gov.tw/live/HLS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 台东分台", url: "http://stream.pbs.gov.tw:1935/live/TTS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
-    { name: "警察广播电台 新竹分台", url: "http://stream.pbs.gov.tw:1935/live/SCS/playlist.m3u8", logo: "https://www.pbs.gov.tw/favicon.ico", category: "台湾" },
+    { name: "警察广播电台 全国治安交通网", url: "https://stream.pbs.gov.tw/live/PBS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 台北分台", url: "https://stream.pbs.gov.tw/live/TPS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 台中分台", url: "https://stream.pbs.gov.tw/live/TCS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 台南分台", url: "https://stream.pbs.gov.tw/live/TNS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 高雄分台", url: "https://stream.pbs.gov.tw/live/KSS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 宜兰分台", url: "https://stream.pbs.gov.tw/live/ELS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 花莲分台", url: "https://stream.pbs.gov.tw/live/HLS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 台东分台", url: "http://stream.pbs.gov.tw:1935/live/TTS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
+    { name: "警察广播电台 新竹分台", url: "http://stream.pbs.gov.tw:1935/live/SCS/playlist.m3u8", logo: "img/radio/pbs.jpg", category: "台湾" },
 
     // 中央广播电台 (RTI)
     { name: "中央广播电台 国语台 (RTI)", url: "http://live2.rti.org.tw/live/_definst_/rti/rti3/playlist.m3u8", logo: "https://www.rti.org.tw/favicon.ico", category: "台湾" },
