@@ -15,34 +15,39 @@
             --accent-color: #0081ff;
         }
         .mdui-theme-dark {
-            --glass-bg: rgba(30, 30, 35, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(30, 30, 35, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.12);
         }
         body {
             margin: 0; min-height: 100vh; background: transparent !important;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex; flex-direction: column;
         }
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('img/home.jpg') center/cover no-repeat; z-index: -2;
+            filter: brightness(0.85);
+        }
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
         }
         .radio-container {
-            width: 95%; max-width: 900px; margin: 60px 0; padding: 32px;
+            width: 95%; max-width: 1100px; margin: 90px auto 40px; padding: 32px;
             background: var(--glass-bg); backdrop-filter: blur(25px);
-            border-radius: 32px; border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-radius: 28px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+            flex: 1;
         }
-        /* 当前播放区域 */
         .player-card {
             display: flex; align-items: center; gap: 24px; padding: 24px;
-            background: rgba(128,128,128,0.1); border-radius: 24px; margin-bottom: 32px;
+            background: rgba(128,128,128,0.08); border-radius: 24px; margin-bottom: 32px;
         }
         #current-logo {
-            width: 80px; height: 80px; border-radius: 16px; 
-            object-fit: cover; background: white; padding: 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 80px; height: 80px; border-radius: 16px;
+            object-fit: cover; background: white; padding: 6px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
-        /* 电台列表 */
         .radio-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 20px;
@@ -50,44 +55,68 @@
         .radio-item {
             display: flex; flex-direction: column; align-items: center;
             padding: 20px; border-radius: 24px; cursor: pointer;
-            background: rgba(128,128,128,0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(128,128,128,0.05); transition: all 0.3s;
             border: 1px solid transparent;
         }
         .radio-item:hover {
-            background: rgba(128,128,128,0.15); transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: rgba(128,128,128,0.15); transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
         }
         .radio-item.active {
             border-color: var(--accent-color);
             background: rgba(0, 129, 255, 0.1);
         }
         .radio-item img {
-            width: 48px; height: 48px; border-radius: 12px; margin-bottom: 12px;
-            background: white; object-fit: contain; padding: 2px;
+            width: 52px; height: 52px; border-radius: 14px; margin-bottom: 14px;
+            background: white; object-fit: contain; padding: 4px;
         }
-        .radio-item span { font-weight: bold; font-size: 0.9rem; text-align: center; }
-        
-        /* 播放动画小波浪 */
-        .wave-box { display: none; display: flex; align-items: flex-end; gap: 3px; height: 15px; }
-        .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
-        .wave-box span:nth-child(2) { animation-delay: 0.2s; }
-        .wave-box span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes wave { from { height: 3px; } to { height: 15px; } }
+        .wave-box { display: none; align-items: flex-end; gap: 4px; height: 18px; }
+        .wave-box span { width: 4px; background: var(--accent-color); animation: wave 1.1s infinite alternate; }
+        .wave-box span:nth-child(2) { animation-delay: 0.15s; }
+        .wave-box span:nth-child(3) { animation-delay: 0.35s; }
+        @keyframes wave { from { height: 4px; } to { height: 18px; } }
+
+        footer {
+            text-align: center; padding: 20px; color: #888; font-size: 0.9rem;
+            background: rgba(0,0,0,0.15); margin-top: auto;
+        }
+        .add-btn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+        }
     </style>
 </head>
 <body class="mdui-theme-auto">
 
-    <div class="radio-container">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <div style="font-size: 1.6rem; font-weight: 900;">网络收音机</div>
-            <mdui-button-icon icon="arrow_back" onclick="window.history.back()"></mdui-button-icon>
-        </div>
+    <!-- 顶部导航栏 -->
+    <mdui-navigation-bar class="top-nav">
+        <div style="max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; height: 64px;">
+            <a href="https://www.baipon.com" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="img/logo.png" alt="百品" style="height: 36px; margin-right: 12px;">
+                <span style="font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px;">百品导航</span>
+            </a>
+            
+            <div style="margin-left: 40px; display: flex; gap: 24px; font-weight: 500;">
+                <a href="https://www.baipon.com" style="color: inherit; text-decoration: none;">首页</a>
+                <a href="#" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">电台</a>
+                <a href="#" style="color: inherit; text-decoration: none;">电视</a>
+                <a href="#" style="color: inherit; text-decoration: none;">设置</a>
+            </div>
 
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                <mdui-button-icon id="theme-toggle" icon="dark_mode"></mdui-button-icon>
+                <a href="https://www.baipon.com">
+                    <mdui-button-icon icon="home" title="返回百品首页"></mdui-button-icon>
+                </a>
+            </div>
+        </div>
+    </mdui-navigation-bar>
+
+    <div class="radio-container">
         <div class="player-card">
             <img id="current-logo" src="img/logo.png" alt="Logo">
             <div style="flex: 1;">
-                <div id="current-name" style="font-size: 1.3rem; font-weight: 900;">请选择电台</div>
-                <div id="play-status" style="font-size: 0.85rem; opacity: 0.6; margin-top: 4px;">就绪</div>
+                <div id="current-name" style="font-size: 1.35rem; font-weight: 900;">请选择电台</div>
+                <div id="play-status" style="font-size: 0.88rem; opacity: 0.65; margin-top: 4px;">就绪</div>
             </div>
             <div class="wave-box" id="playing-anim"><span></span><span></span><span></span></div>
             <mdui-button-icon id="master-play-btn" icon="play_arrow" variant="filled" style="--mdui-color-primary: var(--accent-color)"></mdui-button-icon>
@@ -95,9 +124,31 @@
 
         <audio id="audio-player"></audio>
 
-        <div class="radio-grid" id="station-list">
-            </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="font-size: 1.25rem; font-weight: 700;">全部电台</div>
+            <mdui-button variant="outlined" onclick="showAddDialog()">+ 添加自定义电台</mdui-button>
+        </div>
+
+        <div class="radio-grid" id="station-list"></div>
     </div>
+
+    <!-- 添加电台对话框 -->
+    <mdui-dialog id="add-dialog" headline="添加自定义电台">
+        <mdui-text-field id="add-name" label="电台名称" variant="outlined"></mdui-text-field>
+        <mdui-text-field id="add-url" label="直播流地址 (m3u8 或 mp3)" variant="outlined" style="margin-top: 16px;"></mdui-text-field>
+        <mdui-text-field id="add-logo" label="Logo 地址 (可选)" variant="outlined" style="margin-top: 16px;"></mdui-text-field>
+        
+        <mdui-button slot="action" variant="text" onclick="closeAddDialog()">取消</mdui-button>
+        <mdui-button slot="action" onclick="addCustomStation()">添加</mdui-button>
+    </mdui-dialog>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 百品导航 | 网络收音机 | 仅供学习交流使用</p>
+        <p style="margin-top: 8px; font-size: 0.85rem;">
+            数据来源于公开直播流 • 如有侵权请联系删除
+        </p>
+    </footer>
 
     <script>
         const audio = document.getElementById('audio-player');
@@ -107,30 +158,42 @@
         const currentName = document.getElementById('current-name');
         const statusText = document.getElementById('play-status');
         const waveAnim = document.getElementById('playing-anim');
+        const themeToggle = document.getElementById('theme-toggle');
 
-        // 渲染电台列表 (数据来自 radio.js 中的 radioStations)
-        radioStations.forEach((s, idx) => {
-            const item = document.createElement('div');
-            item.className = 'radio-item';
-            item.innerHTML = `
-                <img src="${s.logo}" onerror="this.src='https://material-icons.github.io/material-icons-png/png/blue_grey/radio/24dp.png'">
-                <span>${s.name}</span>
-            `;
-            item.onclick = () => playStation(s, item);
-            listDiv.appendChild(item);
-        });
+        let allStations = [...radioStations]; // 复制原始电台
+
+        // 加载自定义电台
+        function loadCustomStations() {
+            const saved = localStorage.getItem('customRadioStations');
+            if (saved) {
+                allStations = [...radioStations, ...JSON.parse(saved)];
+            }
+        }
+
+        // 渲染电台列表
+        function renderStations() {
+            listDiv.innerHTML = '';
+            allStations.forEach((s, idx) => {
+                const item = document.createElement('div');
+                item.className = 'radio-item';
+                item.innerHTML = `
+                    <img src="${s.logo || 'https://material-icons.github.io/material-icons-png/png/blue_grey/radio/24dp.png'}" 
+                         onerror="this.src='https://material-icons.github.io/material-icons-png/png/blue_grey/radio/24dp.png'">
+                    <span>${s.name}</span>
+                `;
+                item.onclick = () => playStation(s, item);
+                listDiv.appendChild(item);
+            });
+        }
 
         function playStation(s, element) {
-            // 样式切换
             document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
-            // 状态更新
             currentName.innerText = s.name;
-            currentLogo.src = s.logo;
-            statusText.innerText = "正在连接流媒体...";
-            
-            // 播放
+            currentLogo.src = s.logo || 'img/logo.png';
+            statusText.innerText = "正在连接...";
+
             audio.src = s.url;
             audio.play().catch(err => {
                 statusText.innerText = "播放失败，地址可能已失效";
@@ -149,21 +212,73 @@
             waveAnim.style.display = "none";
             statusText.innerText = "已暂停";
         };
-        
         masterBtn.onclick = () => {
-            if(!audio.src) return;
+            if (!audio.src) return;
             audio.paused ? audio.play() : audio.pause();
         };
 
-        // 自动加载上次背景
+        // 夜间模式切换
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('mdui-theme-dark');
+            themeToggle.icon = isDark ? 'light_mode' : 'dark_mode';
+            localStorage.setItem('radioThemeDark', isDark);
+        }
+
+        // 添加自定义电台
+        function showAddDialog() {
+            document.getElementById('add-dialog').open = true;
+        }
+        function closeAddDialog() {
+            document.getElementById('add-dialog').open = false;
+        }
+        function addCustomStation() {
+            const name = document.getElementById('add-name').value.trim();
+            const url = document.getElementById('add-url').value.trim();
+            const logo = document.getElementById('add-logo').value.trim();
+
+            if (!name || !url) {
+                mdui.alert("名称和直播地址不能为空！");
+                return;
+            }
+
+            const newStation = { name, url, logo: logo || "https://material-icons.github.io/material-icons-png/png/blue_grey/radio/24dp.png" };
+            
+            let customList = JSON.parse(localStorage.getItem('customRadioStations') || '[]');
+            customList.push(newStation);
+            localStorage.setItem('customRadioStations', JSON.stringify(customList));
+
+            allStations.push(newStation);
+            renderStations();
+            closeAddDialog();
+
+            // 清空输入框
+            document.getElementById('add-name').value = '';
+            document.getElementById('add-url').value = '';
+            document.getElementById('add-logo').value = '';
+
+            mdui.snackbar({ message: "电台添加成功！" });
+        }
+
+        // 初始化
+        loadCustomStations();
+        renderStations();
+
+        // 主题初始化
+        if (localStorage.getItem('radioThemeDark') === 'true') {
+            document.body.classList.add('mdui-theme-dark');
+            themeToggle.icon = 'light_mode';
+        }
+        themeToggle.onclick = toggleTheme;
+
+        // 背景加载（保留你原来的逻辑）
         const match = document.cookie.match(/homepage_bg=([^;]+)/);
         if (match) {
-            const data = JSON.parse(decodeURIComponent(match[1]));
-            document.body.style.setProperty('--bg-url', `url(${data.url})`);
-            // 动态修改伪元素背景
-            const style = document.createElement('style');
-            style.innerHTML = `body::before { background-image: url('${data.url}') !important; }`;
-            document.head.appendChild(style);
+            try {
+                const data = JSON.parse(decodeURIComponent(match[1]));
+                const style = document.createElement('style');
+                style.innerHTML = `body::before { background-image: url('${data.url}') !important; }`;
+                document.head.appendChild(style);
+            } catch(e) {}
         }
     </script>
 </body>
