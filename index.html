@@ -116,6 +116,12 @@
     .tab-btn.active { background: var(--accent-color); color: white; }
     .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
     
+    /* 加载动画相关 CSS */
+    @keyframes fadeInScale {
+        from { opacity: 0; transform: translateY(15px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .radio-item {
         display: flex; flex-direction: column; align-items: center; padding: 20px;
         border-radius: 24px; cursor: pointer;
@@ -123,7 +129,7 @@
         transition: 0.3s;
         position: relative;
         border: 2px solid transparent;
-        /* min-height: 140px; /* 防止瀑布流加载时高度塌陷 */
+        animation: fadeInScale 0.4s ease forwards; /* 应用动画 */
     }
     .mdui-theme-dark .radio-item {
         background: rgba(45,45,55,0.95) !important;
@@ -343,29 +349,57 @@
             updateFavBtnState();
         }
 
+        let currentRenderTask = null; // 用于取消上一次未完成的渲染
+
         function renderList() {
             lazyObserver.disconnect();
             listDiv.innerHTML = '';
-            let filtered = allStations;
+            
+            // 取消正在进行的渲染任务防止冲突
+            if (currentRenderTask) {
+                cancelAnimationFrame(currentRenderTask);
+            }
 
+            let filtered = allStations;
             if(currentFilter === '我的收藏') {
                 filtered = allStations.filter(s => favorites.includes(s.url));
             } else if(currentFilter !== '全部') {
                 filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
             }
 
-            filtered.forEach((s) => {
-                const item = document.createElement('div');
-                item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
-                item.dataset.info = JSON.stringify(s); // 存储数据供延迟加载和排序使用
-                
-                // 初始显示占位内容，待滚动到位置后加载
-                item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
-                
-                item.onclick = () => play(s, item);
-                listDiv.appendChild(item);
-                lazyObserver.observe(item);
-            });
+            // --- 升级：分批渲染逻辑 ---
+            const chunkSize = 20; // 每帧渲染的数量
+            let index = 0;
+
+            const renderChunk = () => {
+                const limit = Math.min(index + chunkSize, filtered.length);
+                const fragment = document.createDocumentFragment();
+
+                for (; index < limit; index++) {
+                    const s = filtered[index];
+                    const item = document.createElement('div');
+                    item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
+                    // 设置动画延迟，形成交错入场效果
+                    item.style.animationDelay = `${(index % chunkSize) * 0.05}s`;
+                    item.dataset.info = JSON.stringify(s);
+                    item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
+                    item.onclick = () => play(s, item);
+                    
+                    fragment.appendChild(item);
+                    lazyObserver.observe(item);
+                }
+
+                listDiv.appendChild(fragment);
+
+                if (index < filtered.length) {
+                    currentRenderTask = requestAnimationFrame(renderChunk);
+                } else {
+                    currentRenderTask = null;
+                }
+            };
+
+            renderChunk();
+            // --- 升级结束 ---
         }
 
         // 兼容原有的手动移动功能
