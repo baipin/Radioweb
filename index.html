@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百品电台 - 网络收音机</title>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
+    <script src="js/radio.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --accent-color: #0081ff;
+        }
+        .mdui-theme-dark {
+            --glass-bg: rgba(30, 30, 35, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            margin: 0; min-height: 100vh; background: transparent !important;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('img/home.jpg') center/cover no-repeat; z-index: -2;
+        }
+        .radio-container {
+            width: 95%; max-width: 900px; margin: 60px 0; padding: 32px;
+            background: var(--glass-bg); backdrop-filter: blur(25px);
+            border-radius: 32px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        /* 当前播放区域 */
+        .player-card {
+            display: flex; align-items: center; gap: 24px; padding: 24px;
+            background: rgba(128,128,128,0.1); border-radius: 24px; margin-bottom: 32px;
+        }
+        #current-logo {
+            width: 80px; height: 80px; border-radius: 16px; 
+            object-fit: cover; background: white; padding: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        /* 电台列表 */
+        .radio-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+        .radio-item {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px; border-radius: 24px; cursor: pointer;
+            background: rgba(128,128,128,0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .radio-item:hover {
+            background: rgba(128,128,128,0.15); transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .radio-item.active {
+            border-color: var(--accent-color);
+            background: rgba(0, 129, 255, 0.1);
+        }
+        .radio-item img {
+            width: 48px; height: 48px; border-radius: 12px; margin-bottom: 12px;
+            background: white; object-fit: contain; padding: 2px;
+        }
+        .radio-item span { font-weight: bold; font-size: 0.9rem; text-align: center; }
+        
+        /* 播放动画小波浪 */
+        .wave-box { display: none; display: flex; align-items: flex-end; gap: 3px; height: 15px; }
+        .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
+        .wave-box span:nth-child(2) { animation-delay: 0.2s; }
+        .wave-box span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes wave { from { height: 3px; } to { height: 15px; } }
+    </style>
+</head>
+<body class="mdui-theme-auto">
+
+    <div class="radio-container">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <div style="font-size: 1.6rem; font-weight: 900;">网络收音机</div>
+            <mdui-button-icon icon="arrow_back" onclick="window.history.back()"></mdui-button-icon>
+        </div>
+
+        <div class="player-card">
+            <img id="current-logo" src="img/logo.png" alt="Logo">
+            <div style="flex: 1;">
+                <div id="current-name" style="font-size: 1.3rem; font-weight: 900;">请选择电台</div>
+                <div id="play-status" style="font-size: 0.85rem; opacity: 0.6; margin-top: 4px;">就绪</div>
+            </div>
+            <div class="wave-box" id="playing-anim"><span></span><span></span><span></span></div>
+            <mdui-button-icon id="master-play-btn" icon="play_arrow" variant="filled" style="--mdui-color-primary: var(--accent-color)"></mdui-button-icon>
+        </div>
+
+        <audio id="audio-player"></audio>
+
+        <div class="radio-grid" id="station-list">
+            </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio-player');
+        const listDiv = document.getElementById('station-list');
+        const masterBtn = document.getElementById('master-play-btn');
+        const currentLogo = document.getElementById('current-logo');
+        const currentName = document.getElementById('current-name');
+        const statusText = document.getElementById('play-status');
+        const waveAnim = document.getElementById('playing-anim');
+
+        // 渲染电台列表 (数据来自 radio.js 中的 radioStations)
+        radioStations.forEach((s, idx) => {
+            const item = document.createElement('div');
+            item.className = 'radio-item';
+            item.innerHTML = `
+                <img src="${s.logo}" onerror="this.src='https://material-icons.github.io/material-icons-png/png/blue_grey/radio/24dp.png'">
+                <span>${s.name}</span>
+            `;
+            item.onclick = () => playStation(s, item);
+            listDiv.appendChild(item);
+        });
+
+        function playStation(s, element) {
+            // 样式切换
+            document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // 状态更新
+            currentName.innerText = s.name;
+            currentLogo.src = s.logo;
+            statusText.innerText = "正在连接流媒体...";
+            
+            // 播放
+            audio.src = s.url;
+            audio.play().catch(err => {
+                statusText.innerText = "播放失败，地址可能已失效";
+                console.error(err);
+            });
+        }
+
+        // 播放器事件
+        audio.onplaying = () => {
+            statusText.innerText = "正在直播";
+            masterBtn.icon = "pause";
+            waveAnim.style.display = "flex";
+        };
+        audio.onpause = () => {
+            masterBtn.icon = "play_arrow";
+            waveAnim.style.display = "none";
+            statusText.innerText = "已暂停";
+        };
+        
+        masterBtn.onclick = () => {
+            if(!audio.src) return;
+            audio.paused ? audio.play() : audio.pause();
+        };
+
+        // 自动加载上次背景
+        const match = document.cookie.match(/homepage_bg=([^;]+)/);
+        if (match) {
+            const data = JSON.parse(decodeURIComponent(match[1]));
+            document.body.style.setProperty('--bg-url', `url(${data.url})`);
+            // 动态修改伪元素背景
+            const style = document.createElement('style');
+            style.innerHTML = `body::before { background-image: url('${data.url}') !important; }`;
+            document.head.appendChild(style);
+        }
+    </script>
+</body>
+</html>
