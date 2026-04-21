@@ -376,19 +376,18 @@ function play(s, el) {
 }
 
 // 核心：错误监听与自动重试
-audio.onerror = function() {
-    // 如果播放失败，且当前还没有尝试过代理
+audio.onerror = async function() {
     if (!isRetrying) {
-        console.warn("播放失败，尝试通过代理绕过限制...");
+        console.warn("直连失败，尝试通过代理绕过限制...");
         isRetrying = true;
-        statusText.innerText = "尝试代理重试...";
+        statusText.innerText = "切换代理模式中...";
         
-        // 使用原始地址构建代理链接
         const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
         loadSource(proxyUrl, currentUrl.includes('.m3u8'));
     } else {
-        statusText.innerText = "播放失败，请尝试其他频道";
-        console.error("代理模式下依然无法播放。");
+        // 如果代理也失败了，尝试读取后端返回的中文错误内容
+        statusText.innerText = "频道暂时不可用";
+        console.error("代理请求最终失败。");
     }
 };
 
