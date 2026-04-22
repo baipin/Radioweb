@@ -100,7 +100,7 @@ var radioStations = [
     { name: "RIA 897", url: "https://14033.live.streamtheworld.com/RIA897FM_PREM.aac", logo: "https://www16.mediacorp.sg/melisten/radiostation-logos/ria-897.png", category: "新加坡" },
     { name: "Oli 968", url: "https://14033.live.streamtheworld.com/OLI968FM_PREM.aac", logo: "https://www16.mediacorp.sg/melisten/radiostation-logos/oli-968.png", category: "新加坡" },
     { name: "Warna 942", url: "https://14033.live.streamtheworld.com/WARNA942FM_PREM.aac", logo: "https://www16.mediacorp.sg/melisten/radiostation-logos/warna-942.png", category: "新加坡" },
-    { name: "UFM 100.3", url: "https://www.ufm1003.sg/wp-content/assets/5/img/NAV_01_Logo_1003.svg", logo: "https://28093.live.streamtheworld.com/UFM_1003AAC.aac", category: "新加坡" },
+    { name: "UFM 100.3", url: "https://28093.live.streamtheworld.com/UFM_1003AAC.aac", logo: "https://www.ufm1003.sg/wp-content/assets/5/img/NAV_01_Logo_1003.svg", category: "新加坡" },
     { name: "96.3 好FM", url: "https://22243.live.streamtheworld.com/HAO_963AAC.aac", logo: "https://static.moneyfm893.sg/uploads/sites/7/2024/08/HaoFm-fullcolor-copy.svg", category: "新加坡" },
     { name: "One FM 91.3", url: "https://22283.live.streamtheworld.com/ONE_FM_913AAC.aac", logo: "https://www.onefm.sg/wp-content/assets/3/img/NAV_01_Logo_913-new.svg", category: "新加坡" },
     { name: "Kiss92 FM", url: "https://22283.live.streamtheworld.com/KISS_92AAC.aac", logo: "https://www.kiss92.sg/wp-content/assets/4/img/NAV_01_Logo_920.svg", category: "新加坡" },
