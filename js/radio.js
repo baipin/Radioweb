@@ -145,7 +145,7 @@ var radioStations = [
     { name: "181.FM Kickin' Country", url: "http://relay.181.fm:8130", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
     { name: "181.FM Highway 181", url: "http://relay.181.fm:8018", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
     { name: "181.FM 90's Country", url: "http://relay.181.fm:8050", logo: "https://www.181.fm/favicon.ico", category: "网络音乐" },
-    { name: "Nashville FM (荷兰纳什维尔)", url: "https://stream.nashvillefm.nl/nashvillefm.mp3", logo: "https://nashvillefm.nl/favicon.ico", category: "网络音乐" },
+    { name: "Nashville FM WNXP(纳什维尔)", url: "https://wpln.streamguys1.com/wnxpfm.aac", logo: "https://wnxp.org/wp-content/uploads/2025/06/cropped-logo-just-letters-300x300.png", category: "网络音乐" },
     { name: "Country 108 (德国网络音乐台)", url: "http://www.country108.com/listen.m3u", logo: "https://www.country108.com/favicon.png.pagespeed.ce.tuEDsXNmeM.png", category: "网络音乐" },
     { name: "Truckers.FM (全球卡车社区)", url: "https://live.truckers.fm/", logo: "https://truckers.fm/favicon.ico", category: "网络音乐" },
     { name: "BigRigFM (卡车乡村音乐专用)", url: "https://radio.bigrig.fm/", logo: "https://bigrig.fm/favicon.ico", category: "网络音乐" },
