@@ -73,7 +73,7 @@ var radioStations = [
     { name: "CityFM 台南知音 (971)", url: "http://fm971.cityfm.tw:8080/971.mp3", logo: "img/radio/cityfm.webp", category: "台湾" },
     { name: "M-Radio 全国", url: "http://stream.rcs.revma.com/044q61ha7a0uv", logo: "https://www.mradio.com.tw/favicon.ico", category: "台湾" },
 
-    { name: "Classical FM 97.7", url: "https://onair.family977.com.tw:8977/live.mp3", logo: "https://www.family977.com.tw/apple-touch-icon.png", category: "台湾" },
+    { name: "Classical FM 97.7", url: "https://onair.family977.com.tw:8977/live.mp3", logo: "img/radio/classical.jpg", category: "台湾" },
     { name: "Bravo FM 91.3", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "https://www.bravo913.com.tw/lazyweb/images/logo.png", category: "台湾" },
     { name: "ICRT", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
     { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "https://www.news98.com.tw/images/logo.png", category: "台湾" },
