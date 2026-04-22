@@ -65,7 +65,6 @@ var radioStations = [
 
     // 其他台湾电台（含补充）
     { name: "ICRT 台北国际社区广播电台", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
-    { name: "飞碟联播网 (UFO)", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.uforadio.com.tw/favicon.ico", category: "台湾" },
     { name: "BravoFM 台北都会音乐台", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "", category: "台湾" },
     { name: "CityFM 台中城市广播 (929)", url: "http://fm929.cityfm.tw:8080/929.mp3", logo: "img/radio/cityfm.webp", category: "台湾" },
     { name: "CityFM 台北健康电台 (901)", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "img/radio/cityfm.webp", category: "台湾" },
@@ -74,11 +73,11 @@ var radioStations = [
     { name: "M-Radio 全国", url: "http://stream.rcs.revma.com/044q61ha7a0uv", logo: "https://www.mradio.com.tw/favicon.ico", category: "台湾" },
 
     { name: "Classical FM 97.7", url: "https://onair.family977.com.tw:8977/live.mp3", logo: "img/radio/classical.jpg", category: "台湾" },
-    { name: "Bravo FM 91.3", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "https://www.bravo913.com.tw/lazyweb/images/logo.png", category: "台湾" },
+    { name: "BravoFM 91.3台北都会音乐台", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "https://www.bravo913.com.tw/lazyweb/images/logo.png", category: "台湾" },
     { name: "ICRT", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
     { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "https://www.news98.com.tw/images/logo.png", category: "台湾" },
     { name: "城市廣播網台北90.1", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "http://www.cityfm.tw/img/logo.png", category: "台湾" },
-    { name: "IC之音", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.ic975.com/wp-content/themes/ic975/images/logo.png", category: "台湾" },
+    { name: "IC之音 竹科廣播電台", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.ic975.com/wp-content/themes/ic975/images/logo.png", category: "台湾" },
     { name: "臺北廣播電臺93.1", url: "https://stream.ginnet.cloud/live0130lo-yfyo/_definst_/fm/playlist.m3u8", logo: "https://tradio.gov.taipei/favicon.ico", category: "台湾" },
     { name: "中廣流行網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣流行網", logo: "https://www.bcc.com.tw/favicon.ico", category: "台湾" },
     { name: "中廣音樂網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣音樂網", logo: "https://www.bcc.com.tw/favicon.ico", category: "台湾" },
