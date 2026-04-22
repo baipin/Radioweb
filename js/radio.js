@@ -23,6 +23,7 @@ var radioStations = [
     // === 澳门 ===
     { name: "澳门电台 (中文)", url: "https://live5.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
     { name: "澳门电台 (葡文)", url: "https://live5.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
+    { name: "绿邨电台", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
     { name: "中国之声", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "img/radio/cnr.jpg", category: "内地" },
@@ -75,8 +76,7 @@ var radioStations = [
     { name: "Classical FM 97.7", url: "https://onair.family977.com.tw:8977/live.mp3", logo: "img/radio/classical.jpg", category: "台湾" },
     { name: "BravoFM 91.3台北都会音乐台", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "https://www.bravo913.com.tw/lazyweb/images/logo.png", category: "台湾" },
     { name: "ICRT", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
-    { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "https://www.news98.com.tw/images/logo.png", category: "台湾" },
-    { name: "城市廣播網台北90.1", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "http://www.cityfm.tw/img/logo.png", category: "台湾" },
+    { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "http://www.news98.com.tw/images/neil.ico", category: "台湾" },
     { name: "IC之音 竹科廣播電台", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.ic975.com/favicon.svg", category: "台湾" },
     { name: "臺北廣播電臺93.1", url: "https://stream.ginnet.cloud/live0130lo-yfyo/_definst_/fm/playlist.m3u8", logo: "img/radio/tr.jpg", category: "台湾" },
     { name: "中廣流行網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣流行網", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
