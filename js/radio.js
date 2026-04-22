@@ -148,12 +148,11 @@ var radioStations = [
     
     // === 美国 (USA) ===
     { name: "NPR News (美国全国公共广播)", url: "https://npr-ice.streamguys1.com/live.mp3", logo: "https://www.npr.org/favicon.ico", category: "美国" },
-    { name: "WNYC New York (纽约公共广播)", url: "https://wnyc.streaming.adswizz.com/wnycfm-mobile.mp3", logo: "https://www.wnyc.org/favicon.ico", category: "美国" },
+    { name: "WNYC New York (纽约公共广播)", url: "https://fm939.wnyc.org/wnycfm-mobile.aac", logo: "https://www.wnyc.org/favicon.ico", category: "美国" },
     { name: "KEXP Seattle (西雅图独立音乐)", url: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3", logo: "https://www.kexp.org/favicon.ico", category: "美国" },
-    { name: "Smooth Jazz 74 (纽约爵士)", url: "https://sj74.streamguys1.com/sj74mp3", logo: "https://www.smoothjazz74.com/favicon.ico", category: "美国" },
     { name: "WQXR (纽约古典音乐台)", url: "https://wqxr.streaming.adswizz.com/wqxr-mobile.mp3", logo: "https://www.wqxr.org/favicon.ico", category: "美国" },
     { name: "SomaFM Groove Salad (旧金山电子)", url: "http://ice1.somafm.com/groovesalad-128-mp3", logo: "https://somafm.com/favicon.ico", category: "美国" },
-    { name: "Bloomberg Radio (彭博财经)", url: "https://bloombergradio.atunne.com/bloomberg_radio.mp3", logo: "https://www.bloomberg.com/favicon.ico", category: "美国" },
+    { name: "Bloomberg Radio (彭博财经)", url: "https://17563.live.streamtheworld.com/WBBRAMAAC48/HLS/aa6b0a8b-da19-463f-a757-a4e5f57df4f5/0/playlist.m3u8", logo: "https://www.bloomberg.com/favicon.ico", category: "美国" },
     { name: "Jazz24 (全天候爵士乐)", url: "https://live.wpmucdn.com/kplu/jazz24-mp3-128", logo: "https://www.jazz24.org/favicon.ico", category: "美国" },
 
     { name: "Rock Antenne (德国摇滚)", url: "https://mp3channels.webradio.antenne.de/rockantenne", logo: "https://www.rockantenne.de/favicon.ico", category: "网络音乐"},
