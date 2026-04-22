@@ -78,7 +78,7 @@ var radioStations = [
     { name: "News 98", url: "https://stream.rcs.revma.com/pntx1639ntzuv.m4a", logo: "https://www.news98.com.tw/images/logo.png", category: "台湾" },
     { name: "城市廣播網台北90.1", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "http://www.cityfm.tw/img/logo.png", category: "台湾" },
     { name: "IC之音 竹科廣播電台", url: "https://stream.rcs.revma.com/7mnq8rt7k5zuv", logo: "https://www.ic975.com/wp-content/themes/ic975/images/logo.png", category: "台湾" },
-    { name: "臺北廣播電臺93.1", url: "https://stream.ginnet.cloud/live0130lo-yfyo/_definst_/fm/playlist.m3u8", logo: "https://tradio.gov.taipei/favicon.ico", category: "台湾" },
+    { name: "臺北廣播電臺93.1", url: "https://stream.ginnet.cloud/live0130lo-yfyo/_definst_/fm/playlist.m3u8", logo: "img/radio/tr.ico", category: "台湾" },
     { name: "中廣流行網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣流行網", logo: "https://www.bcc.com.tw/favicon.ico", category: "台湾" },
     { name: "中廣音樂網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣音樂網", logo: "https://www.bcc.com.tw/favicon.ico", category: "台湾" },
     { name: "中廣新聞網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣新聞網", logo: "https://www.bcc.com.tw/favicon.ico", category: "台湾" },
