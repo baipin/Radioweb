@@ -6,7 +6,7 @@
     <title>百品电台 - 网络收音机</title>
     <link rel="icon" type="image/png" href="img/logo.png">
 
-    <meta name="description" content="百品电台提供稳定流畅的在线网络收音机服务，涵盖国内外各大主流广播、音乐电台、香港电台及各类流媒体频道。支持瀑布流加载、自定义排序及收藏功能，为您打造纯净的听觉体验。">
+    <meta name="description" content="百品电台提供稳定流畅的在线网络收音机服务，涵盖国内外各大主流广播、音乐电台、香港电台及各类流媒体频道。支持[...]
     <meta name="keywords" content="在线收音机,网络广播,电台直播,百品电台,m3u8电台,香港电台,广播在线听,流媒体播放器">
     <meta name="author" content="百品 (baipon.com)">
     
@@ -237,7 +237,7 @@
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台 / 批量导入"></mdui-button-icon>
                 <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道"></mdui-button-icon>
-                <mdui-button-icon id="theme-toggle" icon="dark_mode"></mdui-button-icon>
+                <mdui-button-icon id="theme-toggle" icon="dark_mode" title="切换深色模式"></mdui-button-icon>
             </div>
         </div>
     </div>
@@ -315,6 +315,71 @@
         let currentUrl = "";
         let hls = null;
         let editingUrl = null;
+
+        // ==================== 黑暗模式管理 ====================
+        // 初始化黑暗模式：优先读取用户设置，如无设置则跟随系统
+        function initThemeMode() {
+            const savedTheme = localStorage.getItem('bp_theme_mode');
+            
+            if (savedTheme === 'dark') {
+                // 用户明确选择了深色模式
+                applyDarkMode(true);
+            } else if (savedTheme === 'light') {
+                // 用户明确选择了浅色模式
+                applyDarkMode(false);
+            } else {
+                // 自动跟随系统设置
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyDarkMode(prefersDark);
+            }
+        }
+
+        // 应用黑暗模式
+        function applyDarkMode(isDark) {
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            if (isDark) {
+                body.classList.add('mdui-theme-dark');
+                themeToggleBtn.icon = 'light_mode';
+            } else {
+                body.classList.remove('mdui-theme-dark');
+                themeToggleBtn.icon = 'dark_mode';
+            }
+        }
+
+        // 监听系统主题变化（当用户未设置偏好时）
+        function setupSystemThemeListener() {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addEventListener('change', (e) => {
+                const savedTheme = localStorage.getItem('bp_theme_mode');
+                // 只有在用户没有明确设置主题时，才跟随系统变化
+                if (savedTheme === null) {
+                    applyDarkMode(e.matches);
+                }
+            });
+        }
+
+        // 切换黑暗模式按钮
+        document.getElementById('theme-toggle').onclick = () => {
+            const isDark = document.body.classList.toggle('mdui-theme-dark');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            if (isDark) {
+                themeToggleBtn.icon = 'light_mode';
+                localStorage.setItem('bp_theme_mode', 'dark');
+            } else {
+                themeToggleBtn.icon = 'dark_mode';
+                localStorage.setItem('bp_theme_mode', 'light');
+            }
+        };
+
+        // 页面加载时初始化主题
+        window.addEventListener('DOMContentLoaded', () => {
+            initThemeMode();
+            setupSystemThemeListener();
+        });
+        // ==================== 黑暗模式管理结束 ====================
 
         // 初始化延迟加载观察器
         const lazyObserver = new IntersectionObserver((entries) => {
@@ -702,7 +767,7 @@ function loadSource(url, isM3U8) {
                 // 如果是直播流，暂停后重置 src 往往能解决恢复播放时的卡死问题
                 // 但为了不删除无关代码，我们通过判断原生 HLS 还是 hls.js 来处理
                 if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
-                    // Safari 原生 HLS 环境下，暂停直播建议“停止加载”
+                    // Safari 原生 HLS 环境下，暂停直播建议"停止加载"
                     // 这样下次播放会重新拉取最新切片，防止卡死在旧进度
                     const currentSrc = audio.src;
                     audio.src = ''; 
@@ -737,10 +802,6 @@ function loadSource(url, isM3U8) {
             waveAnim.style.display = "none";
         };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
-        document.getElementById('theme-toggle').onclick = () => {
-            const isDark = document.body.classList.toggle('mdui-theme-dark');
-            document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
-        };
 
         window.onload = () => {
             // 检查数据是否加载，如果没有，等待 500ms 再试
