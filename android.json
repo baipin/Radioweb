@@ -1,6 +1,6 @@
 {
-  "versionCode": 2,
-  "versionName": "0.0.2",
-  "downloadUrl": "https://radio.baipon.com/app/0.0.2.apk",
-  "updateLog": "1. 优化了播放流畅度\n2. 修复了已知问题"
+  "versionCode": 3,
+  "versionName": "0.0.3",
+  "downloadUrl": "https://radio.baipon.com/app/0.0.3.apk",
+  "updateLog": "1.重制Logo；\n2.改进设置，增加清除缓存功能；\n3.修复一些目前已知的bug；"
 }
