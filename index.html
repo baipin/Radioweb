@@ -564,7 +564,7 @@ function play(s, el) {
     // 通知 App 频道名称 ---
     if (window.AndroidBridge) {
         // 需要在 WebView 中注入了名为 AndroidBridge 的对象
-        window.AndroidBridge.onStationChanged(s.name, s.url);
+        window.AndroidBridge.onStationChanged(s.name, s.url, s.logo || "");
     }
     // ----------------------------
 }
