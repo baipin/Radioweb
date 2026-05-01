@@ -226,6 +226,41 @@
 
     .nav-content span, #current-name, #play-status { color: #1f1f1f !important; }
     .mdui-theme-dark .nav-content span, .mdui-theme-dark #current-name, .mdui-theme-dark #play-status { color: #ffffff !important; }
+
+        /* 对话框主题随系统切换 */
+    #station-dialog[theme="dark"] {
+        --mdui-color-surface: #1e1e24;
+        --mdui-color-on-surface: #e0e0e0;
+        --mdui-color-surface-container: #2a2a32;
+    }
+    
+    #station-dialog[theme="dark"] mdui-text-field {
+        --mdui-color-primary: #0081ff;
+    }
+    
+    /* 语言切换按钮样式 */
+    #language-switch-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    #language-switch-btn .material-icons {
+        font-size: 20px;
+    }
+    
+    /* 深色模式下的下拉菜单文字颜色 */
+    .mdui-theme-dark #language-dropdown {
+        color: #ffffff;
+    }
+    
+    #language-dropdown div:hover {
+        background: rgba(128, 128, 128, 0.1);
+    }
+    
+    .mdui-theme-dark #language-dropdown div:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
 </style>
 </head>
 <body class="mdui-theme-auto">
