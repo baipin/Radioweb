@@ -78,7 +78,7 @@ var radioStations = [
     { name: "中廣音樂網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣音樂網", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
     { name: "中廣新聞網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣新聞網", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
     { name: "中廣鄉親網", url: "https://sonnykuo.appspot.com/bcc/?id=中廣鄉親網", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
-    { name: "中廣I go 531", url: "https://sonnykuo.appspot.com/bcc/?id=I%20go%2020531", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
+    { name: "中廣I go 531", url: "https://stream.rcs.revma.com/1qxn2vg3qtzuv", logo: "https://www.bcc.com.tw/images/bcc.ico", category: "台湾" },
     { name: "飛碟聯播網", url: "https://stream.rcs.revma.com/em90w4aeewzuv.m4a", logo: "https://www.uforadio.com.tw/frontend_assets/img/logo-s.png", category: "台湾" },
     { name: "AsiaFM 亞洲電台", url: "https://stream.rcs.revma.com/xpgtqc74hv8uv", logo: "https://www.asiafm.com.tw/wp-content/uploads/2023/03/logo-footer-04.png", category: "台湾" },
     { name: "AsiaFM 亚太电台 FM92.3", url: "https://stream.rcs.revma.com/kydend74hv8uv", logo: "https://www.asiafm.com.tw/wp-content/themes/asiafm/images/logo.png", category: "台湾" },
