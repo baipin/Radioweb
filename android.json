@@ -1,6 +1,6 @@
 {
-  "versionCode": 3,
-  "versionName": "0.0.3",
-  "downloadUrl": "https://radio.baipon.com/app/0.0.3.apk",
-  "updateLog": "1.重制Logo；\n2.改进设置，增加清除缓存功能；\n3.修复一些目前已知的bug；"
+  "versionCode": 4,
+  "versionName": "0.0.4",
+  "downloadUrl": "https://radio.baipon.com/app/0.0.4.apk",
+  "updateLog": "1.重制Logo；\n2.修复收藏频道以后无法立即显示的bug；"
 }
