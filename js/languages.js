@@ -104,7 +104,7 @@ const translations = {
         'language_english': 'English'
     },
     'en': {
-        'nav_title': 'Baipon Radio',
+        'nav_title': 'Baipin Radio',
         'status_ready': 'Ready',
         'status_playing': 'Live',
         'status_buffering': 'Buffering...',
