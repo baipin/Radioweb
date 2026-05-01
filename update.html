@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update / 更新 - Baipon Radio</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --play-green: #01875f;
+            --text-main: #202124;
+            --text-sub: #5f6368;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', "Microsoft YaHei", sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        /* 顶部品牌装饰 */
+        .brand-section {
+            margin-bottom: 48px;
+        }
+
+        .brand-icon {
+            font-size: 72px;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            box-shadow: none;
+        }
+
+        /* APK 下载按钮 */
+        .btn-apk {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Google Play 按钮 */
+        .btn-google {
+            background-color: white;
+            color: var(--play-green);
+            border: 2px solid var(--play-green);
+        }
+
+        .btn-label-en {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .btn-label-zh {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .btn-icon {
+            margin-bottom: 4px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 24px;
+            font-size: 12px;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand-section">
+        <i class="material-icons brand-icon">radio</i>
+        <p class="brand-name">BAIPIN RADIO</p>
+    </div>
+
+    <a href="#" id="apk-link" class="btn btn-apk">
+        <i class="material-icons btn-icon">file_download</i>
+        <span class="btn-label-en">Download APK Directly</span>
+        <span class="btn-label-zh">直接下载 APK</span>
+    </a>
+
+    <a href="https://play.google.com/store/apps/details?id=com.baipon.radio" class="btn btn-google">
+        <i class="material-icons btn-icon">shop</i>
+        <span class="btn-label-en">Update via Google Play</span>
+        <span class="btn-label-zh">通过 Google Play 更新</span>
+    </a>
+
+    <div class="footer">
+        百品电台 · VERSION UPDATE
+    </div>
+</div>
+
+<script>
+    // 动态获取 android.json 中的 realdownUrl
+    async function fetchUpdateInfo() {
+        const apkBtn = document.getElementById('apk-link');
+        try {
+            // 注意：请确保 android.json 与此页面同域或已配置 CORS
+            const response = await fetch('./android.json');
+            const data = await response.json();
+            if (data.realdownUrl) {
+                apkBtn.href = data.realdownUrl;
+            }
+        } catch (error) {
+            console.error('无法获取更新配置文件:', error);
+            // 容错处理：如果获取失败，可以指向一个备用链接
+            apkBtn.onclick = () => alert('Update link unavailable. Please try Google Play.');
+        }
+    }
+
+    // 页面加载时执行
+    window.onload = fetchUpdateInfo;
+</script>
+
+</body>
+</html>
