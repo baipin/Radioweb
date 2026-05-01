@@ -138,7 +138,7 @@ const translations = {
         'msg_sync_complete': 'Radio stations synchronized',
         'admin_mode_enter': 'Edit Mode',
         'admin_mode_exit': 'Exit Edit',
-        'footer_baipon_entry': 'Baipin Portal',
+        'footer_baipon_entry': 'Portal',
         'footer_donate': 'Donate',
         'footer_contact': 'Contact',
         'footer_other_projects': 'Other Apps',
