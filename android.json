@@ -1,6 +1,6 @@
 {
-  "versionCode": 7,
-  "versionName": "0.0.7",
-  "downloadUrl": "https://radio.baipon.com/app/0.0.7.apk",
-  "updateLog": "1. 新增繁体中文、英文语言支持，应用将自动跟随系统语言或手动切换；\n2. 设置页面增加语言切换选项；\n3.优化播放器稳定性，修复若干已知问题。"
+  "versionCode": 8,
+  "versionName": "0.0.8",
+  "downloadUrl": "https://radio.baipon.com/app/0.0.8.apk",
+  "updateLog": "修复多语言适配bug。Fixed a bug related to multilingual compatibility."
 }
