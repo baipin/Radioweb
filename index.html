@@ -783,9 +783,11 @@ function loadSource(url, isM3U8) {
             togglePlay();
         };
         
-        // 增加对音频对象的事件监听兼容性
+                // 增加对音频对象的事件监听兼容性
         audio.onplaying = () => { 
-            statusText.innerText = "正在直播"; 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_playing 
+                : "正在直播"; 
             masterBtn.icon = "pause"; 
             waveAnim.style.display = "flex"; 
         };
@@ -793,9 +795,11 @@ function loadSource(url, isM3U8) {
         audio.onpause = () => { 
             masterBtn.icon = "play_arrow"; 
             waveAnim.style.display = "none"; 
-            statusText.innerText = "已暂停"; 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_paused 
+                : "已暂停"; 
         };
-        
+                
         // 修复 Safari 锁屏或控制中心操作导致的同步问题
         audio.onabort = () => {
             masterBtn.icon = "play_arrow";
