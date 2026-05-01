@@ -66,7 +66,6 @@ var radioStations = [
 
     // 其他台湾电台（含补充）
     { name: "ICRT 台北国际社区广播电台", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
-    { name: "BravoFM 台北都会音乐台", url: "https://onair.bravo913.com.tw:9130/live.mp3", logo: "", category: "台湾" },
     { name: "CityFM 台中城市广播 (929)", url: "http://fm929.cityfm.tw:8080/929.mp3", logo: "https://radio.baipon.com/img/radio/cityfm.ico", category: "台湾" },
     { name: "CityFM 台北健康电台 (901)", url: "http://fm901.cityfm.tw:8080/901.mp3", logo: "https://radio.baipon.com/img/radio/cityfm.ico", category: "台湾" },
     { name: "CityFM 大苗栗 (983)", url: "http://fm983.cityfm.tw:8080/983.mp3", logo: "https://radio.baipon.com/img/radio/cityfm.ico", category: "台湾" },
