@@ -36,16 +36,12 @@ var radioStations = [
     { name: "香港之声", url: "https://ngcdn008.cnr.cn/live/xgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "民族之声", url: "https://ngcdn009.cnr.cn/live/mzzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "文艺之声", url: "https://ngcdn010.cnr.cn/live/wyzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "阅读之声", url: "https://ngcdn014.cnr.cn/live/ylgb/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "中国交通广播", url: "https://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "中国网络音乐之声", url: "https://ngcdn017.cnr.cn/live/xczs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
 
     { name: "华语环球广播 (CRI)", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "环球资讯广播", url: "http://sk.cri.cn/905.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "英语资讯广播 (China Plus)", url: "http://cnlive.cnr.cn/hls/yyzxgb.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "世界华声", url: "http://sk.cri.cn/hxfh.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
-    { name: "劲曲调频 (CRI Hit FM)", url: "http://sk.cri.cn/887.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
-    { name: "轻松调频 (CRI EZFM)", url: "http://sk.cri.cn/915.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
 
     // === 台湾 ===
     // 警察广播电台（含补充分台）
@@ -61,8 +57,8 @@ var radioStations = [
 
     // 中央广播电台 (RTI)
     { name: "中央广播电台 国语台 (RTI)", url: "https://streamak0138.akamaized.net/live0138lh-mbm9/_definst_/rti3/playlist.m3u8", logo: "https://www.rti.org.tw/favicon.ico", category: "台湾" },
-    { name: "中央广播电台 音乐台 (RTI)", url: "http://live2.rti.org.tw/live/_definst_/rti/rti4/playlist.m3u8", logo: "https://www.rti.org.tw/favicon.ico", category: "台湾" },
-    { name: "中央广播电台 讲客电台 (RTI Hakka)", url: "http://live2.rti.org.tw/live/_definst_/rti/hakka/playlist.m3u8", logo: "https://www.rti.org.tw/favicon.ico", category: "台湾" },
+    { name: "中央廣播電臺 台客粵語和歐美外語 (RTI)", url: "https://streamak0138.akamaized.net/live0138lh-mbm9/_definst_/rti6/playlist.m3u8", logo: "https://www.rti.org.tw/favicon.ico", category: "台湾" },
+    { name: "講客廣播電臺 (RTI Hakka)", url: "https://stream.rcs.revma.com/akqrbx94gbkvv", logo: "https://www.hakkaradio.org.tw/logos/hakkaradio_256.png", category: "台湾" },
 
     // 其他台湾电台（含补充）
     { name: "ICRT 台北国际社区广播电台", url: "https://stream.rcs.revma.com/nkdfurztxp3vv", logo: "https://www.icrt.com.tw/favicon.ico", category: "台湾" },
@@ -105,6 +101,9 @@ var radioStations = [
     { name: "UNI FM96.7 环宇广播电台", url: "https://n10.rcs.revma.com/srn5f9kmwxhvv", logo: "https://radio.baipon.com/img/radio/uni.ico", category: "台湾" },
     { name: "汉声广播电台", url: "http://202.39.43.67:1935/live/RA000076/chunklist.m3u8", logo: "https://www.voh.com.tw/images/logo.png", category: "台湾" },
     { name: "国立教育广播电台/台北 101.7", url: "https://cast.ner.gov.tw/1", logo: "https://www.ner.gov.tw/icon.jpg", category: "台湾" },
+    { name: "領袖廣播電台 FM93.7", url: "https://stream.rcs.revma.com/hpeqh9mkc6hvv", logo: "https://fm937fm.com/assets/images/icon-32x33.png", category: "台湾" },
+    { name: "GoGoRadio 桃園 FM104.3", url: "https://stream.ginnet.cloud/live0119lo-p4rb/_definst_/fm1043/playlist.m3u8", logo: "https://gogoradiofm1043.com.tw/favicon.ico", category: "台湾" },
+    { name: "高雄廣播電臺 FM94.3", url: "https://stream.rcs.revma.com/pet2dvug1bkvv", logo: "https://www.kbs.gov.tw/images/favicon/apple-touch-icon-114x114.png", category: "台湾" },
         
     { name: "LOVE 972", url: "https://14033.live.streamtheworld.com/LOVE972FM_PREM.aac", logo: "https://www16.mediacorp.sg/melisten/radiostation-logos/love-972.png", category: "新加坡" },
     { name: "YES 933", url: "https://22393.live.streamtheworld.com/YES933_PREM.aac", logo: "https://www16.mediacorp.sg/melisten/radiostation-logos/yes-933.png", category: "新加坡" },
