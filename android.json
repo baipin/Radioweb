@@ -1,6 +1,7 @@
 {
   "versionCode": 8,
   "versionName": "0.0.8",
-  "downloadUrl": "https://radio.baipon.com/app/0.0.8.apk",
+  "realdownUrl":"https://radio.baipon.com/app/0.0.8.apk"
+  "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": "修复多语言适配bug。Fixed a bug related to multilingual compatibility."
 }
