@@ -19,18 +19,32 @@
         --glass-bg: rgba(255, 255, 255, 0.95);
         --glass-border: rgba(255, 255, 255, 0.6);
         --accent-color: #0081ff;
+        --text-primary: #1a1a2e;
+        --text-secondary: #2c2c3a;
+        --text-muted: #4a4a5a;
+        --card-bg: rgba(255, 255, 255, 0.96);
+        --border-color: rgba(0, 0, 0, 0.1);
     }
+    
+    /* 深色模式变量 */
     .mdui-theme-dark {
         --glass-bg: rgba(28, 28, 35, 0.95);
         --glass-border: rgba(255, 255, 255, 0.15);
+        --text-primary: #f0f0f0;
+        --text-secondary: #e0e0e0;
+        --text-muted: #b0b0b8;
+        --card-bg: rgba(35, 35, 42, 0.96);
+        --border-color: rgba(255, 255, 255, 0.1);
     }
+    
     body { 
         margin: 0; 
         min-height: 100vh; 
         background: transparent !important; 
         display: flex; 
         flex-direction: column; 
-        color: #1f1f1f;
+        color: var(--text-primary);
+        transition: background-color 0.3s ease, color 0.2s ease;
     }
       
     body::before {
@@ -43,9 +57,14 @@
         background: url('img/home.jpg') center/cover no-repeat; 
         z-index: -2; 
         filter: brightness(0.9);
+        transition: filter 0.3s ease;
+    }
+    
+    .mdui-theme-dark body::before {
+        filter: brightness(0.4);
     }
       
-    /* 导航栏 */
+    /* 导航栏 - 添加过渡动画 */
     .top-nav {
         position: fixed; 
         top: 0; 
@@ -56,7 +75,9 @@
         backdrop-filter: blur(20px); 
         border-bottom: 1px solid var(--glass-border); 
         height: 64px;
+        transition: background 0.3s ease, border-color 0.3s ease;
     }
+    
     .nav-content {
         max-width: 1200px; 
         margin: 0 auto; 
@@ -65,6 +86,7 @@
         align-items: center; 
         height: 100%;
     }
+    
     .nav-logo { 
         height: 40px; 
         margin-right: 12px; 
@@ -78,17 +100,15 @@
         flex: 1;
     }
 
+    /* 卡片容器 - 添加过渡动画 */
     .privacy-card {
-        background: rgba(255, 255, 255, 0.96);
+        background: var(--card-bg);
         backdrop-filter: blur(10px);
         border-radius: 28px;
         border: 1px solid var(--glass-border);
         padding: 40px 48px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-
-    .mdui-theme-dark .privacy-card {
-        background: rgba(35, 35, 42, 0.96);
+        transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .privacy-header {
@@ -106,7 +126,7 @@
 
     .privacy-header .update-date {
         font-size: 0.85rem;
-        opacity: 0.7;
+        color: var(--text-muted);
     }
 
     .privacy-section {
@@ -118,6 +138,7 @@
         margin: 0 0 16px 0;
         padding-left: 12px;
         border-left: 4px solid var(--accent-color);
+        color: var(--text-primary);
     }
 
     .privacy-section h3 {
@@ -130,6 +151,7 @@
         line-height: 1.75;
         margin: 12px 0;
         font-size: 0.95rem;
+        color: var(--text-secondary);
     }
 
     .privacy-section ul, .privacy-section ol {
@@ -140,14 +162,38 @@
     .privacy-section li {
         line-height: 1.7;
         margin: 8px 0;
+        color: var(--text-secondary);
     }
 
+    .privacy-section li strong {
+        color: var(--text-primary);
+    }
+
+    .privacy-section a {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+    }
+
+    .privacy-section a:hover {
+        opacity: 0.8;
+    }
+
+    /* 高亮框 - 修复文字颜色 */
     .highlight-box {
         background: rgba(0, 129, 255, 0.08);
         border-left: 3px solid var(--accent-color);
         padding: 16px 20px;
         border-radius: 12px;
         margin: 20px 0;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    .highlight-box strong {
+        color: var(--text-primary);
+        display: block;
+        margin-bottom: 8px;
     }
 
     .mdui-theme-dark .highlight-box {
@@ -163,7 +209,7 @@
         -webkit-backdrop-filter: blur(15px);
         border-top: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
-        transition: background 0.3s, backdrop-filter 0.3s;
+        transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
     }
     
     .mdui-theme-dark .main-footer {
@@ -187,11 +233,17 @@
         margin: 0 10px;
         font-weight: 500;
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        transition: opacity 0.2s ease;
+    }
+
+    .footer-links a:hover {
+        opacity: 0.8;
     }
     
     .footer-copyright {
         font-size: 12px;
         color: rgba(0, 0, 0, 0.6);
+        transition: color 0.3s ease;
     }
     
     .mdui-theme-dark .footer-copyright {
@@ -219,11 +271,41 @@
         gap: 8px;
     }
 
+    /* 导航栏文字颜色 */
     .nav-content span {
-        color: #1f1f1f !important;
+        color: var(--text-primary) !important;
+        transition: color 0.2s ease;
     }
-    .mdui-theme-dark .nav-content span {
-        color: #ffffff !important;
+
+    /* 主题切换按钮动画 */
+    #theme-toggle {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    #theme-toggle:active {
+        transform: rotate(15deg);
+    }
+
+    /* 卡片淡入动画 */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .privacy-card {
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* 深色模式切换时的平滑过渡 */
+    * {
+        transition: color 0.2s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     </style>
 </head>
@@ -233,7 +315,7 @@
             <img src="img/logo.png" class="nav-logo" alt="百品电台" onerror="this.style.display='none';">
             <span style="font-weight: 900; font-size: 1.3rem;">百品电台</span>
             <div class="back-btn">
-                <a href="https://radio.baipon.com/" style="text-decoration: none;">
+                <a href="https://radio.baipon.com/" style="text-decoration: none; display: flex;">
                     <mdui-button-icon icon="home" title="返回首页"></mdui-button-icon>
                 </a>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode" title="切换深色模式"></mdui-button-icon>
@@ -246,7 +328,7 @@
             <div class="privacy-header">
                 <h1>📋 隐私政策</h1>
                 <div class="update-date">最后更新日期：2026年5月1日</div>
-                <div style="margin-top: 12px; font-size: 0.9rem; opacity: 0.8;">欢迎使用百品电台！我们深知隐私的重要性，承诺保护您的个人信息安全。</div>
+                <div style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted);">欢迎使用百品电台！我们深知隐私的重要性，承诺保护您的个人信息安全。</div>
             </div>
 
             <div class="privacy-section">
@@ -258,7 +340,7 @@
                     <li><strong>网络状态信息</strong>：用于检测网络连接状态，以便提供稳定的流媒体播放服务。</li>
                 </ul>
                 <div class="highlight-box">
-                    <strong>⚠️ 特别说明</strong><br>
+                    <strong>⚠️ 特别说明</strong>
                     我们<strong>不收集</strong>您的姓名、邮箱、电话号码、位置信息等个人身份信息。所有收藏和自定义数据均存储在您的浏览器/设备本地。
                 </div>
             </div>
@@ -278,10 +360,10 @@
                 <p>百品电台使用以下第三方服务，请了解其隐私实践：</p>
                 <ul>
                     <li><strong>Google Analytics</strong>：用于匿名统计访问量和用户行为分析。<br>
-                        <a href="https://policies.google.com/privacy" target="_blank" style="color: var(--accent-color);">Google 隐私政策</a>
+                        <a href="https://policies.google.com/privacy" target="_blank">Google 隐私政策</a>
                     </li>
                     <li><strong>Google AdSense</strong>：用于展示广告（如果启用）。广告展示基于非个人身份信息。<br>
-                        <a href="https://policies.google.com/technologies/ads" target="_blank" style="color: var(--accent-color);">Google 广告隐私说明</a>
+                        <a href="https://policies.google.com/technologies/ads" target="_blank">Google 广告隐私说明</a>
                     </li>
                     <li><strong>HLS.js / SortableJS</strong>：开源库，运行于本地，不收集任何数据。</li>
                 </ul>
@@ -312,9 +394,9 @@
                 <h2>8. 联系我们</h2>
                 <p>如果您对本隐私政策有任何疑问、意见或建议，可以通过以下方式联系我们：</p>
                 <ul>
-                    <li>📧 邮件：<a href="mailto:baipon@baipon.com" style="color: var(--accent-color);">baipon@baipon.com</a></li>
-                    <li>📝 反馈表单：<a href="https://forms.gle/efuQfp8xAYHr4ryL8" target="_blank" style="color: var(--accent-color);">点击填写</a></li>
-                    <li>🌐 官网：<a href="https://www.baipon.com/" target="_blank" style="color: var(--accent-color);">www.baipon.com</a></li>
+                    <li>📧 邮件：<a href="mailto:baipon@baipon.com">baipon@baipon.com</a></li>
+                    <li>📝 反馈表单：<a href="https://forms.gle/efuQfp8xAYHr4ryL8" target="_blank">点击填写</a></li>
+                    <li>🌐 官网：<a href="https://www.baipon.com/" target="_blank">www.baipon.com</a></li>
                 </ul>
             </div>
 
@@ -341,7 +423,31 @@
     </footer>
 
     <script>
-        // ==================== 黑暗模式管理 ====================
+        // ==================== 黑暗模式管理（带动画） ====================
+        
+        // 应用深色模式（带动画效果）
+        function applyDarkMode(isDark) {
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            // 添加一个临时的过渡类来增强动画效果
+            body.style.transition = 'background-color 0.3s ease, color 0.2s ease';
+            
+            if (isDark) {
+                body.classList.add('mdui-theme-dark');
+                if (themeToggleBtn) themeToggleBtn.icon = 'light_mode';
+            } else {
+                body.classList.remove('mdui-theme-dark');
+                if (themeToggleBtn) themeToggleBtn.icon = 'dark_mode';
+            }
+            
+            // 移除过渡样式，避免影响其他交互
+            setTimeout(() => {
+                body.style.transition = '';
+            }, 300);
+        }
+
+        // 初始化主题模式
         function initThemeMode() {
             const savedTheme = localStorage.getItem('bp_theme_mode');
             
@@ -355,19 +461,7 @@
             }
         }
 
-        function applyDarkMode(isDark) {
-            const body = document.body;
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            
-            if (isDark) {
-                body.classList.add('mdui-theme-dark');
-                themeToggleBtn.icon = 'light_mode';
-            } else {
-                body.classList.remove('mdui-theme-dark');
-                themeToggleBtn.icon = 'dark_mode';
-            }
-        }
-
+        // 监听系统主题变化
         function setupSystemThemeListener() {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             mediaQuery.addEventListener('change', (e) => {
@@ -378,19 +472,33 @@
             });
         }
 
-        document.getElementById('theme-toggle').onclick = () => {
-            const isDark = document.body.classList.toggle('mdui-theme-dark');
+        // 切换深色模式（带动画反馈）
+        function toggleTheme() {
+            const isDark = document.body.classList.contains('mdui-theme-dark');
             const themeToggleBtn = document.getElementById('theme-toggle');
             
-            if (isDark) {
-                themeToggleBtn.icon = 'light_mode';
-                localStorage.setItem('bp_theme_mode', 'dark');
-            } else {
-                themeToggleBtn.icon = 'dark_mode';
-                localStorage.setItem('bp_theme_mode', 'light');
+            // 添加点击动画
+            if (themeToggleBtn) {
+                themeToggleBtn.style.transform = 'rotate(15deg)';
+                setTimeout(() => {
+                    if (themeToggleBtn) themeToggleBtn.style.transform = '';
+                }, 300);
             }
-        };
+            
+            // 应用新主题
+            if (isDark) {
+                applyDarkMode(false);
+                localStorage.setItem('bp_theme_mode', 'light');
+            } else {
+                applyDarkMode(true);
+                localStorage.setItem('bp_theme_mode', 'dark');
+            }
+        }
 
+        // 绑定切换按钮事件
+        document.getElementById('theme-toggle').onclick = toggleTheme;
+
+        // 页面加载时初始化
         window.addEventListener('DOMContentLoaded', () => {
             initThemeMode();
             setupSystemThemeListener();
