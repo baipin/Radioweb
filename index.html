@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>百品电台 - 网络收音机</title>
     <link rel="icon" type="image/png" href="img/logo.png">
-    <meta name="description" content="百品电台提供稳定流畅的在线网络收音机服务">
-    <meta name="keywords" content="在线收音机,网络广播,电台直播,百品电台">
+
+    <meta name="description" content="百品电台提供稳定流畅的在线网络收音机服务，涵盖国内外各大主流广播、音乐电台、香港电台及各类流媒体频道。支持支持瀑布流加载、自定义排序及收藏功能，为您打造纯净的听觉体验。">
+    <meta name="keywords" content="在线收音机,网络广播,电台直播,百品电台,m3u8电台,香港电台,广播在线听,流媒体播放器">
     <meta name="author" content="百品 (baipon.com)">
+    
+    <meta property="og:title" content="百品电台 - 您的私人网络收音机">
+    <meta property="og:description" content="稳定、极简、功能强大的在线广播电台播放器，支持自定义扩展。">
+    <meta property="og:image" content="https://radio.baipon.com/img/logo.png">
+    <meta property="og:url" content="https://radio.baipon.com/">
+    <meta property="og:type" content="website">
+    
     <link rel="canonical" href="https://radio.baipon.com/">
     
     <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css">
@@ -15,9 +23,17 @@
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <!-- radio.js 改为异步加载，不阻塞渲染 -->
-    <script src="js/radio.js" async defer></script>
-    
+    <script src="js/radio.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-328FTWB8G4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-328FTWB8G4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3664886958722859"
+     crossorigin="anonymous"></script>
+
     <style>
     :root {
         --glass-bg: rgba(255, 255, 255, 0.95);
@@ -36,10 +52,13 @@
         flex-direction: column; 
         color: #1f1f1f;
     }
+      
     body::before {
         content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: url('img/home.jpg') center/cover no-repeat; z-index: -2; filter: brightness(0.9);
     }
+      
+    /* 导航栏 */
     .top-nav {
         position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
         background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); height: 64px;
@@ -49,42 +68,67 @@
         display: flex; align-items: center; height: 100%;
     }
     .nav-logo { height: 40px; margin-right: 12px; }
-    .rotate-anim { animation: rotation 1s infinite linear; }
-    @keyframes rotation {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(359deg); }
-    }
+
+
+            /* 刷新动画 */
+    .rotate-anim {
+            animation: rotation 1s infinite linear;
+        }
+        @keyframes rotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(359deg); }
+}
+        /* 透明毛玻璃页脚 */
     .main-footer {
         margin-top: auto;
         padding: 30px 20px;
+        /* 背景半透明：0.4 表示 40% 不透明度 */
         background: rgba(255, 255, 255, 0.4); 
+        /* 核心：毛玻璃模糊效果 */
         backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px); /* 兼容 Safari */
+        
+        /* 边框增加质感：上边框稍微亮一点，模拟高光 */
         border-top: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
         transition: background 0.3s, backdrop-filter 0.3s;
     }
+    
+    /* 深色模式下的毛玻璃适配 */
     .mdui-theme-dark .main-footer {
         background: rgba(30, 30, 35, 0.4);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .footer-content { max-width: 1200px; margin: 0 auto; }
-    .footer-links { margin-bottom: 10px; }
+    
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .footer-links {
+        margin-bottom: 10px;
+    }
+    
     .footer-links a {
         color: var(--accent-color);
         text-decoration: none;
         font-size: 14px;
         margin: 0 10px;
         font-weight: 500;
+        /* 给文字增加一点点阴影，防止在复杂背景下看不清 */
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
+    
     .footer-copyright {
         font-size: 12px;
         color: rgba(0, 0, 0, 0.6);
     }
+    
     .mdui-theme-dark .footer-copyright {
         color: rgba(255, 255, 255, 0.6);
     }
+        /* 页脚结束 */
+    /* 悬浮播放器 */
     .player-wrapper {
         position: sticky;
         top: 64px;
@@ -99,6 +143,7 @@
         border-bottom: 1px solid var(--glass-border);
     }
     .radio-container { width: 95%; max-width: 1200px; margin: 80px auto 40px; flex: 1; }
+    
     .player-card {
         max-width: 1200px; margin: 0 auto;
         display: flex; align-items: center; gap: 20px; padding: 20px 32px;
@@ -110,6 +155,7 @@
     .mdui-theme-dark .player-card {
         background: rgba(40,40,48,0.98) !important;
     }
+
     .player-wrapper.is-sticky .player-card {
         background: transparent;
         padding: 10px 32px;
@@ -123,104 +169,18 @@
         overflow: hidden; background: #ccc; font-size: 1.3rem;
     }
     .volume-box { display: flex; align-items: center; gap: 8px; width: 140px; margin-left: auto; }
+      
     .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0 24px; }
     .tab-btn { padding: 8px 18px; border-radius: 99px; border: none; background: rgba(128,128,128,0.12); cursor: pointer; color: inherit; transition: 0.3s; }
     .tab-btn.active { background: var(--accent-color); color: white; }
-    .radio-grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-        gap: 20px; 
-        min-height: 200px;
-    }
+    .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
     
-    /* 加载动画 */
+    /* 加载动画相关 CSS */
     @keyframes fadeInScale {
         from { opacity: 0; transform: translateY(15px) scale(0.95); }
         to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    /* 骨架屏加载动画 */
-    .skeleton-item {
-        background: rgba(200, 200, 210, 0.3);
-        border-radius: 24px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        backdrop-filter: blur(5px);
-    }
-    .mdui-theme-dark .skeleton-item {
-        background: rgba(60, 60, 70, 0.5);
-    }
-    .skeleton-logo {
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        background: linear-gradient(90deg, rgba(150,150,160,0.3) 25%, rgba(180,180,190,0.5) 50%, rgba(150,150,160,0.3) 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.5s infinite;
-    }
-    .skeleton-text {
-        width: 80%;
-        height: 14px;
-        border-radius: 7px;
-        background: linear-gradient(90deg, rgba(150,150,160,0.3) 25%, rgba(180,180,190,0.5) 50%, rgba(150,150,160,0.3) 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.5s infinite;
-    }
-    
-    /* 加载指示器 */
-    .loading-spinner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-        gap: 12px;
-    }
-    .spinner {
-        width: 32px;
-        height: 32px;
-        border: 3px solid rgba(128,128,128,0.2);
-        border-top: 3px solid var(--accent-color);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-    .loading-text {
-        color: var(--accent-color);
-        font-size: 14px;
-    }
-    
-    /* 加载进度条 */
-    .progress-bar {
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: rgba(0, 129, 255, 0.2);
-        z-index: 1002;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    .progress-bar.active {
-        opacity: 1;
-    }
-    .progress-fill {
-        width: 0%;
-        height: 100%;
-        background: var(--accent-color);
-        transition: width 0.3s ease;
-    }
-    
+
     .radio-item {
         display: flex; flex-direction: column; align-items: center; padding: 20px;
         border-radius: 24px; cursor: pointer;
@@ -228,7 +188,7 @@
         transition: 0.3s;
         position: relative;
         border: 2px solid transparent;
-        animation: fadeInScale 0.3s ease forwards;
+        animation: fadeInScale 0.4s ease forwards; /* 应用动画 */
     }
     .mdui-theme-dark .radio-item {
         background: rgba(45,45,55,0.95) !important;
@@ -239,40 +199,69 @@
     
     .admin-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 4px; flex-direction: column; }
     body.is-admin-mode .admin-actions { display: flex; }
+    /* 拖拽时的样式 */
     body.is-admin-mode .radio-item { cursor: move; }
     .sortable-ghost { opacity: 0.4; }
-    
+
     .wave-box { display: none; align-items: flex-end; gap: 3px; height: 16px; margin-right: 10px; }
     .wave-box span { width: 3px; background: var(--accent-color); animation: wave 1s infinite alternate; }
     @keyframes wave { from { height: 3px; } to { height: 16px; } }
-    
+
     .radio-item span {
         color: #1f1f1f !important;
         font-weight: 600;
         opacity: 1;
     }
-    .mdui-theme-dark .radio-item span { color: #ffffff !important; }
+    .mdui-theme-dark .radio-item span {
+        color: #ffffff !important;
+    }
+
     #fav-btn-main { color: #ff5252 !important; }
     .mdui-theme-dark #fav-btn-main { color: #ff5252 !important; }
     #master-play-btn { color: #1f1f1f !important; }
     .mdui-theme-dark #master-play-btn { color: #ffffff !important; }
+
     mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) { color: #1f1f1f !important; }
     .mdui-theme-dark mdui-button-icon:not(#master-play-btn):not(#fav-btn-main) { color: #e0e0e0 !important; }
+
     .nav-content span, #current-name, #play-status { color: #1f1f1f !important; }
     .mdui-theme-dark .nav-content span, .mdui-theme-dark #current-name, .mdui-theme-dark #play-status { color: #ffffff !important; }
-    
+
+        /* 对话框主题随系统切换 */
     #station-dialog[theme="dark"] {
         --mdui-color-surface: #1e1e24;
         --mdui-color-on-surface: #e0e0e0;
         --mdui-color-surface-container: #2a2a32;
     }
-    #station-dialog[theme="dark"] mdui-text-field { --mdui-color-primary: #0081ff; }
-    #language-switch-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; }
-    #language-switch-btn .material-icons { font-size: 20px; }
-    .mdui-theme-dark #language-dropdown { color: #ffffff; }
-    #language-dropdown div:hover { background: rgba(128, 128, 128, 0.1); }
-    .mdui-theme-dark #language-dropdown div:hover { background: rgba(255, 255, 255, 0.1); }
-    </style>
+    
+    #station-dialog[theme="dark"] mdui-text-field {
+        --mdui-color-primary: #0081ff;
+    }
+    
+    /* 语言切换按钮样式 */
+    #language-switch-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    #language-switch-btn .material-icons {
+        font-size: 20px;
+    }
+    
+    /* 深色模式下的下拉菜单文字颜色 */
+    .mdui-theme-dark #language-dropdown {
+        color: #ffffff;
+    }
+    
+    #language-dropdown div:hover {
+        background: rgba(128, 128, 128, 0.1);
+    }
+    
+    .mdui-theme-dark #language-dropdown div:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+</style>
 </head>
 <body class="mdui-theme-auto">
     <div class="top-nav">
@@ -282,15 +271,10 @@
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台 / 批量导入"></mdui-button-icon>
-                <mdui-button-icon icon="refresh" id="refresh" title="更新电台频道"></mdui-button-icon>
+                <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道"></mdui-button-icon>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode" title="切换深色模式"></mdui-button-icon>
             </div>
         </div>
-    </div>
-    
-    <!-- 加载进度条 -->
-    <div class="progress-bar" id="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
     </div>
 
     <div class="radio-container">
@@ -318,29 +302,14 @@
         </div>
 
         <audio id="audio-player"></audio>
-        
-        <!-- 分类标签加载占位 -->
-        <div class="category-tabs" id="category-tabs">
-            <div class="loading-spinner" style="justify-content: flex-start;">
-                <div class="spinner"></div>
-                <span class="loading-text">加载分类中...</span>
-            </div>
-        </div>
-        
-        <!-- 电台列表骨架屏 -->
-        <div class="radio-grid" id="station-list">
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-            <div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>
-        </div>
+        <div class="category-tabs" id="category-tabs"></div>
+        <div class="radio-grid" id="station-list"></div>
     </div>
 
     <mdui-dialog id="station-dialog">
         <span slot="headline" id="diag-title">添加电台</span>
         <span slot="description">百品电台会先尝试直连电台，若果失败百品电台将会使用服务器进行反代连接，使您在世界各地都可享受电台服务。</span>
+        
         <div style="display: flex; flex-direction: column; gap: 16px; padding: 8px 0;">
             <div id="single-add-fields">
                 <mdui-text-field label="名称" id="f-name"></mdui-text-field>
@@ -348,6 +317,7 @@
                 <mdui-text-field label="分类" id="f-cat"></mdui-text-field>
                 <mdui-text-field label="Logo 地址" id="f-logo"></mdui-text-field>
             </div>
+
             <div id="batch-import-section" style="border-top: 1px solid rgba(128,128,128,0.2); padding-top: 16px;">
                 <mdui-button variant="outlined" id="show-import-area" style="margin-bottom: 8px;">批量导入 JSON</mdui-button>
                 <div id="import-area-wrapper" style="display: none;">
@@ -355,121 +325,146 @@
                 </div>
             </div>
         </div>
+
         <mdui-button slot="action" variant="tonal" id="btn-delete-station" style="color: #ff5252; margin-right: auto; display: none;">删除此电台</mdui-button>
         <mdui-button slot="action" variant="text" onclick="closeDialog()">取消</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-save">保存</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始导入</mdui-button>
     </mdui-dialog>
 
-    <!-- 多语言支持脚本（先加载，不阻塞） -->
-    <script src="js/languages.js" async></script>
-    
     <script>
-        // DOM 元素
         const audio = document.getElementById('audio-player');
         const listDiv = document.getElementById('station-list');
         const masterBtn = document.getElementById('master-play-btn');
         const statusText = document.getElementById('play-status');
         const waveAnim = document.getElementById('playing-anim');
         const stickyWrapper = document.getElementById('player-sticky-wrapper');
-        const progressBar = document.getElementById('progress-bar');
-        const progressFill = document.getElementById('progress-fill');
+       
+        let customData = JSON.parse(localStorage.getItem('bp_radios_custom') || '[]');
+        let favorites = JSON.parse(localStorage.getItem('bp_radios_favs') || '[]');
+        let deletedUrls = JSON.parse(localStorage.getItem('bp_radios_deleted') || '[]');
+        let sortOrder = JSON.parse(localStorage.getItem('bp_radios_sort_order') || '[]');
         
-        // 数据存储
-        let customData = [];
-        let favorites = [];
-        let deletedUrls = [];
-        let sortOrder = [];
         let allStations = [];
         let currentFilter = '全部';
         let currentUrl = "";
         let hls = null;
         let editingUrl = null;
-        let isLoading = false;
-        let currentRenderTask = null;
-        
-        // 进度条管理
-        function showProgress() {
-            progressBar.classList.add('active');
-            progressFill.style.width = '0%';
-        }
-        
-        function updateProgress(percent) {
-            progressFill.style.width = Math.min(percent, 95) + '%';
-        }
-        
-        function hideProgress() {
-            progressFill.style.width = '100%';
-            setTimeout(() => {
-                progressBar.classList.remove('active');
-                progressFill.style.width = '0%';
-            }, 300);
-        }
-        
-        // 显示骨架屏
-        function showSkeleton() {
-            const skeletonCount = 12;
-            let skeletonHtml = '';
-            for (let i = 0; i < skeletonCount; i++) {
-                skeletonHtml += `<div class="skeleton-item"><div class="skeleton-logo"></div><div class="skeleton-text"></div></div>`;
-            }
-            listDiv.innerHTML = skeletonHtml;
-            
-            // 分类标签显示加载中
-            const tabBox = document.getElementById('category-tabs');
-            if (tabBox && !tabBox.querySelector('.tab-btn')) {
-                tabBox.innerHTML = `<div class="loading-spinner" style="justify-content: flex-start;">
-                    <div class="spinner"></div>
-                    <span class="loading-text">加载分类中...</span>
-                </div>`;
-            }
-        }
-        
-        // 加载本地数据
-        function loadLocalData() {
-            try {
-                customData = JSON.parse(localStorage.getItem('bp_radios_custom') || '[]');
-                favorites = JSON.parse(localStorage.getItem('bp_radios_favs') || '[]');
-                deletedUrls = JSON.parse(localStorage.getItem('bp_radios_deleted') || '[]');
-                sortOrder = JSON.parse(localStorage.getItem('bp_radios_sort_order') || '[]');
-            } catch(e) {
-                console.error('加载本地数据失败:', e);
-            }
-        }
-        
-        // 主题管理（省略，保持原有）
+
+        // ==================== 黑暗模式管理 ====================
+        // 初始化黑暗模式：优先读取用户设置，如无设置则跟随系统
         function initThemeMode() {
             const savedTheme = localStorage.getItem('bp_theme_mode');
-            if (savedTheme === 'dark') applyDarkMode(true);
-            else if (savedTheme === 'light') applyDarkMode(false);
-            else applyDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            if (savedTheme === 'dark') {
+                // 用户明确选择了深色模式
+                applyDarkMode(true);
+            } else if (savedTheme === 'light') {
+                // 用户明确选择了浅色模式
+                applyDarkMode(false);
+            } else {
+                // 自动跟随系统设置
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyDarkMode(prefersDark);
+            }
         }
+
+        // 应用黑暗模式
         function applyDarkMode(isDark) {
             const body = document.body;
             const themeToggleBtn = document.getElementById('theme-toggle');
-            if (isDark) { body.classList.add('mdui-theme-dark'); themeToggleBtn.icon = 'light_mode'; }
-            else { body.classList.remove('mdui-theme-dark'); themeToggleBtn.icon = 'dark_mode'; }
+            
+            if (isDark) {
+                body.classList.add('mdui-theme-dark');
+                themeToggleBtn.icon = 'light_mode';
+            } else {
+                body.classList.remove('mdui-theme-dark');
+                themeToggleBtn.icon = 'dark_mode';
+            }
         }
+
+        // 监听系统主题变化（当用户未设置偏好时）
         function setupSystemThemeListener() {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (localStorage.getItem('bp_theme_mode') === null) applyDarkMode(e.matches);
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addEventListener('change', (e) => {
+                const savedTheme = localStorage.getItem('bp_theme_mode');
+                // 只有在用户没有明确设置主题时，才跟随系统变化
+                if (savedTheme === null) {
+                    applyDarkMode(e.matches);
+                }
             });
         }
+
+        // 切换黑暗模式按钮
         document.getElementById('theme-toggle').onclick = () => {
             const isDark = document.body.classList.toggle('mdui-theme-dark');
-            document.getElementById('theme-toggle').icon = isDark ? 'light_mode' : 'dark_mode';
-            localStorage.setItem('bp_theme_mode', isDark ? 'dark' : 'light');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            if (isDark) {
+                themeToggleBtn.icon = 'light_mode';
+                localStorage.setItem('bp_theme_mode', 'dark');
+            } else {
+                themeToggleBtn.icon = 'dark_mode';
+                localStorage.setItem('bp_theme_mode', 'light');
+            }
         };
-        window.addEventListener('DOMContentLoaded', () => { initThemeMode(); setupSystemThemeListener(); });
-        
-        // 辅助函数
+
+        // 页面加载时初始化主题
+        window.addEventListener('DOMContentLoaded', () => {
+            initThemeMode();
+            setupSystemThemeListener();
+        });
+        // ==================== 黑暗模式管理结束 ====================
+
+        // 初始化延迟加载观察器
+        const lazyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const item = entry.target;
+                    const stationData = JSON.parse(item.dataset.info);
+                    item.innerHTML = `
+                        <div style="width:52px;height:52px;">${getLogoHTML(stationData.logo, stationData.name)}</div>
+                        <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${stationData.name}</span>
+                        <div class="admin-actions">
+                            <mdui-button-icon icon="edit" size="small" onclick="openEdit('${stationData.url}'); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_up" size="small" onclick="moveStation('${stationData.url}', -1); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_down" size="small" onclick="moveStation('${stationData.url}', 1); event.stopPropagation();"></mdui-button-icon>
+                        </div>
+                    `;
+                    lazyObserver.unobserve(item);
+                }
+            });
+        }, { rootMargin: '100px' });
+
+        // 初始化拖拽排序
+        const sortable = new Sortable(listDiv, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            disabled: true, // 初始禁用，仅在管理模式开启
+            onEnd: function() {
+                const newOrder = Array.from(listDiv.querySelectorAll('.radio-item')).map(el => {
+                    return JSON.parse(el.dataset.info).url;
+                });
+                sortOrder = newOrder;
+                localStorage.setItem('bp_radios_sort_order', JSON.stringify(sortOrder));
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                stickyWrapper.classList.add('is-sticky');
+            } else {
+                stickyWrapper.classList.remove('is-sticky');
+            }
+        });
+
         function getLogoHTML(logo, name) {
             if (logo && logo.trim() !== '') {
                 return `<img src="${logo}" class="dynamic-logo" onerror="this.outerHTML = createPlaceholder('${name.replace(/'/g, "\\'")}').outerHTML">`;
             }
             return createPlaceholder(name).outerHTML;
         }
-        
+
         function createPlaceholder(name) {
             const char = (name && name.length > 0) ? name.charAt(0).toUpperCase() : '?';
             const colors = ['#5e7eff', '#ff6b6b', '#4ecdc4', '#f9a825', '#ab47bc'];
@@ -480,210 +475,95 @@
             div.innerText = char;
             return div;
         }
-        
-        function updateFavBtnState() {
-            const btn = document.getElementById('fav-btn-main');
-            if (!currentUrl) { if(btn) btn.style.display = "none"; return; }
-            if(btn) btn.style.display = "inline-flex";
-            const isFav = favorites.includes(currentUrl);
-            if(btn) btn.icon = isFav ? "favorite" : "favorite_border";
-        }
-        
-        // 播放器相关
-        let isRetrying = false;
-        
-        function loadSource(url, isM3U8) {
-            if (isM3U8) {
-                if (Hls.isSupported()) {
-                    if (hls) hls.destroy();
-                    hls = new Hls();
-                    hls.loadSource(url);
-                    hls.attachMedia(audio);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
-                    hls.on(Hls.Events.ERROR, (event, data) => {
-                        if (data.fatal && !isRetrying) { audio.onerror(); }
-                    });
-                } else {
-                    audio.src = url;
-                    audio.play();
-                }
-            } else {
-                if (hls) hls.destroy();
-                audio.src = url;
-                audio.play();
-            }
-        }
-        
-        function play(s, el) {
-            let targetUrl = s.url;
-            isRetrying = false;
-            if (targetUrl.startsWith('http://')) {
-                targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
-                isRetrying = true;
-            }
-            currentUrl = targetUrl;
-            document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
-            if(el) el.classList.add('active');
-            document.getElementById('current-name').innerText = s.name;
-            document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
-            statusText.innerText = "缓冲中...";
-            loadSource(targetUrl, s.url.includes('.m3u8'));
-            updateFavBtnState();
-            if (window.AndroidBridge) {
-                window.AndroidBridge.onStationChanged(s.name, s.url, s.logo || "");
-            }
-        }
-        
-        audio.onerror = async function() {
-            if (!isRetrying) {
-                isRetrying = true;
-                statusText.innerText = "切换代理模式中...";
-                const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
-                loadSource(proxyUrl, currentUrl.includes('.m3u8'));
-            } else {
-                statusText.innerText = "频道暂时不可用";
-            }
-        };
-        
-        audio.onplaying = () => { 
-            const t = window.translations?.[window.currentLanguage];
-            statusText.innerText = t?.status_playing || "正在直播"; 
-            masterBtn.icon = "pause"; 
-            waveAnim.style.display = "flex"; 
-        };
-        audio.onpause = () => { 
-            masterBtn.icon = "play_arrow"; 
-            waveAnim.style.display = "none"; 
-            const t = window.translations?.[window.currentLanguage];
-            statusText.innerText = t?.status_paused || "已暂停"; 
-        };
-        audio.onabort = () => {
-            masterBtn.icon = "play_arrow";
-            waveAnim.style.display = "none";
-        };
-        document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
-        
-        const togglePlay = () => {
-            if (!audio.src || audio.src === window.location.href) {
-                statusText.innerText = "请先选择电台";
-                return;
-            }
-            if (audio.paused) {
-                audio.play().catch(error => {
-                    console.error("播放拦截:", error);
-                    statusText.innerText = "点击图标以激活播放";
-                });
-            } else {
-                audio.pause();
-                if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
-                    const currentSrc = audio.src;
-                    audio.src = ''; 
-                    audio.load();
-                    audio.src = currentSrc;
-                }
-            }
-        };
-        masterBtn.onclick = (e) => { e.preventDefault(); togglePlay(); };
-        
-        // 渲染列表
-        function renderList() {
-            if (currentRenderTask) cancelAnimationFrame(currentRenderTask);
+
+        function refresh() {
+            const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
+            const combinedRaw = [...base, ...customData];
+            allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
             
+            if (sortOrder.length > 0) {
+                allStations.sort((a, b) => {
+                    let idxA = sortOrder.indexOf(a.url);
+                    let idxB = sortOrder.indexOf(b.url);
+                    if (idxA === -1) idxA = 9999;
+                    if (idxB === -1) idxB = 9999;
+                    return idxA - idxB;
+                });
+            }
+           
+            let cats = ['全部'];
+            if(favorites.length > 0) cats.push('我的收藏');
+            const allCategories = allStations.map(s => s.category || '未分类').filter((v, i, self) => self.indexOf(v) === i).sort();
+            cats = [...cats, ...allCategories];
+
+            const tabBox = document.getElementById('category-tabs');
+            tabBox.innerHTML = '';
+            cats.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
+                btn.textContent = c;
+                btn.onclick = () => { currentFilter = c; refresh(); };
+                tabBox.appendChild(btn);
+            });
+
+            renderList();
+            updateFavBtnState();
+        }
+
+        let currentRenderTask = null; // 用于取消上一次未完成的渲染
+
+        function renderList() {
+            lazyObserver.disconnect();
+            listDiv.innerHTML = '';
+            
+            // 取消正在进行的渲染任务防止冲突
+            if (currentRenderTask) {
+                cancelAnimationFrame(currentRenderTask);
+            }
+
             let filtered = allStations;
             if(currentFilter === '我的收藏') {
                 filtered = allStations.filter(s => favorites.includes(s.url));
             } else if(currentFilter !== '全部') {
                 filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
             }
-            
-            if (filtered.length === 0) {
-                listDiv.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted);">
-                    <span class="material-icons" style="font-size:48px;opacity:0.5;">radio</span>
-                    <p>暂无电台，请点击 + 添加</p>
-                </div>`;
-                return;
-            }
-            
-            listDiv.innerHTML = '';
-            const chunkSize = 24;
+
+            // --- 升级：分批渲染逻辑 ---
+            const chunkSize = 20; // 每帧渲染的数量
             let index = 0;
-            
+
             const renderChunk = () => {
                 const limit = Math.min(index + chunkSize, filtered.length);
                 const fragment = document.createDocumentFragment();
+
                 for (; index < limit; index++) {
                     const s = filtered[index];
                     const item = document.createElement('div');
                     item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
-                    item.style.animationDelay = `${(index % chunkSize) * 0.02}s`;
+                    // 设置动画延迟，形成交错入场效果
+                    item.style.animationDelay = `${(index % chunkSize) * 0.05}s`;
                     item.dataset.info = JSON.stringify(s);
                     item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
                     item.onclick = () => play(s, item);
+                    
                     fragment.appendChild(item);
+                    lazyObserver.observe(item);
                 }
+
                 listDiv.appendChild(fragment);
-                if (index < filtered.length) currentRenderTask = requestAnimationFrame(renderChunk);
-                else currentRenderTask = null;
-            };
-            renderChunk();
-        }
-        
-        // 刷新主函数
-        function refresh() {
-            if (isLoading) return;
-            isLoading = true;
-            showProgress();
-            updateProgress(10);
-            
-            setTimeout(() => {
-                try {
-                    const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
-                    const combinedRaw = [...base, ...customData];
-                    allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
-                    
-                    if (sortOrder.length > 0) {
-                        allStations.sort((a, b) => {
-                            let idxA = sortOrder.indexOf(a.url);
-                            let idxB = sortOrder.indexOf(b.url);
-                            if (idxA === -1) idxA = 9999;
-                            if (idxB === -1) idxB = 9999;
-                            return idxA - idxB;
-                        });
-                    }
-                    
-                    updateProgress(50);
-                    
-                    let cats = ['全部'];
-                    if(favorites.length > 0) cats.push('我的收藏');
-                    const allCategories = allStations.map(s => s.category || '未分类').filter((v, i, self) => self.indexOf(v) === i).sort();
-                    cats = [...cats, ...allCategories];
-                    
-                    const tabBox = document.getElementById('category-tabs');
-                    if (tabBox) {
-                        tabBox.innerHTML = '';
-                        cats.forEach(c => {
-                            const btn = document.createElement('button');
-                            btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
-                            btn.textContent = c;
-                            btn.onclick = () => { currentFilter = c; refresh(); };
-                            tabBox.appendChild(btn);
-                        });
-                    }
-                    
-                    updateProgress(80);
-                    renderList();
-                    updateFavBtnState();
-                    updateProgress(100);
-                    setTimeout(() => hideProgress(), 200);
-                } catch(e) {
-                    console.error('刷新失败:', e);
-                } finally {
-                    isLoading = false;
+
+                if (index < filtered.length) {
+                    currentRenderTask = requestAnimationFrame(renderChunk);
+                } else {
+                    currentRenderTask = null;
                 }
-            }, 30);
+            };
+
+            renderChunk();
+            // --- 升级结束 ---
         }
-        
-        // 移动电台
+
+        // 兼容原有的手动移动功能
         function moveStation(url, direction) {
             let currentOrder = allStations.map(s => s.url);
             let index = currentOrder.indexOf(url);
@@ -695,49 +575,100 @@
             localStorage.setItem('bp_radios_sort_order', JSON.stringify(sortOrder));
             refresh();
         }
-        
-        // 强制刷新电台列表
+
+        let isRetrying = false; 
+
+function play(s, el) {
+    let targetUrl = s.url;
+    isRetrying = false; 
+
+    if (targetUrl.startsWith('http://')) {
+        targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+        isRetrying = true; 
+    }
+
+    currentUrl = targetUrl;
+    document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
+    if(el) el.classList.add('active');
+    document.getElementById('current-name').innerText = s.name;
+    document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
+    statusText.innerText = "缓冲中...";
+    loadSource(targetUrl, s.url.includes('.m3u8'));
+    updateFavBtnState();
+
+    // 通知 App 频道名称 ---
+    if (window.AndroidBridge) {
+        // 需要在 WebView 中注入了名为 AndroidBridge 的对象
+        window.AndroidBridge.onStationChanged(s.name, s.url, s.logo || "");
+    }
+    // ----------------------------
+}
+
+audio.onerror = async function() {
+    if (!isRetrying) {
+        isRetrying = true;
+        statusText.innerText = "切换代理模式中...";
+        const proxyUrl = `/api/proxy?url=${encodeURIComponent(currentUrl)}`;
+        loadSource(proxyUrl, currentUrl.includes('.m3u8'));
+    } else {
+        statusText.innerText = "频道暂时不可用";
+    }
+};
+
+function loadSource(url, isM3U8) {
+    if (isM3U8) {
+        if (Hls.isSupported()) {
+            if (hls) hls.destroy();
+            hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(audio);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => audio.play());
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal && !isRetrying) { audio.onerror(); }
+            });
+        } else {
+            audio.src = url;
+            audio.play();
+        }
+    } else {
+        if (hls) hls.destroy();
+        audio.src = url;
+        audio.play();
+    }
+}
+
+        function updateFavBtnState() {
+            const btn = document.getElementById('fav-btn-main');
+            if (!currentUrl) { btn.style.display = "none"; return; }
+            btn.style.display = "inline-flex";
+            const isFav = favorites.includes(currentUrl);
+            btn.icon = isFav ? "favorite" : "favorite_border";
+        }
+
         function forceReloadRadios() {
             const btnIcon = document.querySelector('#refresh');
-            if(btnIcon) btnIcon.classList.add('rotate-anim');
-            showProgress();
+            // 注意：mdui v2 使用的是图标名，这里确保选择器正确
+            if(btnIcon) btnIcon.classList.add('rotate-anim'); 
+        
             const script = document.createElement('script');
             script.src = `js/radio.js?t=${Date.now()}`;
+        
             script.onload = function() {
                 if(btnIcon) btnIcon.classList.remove('rotate-anim');
+                
+                // 关键：脚本加载后，先手动刷新一下全局变量（如果需要）
+                // 然后执行 refresh() 重新构建 DOM
                 refresh();
-                mdui.snackbar({ message: '电台频道已同步', position: 'right-top' });
-                hideProgress();
-            };
-            script.onerror = function() {
-                if(btnIcon) btnIcon.classList.remove('rotate-anim');
-                hideProgress();
-                mdui.snackbar({ message: '同步失败，请检查网络', position: 'right-top' });
-            };
-            document.head.appendChild(script);
-        }
         
-        // 初始化拖拽排序
-        const sortable = new Sortable(listDiv, {
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-            disabled: true,
-            onEnd: function() {
-                const newOrder = Array.from(listDiv.querySelectorAll('.radio-item')).map(el => {
-                    return JSON.parse(el.dataset.info).url;
+                mdui.snackbar({
+                    message: '电台频道已同步',
+                    position: 'right-top'
                 });
-                sortOrder = newOrder;
-                localStorage.setItem('bp_radios_sort_order', JSON.stringify(sortOrder));
-            }
-        });
-        
-        // 滚动粘性效果
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 40) stickyWrapper.classList.add('is-sticky');
-            else stickyWrapper.classList.remove('is-sticky');
-        });
-        
-        // 收藏按钮
+    };
+    document.head.appendChild(script);
+}
+         // 结束
+
         document.getElementById('fav-btn-main').onclick = () => {
             if (!currentUrl) return;
             if (favorites.includes(currentUrl)) {
@@ -748,9 +679,9 @@
             localStorage.setItem('bp_radios_favs', JSON.stringify(favorites));
             refresh();
         };
-        
-        // 对话框相关
+
         const diag = document.getElementById('station-dialog');
+
         document.getElementById('open-add').onclick = () => {
             editingUrl = null;
             document.getElementById('diag-title').innerText = "添加电台";
@@ -765,7 +696,7 @@
             document.getElementById('btn-delete-station').style.display = "none";
             diag.open = true;
         };
-        
+
         window.openEdit = (url) => {
             const s = allStations.find(x => x.url === url);
             if (!s) return;
@@ -788,7 +719,7 @@
             document.getElementById('btn-delete-station').style.display = "inline-flex";
             diag.open = true;
         };
-        
+
         document.getElementById('btn-save').onclick = () => {
             const urlInput = document.getElementById('f-url');
             const s = {
@@ -810,7 +741,7 @@
             diag.open = false;
             refresh();
         };
-        
+
         document.getElementById('btn-delete-station').onclick = () => {
             if (confirm("确定删除吗？")) {
                 customData = customData.filter(x => x.url !== editingUrl);
@@ -821,13 +752,13 @@
                 refresh();
             }
         };
-        
+
         document.getElementById('show-import-area').onclick = () => {
             document.getElementById('import-area-wrapper').style.display = "block";
             document.getElementById('btn-save').style.display = "none";
             document.getElementById('btn-do-import').style.display = "inline-flex";
         };
-        
+
         document.getElementById('btn-do-import').onclick = () => {
             try {
                 const imported = JSON.parse(document.getElementById('import-area').value);
@@ -837,50 +768,108 @@
                 refresh();
             } catch (e) { alert("JSON 格式错误"); }
         };
-        
+
         function closeDialog() { diag.open = false; }
-        
+
         document.getElementById('toggle-admin').onclick = () => {
             const isAdmin = document.body.classList.toggle('is-admin-mode');
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
-            sortable.option("disabled", !isAdmin);
+            sortable.option("disabled", !isAdmin); // 只有管理模式允许拖拽
+        };
+
+       // --- 兼容性增强版播放控制 ---
+
+        // 统一的播放/暂停逻辑
+        const togglePlay = () => {
+            if (!audio.src || audio.src === window.location.href) {
+                statusText.innerText = "请先选择电台";
+                return;
+            }
+        
+            if (audio.paused) {
+                // 播放逻辑
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error("Safari 播放拦截:", error);
+                        statusText.innerText = "点击图标以激活播放";
+                    });
+                }
+            } else {
+                // 暂停逻辑：针对 Safari 优化
+                audio.pause();
+                
+                // 如果是直播流，暂停后重置 src 往往能解决恢复播放时的卡死问题
+                // 但为了不删除无关代码，我们通过判断原生 HLS 还是 hls.js 来处理
+                if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Safari 原生 HLS 环境下，暂停直播建议"停止加载"
+                    // 这样下次播放会重新拉取最新切片，防止卡死在旧进度
+                    const currentSrc = audio.src;
+                    audio.src = ''; 
+                    audio.load();
+                    audio.src = currentSrc;
+                }
+            }
         };
         
-        document.getElementById('refresh').onclick = () => forceReloadRadios();
+        // 绑定按钮
+        masterBtn.onclick = (e) => {
+            e.preventDefault();
+            togglePlay();
+        };
         
-        // 初始化
-        function init() {
-            loadLocalData();
-            showSkeleton();
-            setTimeout(() => {
-                if (typeof radioStations !== 'undefined') refresh();
-                else {
-                    const checkData = setInterval(() => {
-                        if (typeof radioStations !== 'undefined') {
-                            refresh();
-                            clearInterval(checkData);
-                        }
-                    }, 50);
-                    setTimeout(() => clearInterval(checkData), 3000);
+                // 增加对音频对象的事件监听兼容性
+        audio.onplaying = () => { 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_playing 
+                : "正在直播"; 
+            masterBtn.icon = "pause"; 
+            waveAnim.style.display = "flex"; 
+        };
+        
+        audio.onpause = () => { 
+            masterBtn.icon = "play_arrow"; 
+            waveAnim.style.display = "none"; 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_paused 
+                : "已暂停"; 
+        };
+                
+        // 修复 Safari 锁屏或控制中心操作导致的同步问题
+        audio.onabort = () => {
+            masterBtn.icon = "play_arrow";
+            waveAnim.style.display = "none";
+        };
+        document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
+
+        window.onload = () => {
+            // 检查数据是否加载，如果没有，等待 500ms 再试
+            const checkData = setInterval(() => {
+                if (typeof radioStations !== 'undefined') {
+                    refresh();
+                    clearInterval(checkData);
                 }
-            }, 50);
-        }
-        
-        init();
+            }, 100);
+            
+            // 5秒后如果还没加载就停止，防止死循环
+            setTimeout(() => clearInterval(checkData), 5000);
+        };
     </script>
     <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://www.baipon.com/" target="_blank">百品入口</a>
-                <a href="https://baipin.pw/about#捐赠我们" target="_blank">捐赠我们</a>
-                <a href="https://forms.gle/efuQfp8xAYHr4ryL8" target="_blank">联系&反馈</a>
-                <a href="https://www.baipon.com/projects.html">其他项目</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; 2026 百品电台 · 基于服务器反代加速的世界电台服务<br/>
-                所有源均来自公开资料搜集，本应用不提供任何源。如有侵权请联系删除。
-            </div>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="https://www.baipon.com/" target="_blank">百品入口</a>
+            <a href="https://baipin.pw/about#%E6%8D%90%E8%B5%A0%E6%88%91%E4%BB%AC" target="_blank">捐赠我们</a>
+            <a href="https://forms.gle/efuQfp8xAYHr4ryL8" target="_blank">联系&反馈</a>
+            <a href="https://www.baipon.com/projects.html">其他项目</a>
         </div>
-    </footer>
+        <div class="footer-copyright">
+            &copy; 2026 百品电台 · 基于服务器反代加速的世界电台服务<br/>
+            所有源均来自公开资料搜集，本应用不提供任何源。如有侵权请联系删除。
+        </div>
+    </div>
+</footer>
+<!-- 引入多语言支持脚本 -->
+<script src="js/languages.js"></script>
 </body>
 </html>
