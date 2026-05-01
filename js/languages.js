@@ -104,7 +104,7 @@ const translations = {
         'language_english': 'English'
     },
     'en': {
-        'nav_title': 'Baipin Radio',
+        'nav_title': 'Baipon Radio',
         'status_ready': 'Ready',
         'status_playing': 'Live',
         'status_buffering': 'Buffering...',
@@ -154,6 +154,61 @@ const translations = {
 // 当前语言
 let currentLanguage = 'zh-CN';
 
+// 分类名称翻译映射
+const categoryTranslations = {
+    'zh-CN': {
+        '香港': '香港',
+        '澳门': '澳门',
+        '内地': '内地',
+        '台湾': '台湾',
+        '新加坡': '新加坡',
+        '国际': '国际',
+        '网络音乐': '网络音乐',
+        '美国': '美国'
+    },
+    'zh-TW': {
+        '香港': '香港',
+        '澳门': '澳門',
+        '内地': '內地',
+        '台湾': '台灣',
+        '新加坡': '新加坡',
+        '国际': '國際',
+        '网络音乐': '網路音樂',
+        '美国': '美國'
+    },
+    'en': {
+        '香港': 'Hong Kong',
+        '澳门': 'Macau',
+        '内地': 'Mainland China',
+        '台湾': 'Taiwan',
+        '新加坡': 'Singapore',
+        '国际': 'International',
+        '网络音乐': 'Online Music',
+        '美国': 'USA'
+    }
+};
+
+// 获取翻译后的分类名
+function getTranslatedCategory(category, lang) {
+    const catMap = categoryTranslations[lang] || categoryTranslations['zh-CN'];
+    return catMap[category] || category;
+}
+
+// 翻译电台列表中的分类名
+function translateStations(lang) {
+    if (typeof radioStations !== 'undefined' && radioStations.length > 0) {
+        for (let i = 0; i < radioStations.length; i++) {
+            if (radioStations[i].originalCategory) {
+                radioStations[i].category = getTranslatedCategory(radioStations[i].originalCategory, lang);
+            } else {
+                // 保存原始分类名
+                radioStations[i].originalCategory = radioStations[i].category;
+                radioStations[i].category = getTranslatedCategory(radioStations[i].originalCategory, lang);
+            }
+        }
+    }
+}
+
 // 获取URL参数中的语言
 function getUrlLanguage() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -162,6 +217,19 @@ function getUrlLanguage() {
         return lang;
     }
     return null;
+}
+
+// 同步对话框主题
+function syncDialogTheme() {
+    const isDark = document.body.classList.contains('mdui-theme-dark');
+    const dialog = document.getElementById('station-dialog');
+    if (dialog) {
+        if (isDark) {
+            dialog.setAttribute('theme', 'dark');
+        } else {
+            dialog.removeAttribute('theme');
+        }
+    }
 }
 
 // 初始化语言
@@ -191,8 +259,21 @@ function initLanguage() {
     // 保存到localStorage
     localStorage.setItem('bp_language', currentLanguage);
     
+    // 翻译电台分类
+    translateStations(currentLanguage);
+    
     // 设置页面语言
     applyLanguage();
+    
+    // 同步对话框主题
+    syncDialogTheme();
+    
+    // 刷新电台列表（如果有refresh函数）
+    setTimeout(function() {
+        if (typeof refresh === 'function') {
+            refresh();
+        }
+    }, 100);
     
     return currentLanguage;
 }
@@ -205,7 +286,6 @@ function applyLanguage() {
     // 设置导航栏标题
     const navTitle = document.querySelector('.nav-content span');
     if (navTitle && navTitle.innerText !== '') {
-        // 只更新如果还是默认文字
         if (navTitle.innerText === '百品电台' || navTitle.innerText === '百品電台' || navTitle.innerText === 'Baipon Radio') {
             navTitle.innerText = t.nav_title;
         }
@@ -283,10 +363,10 @@ function applyLanguage() {
         copyright.innerHTML = `&copy; 2026 百品电台 · ${t.footer_copyright}<br/>${t.footer_disclaimer}`;
     }
     
-    // 设置语言切换按钮的文字
+    // 设置语言切换按钮的标题
     const langBtn = document.getElementById('language-switch-btn');
     if (langBtn) {
-        langBtn.innerText = t.language_switch;
+        langBtn.setAttribute('title', t.language_switch);
     }
     
     console.log('语言已切换为: ' + currentLanguage);
@@ -297,12 +377,19 @@ function switchLanguage(lang) {
     if (translations[lang] && lang !== currentLanguage) {
         currentLanguage = lang;
         localStorage.setItem('bp_language', lang);
+        
+        // 重新翻译电台分类
+        translateStations(lang);
+        
         applyLanguage();
         
         // 刷新分类标签和电台列表
         if (typeof refresh === 'function') {
             refresh();
         }
+        
+        // 同步对话框主题
+        syncDialogTheme();
         
         // 通知Android语言已更改
         if (window.AndroidBridge && window.AndroidBridge.onLanguageChanged) {
@@ -311,8 +398,16 @@ function switchLanguage(lang) {
         
         // 显示提示
         if (typeof mdui !== 'undefined') {
+            let langName = '';
+            if (lang === 'zh-CN') {
+                langName = '简体中文';
+            } else if (lang === 'zh-TW') {
+                langName = '繁體中文';
+            } else if (lang === 'en') {
+                langName = 'English';
+            }
             mdui.snackbar({
-                message: translations[lang].language_switch + ': ' + translations[lang]['language_' + lang.replace('-', '_')],
+                message: translations[lang].language_switch + ': ' + langName,
                 position: 'right-top',
                 timeout: 1500
             });
@@ -320,7 +415,7 @@ function switchLanguage(lang) {
     }
 }
 
-// 创建语言选择器下拉菜单
+// 创建语言选择器下拉菜单（使用地球图标）
 function createLanguageSelector() {
     const footerLinks = document.querySelector('.footer-links');
     if (!footerLinks) return;
@@ -334,21 +429,29 @@ function createLanguageSelector() {
     langContainer.id = 'language-selector';
     langContainer.style.position = 'relative';
     langContainer.style.display = 'inline-block';
+    langContainer.style.margin = '0 10px';
+    langContainer.style.verticalAlign = 'middle';
     
+    // 使用 Material Icons 地球图标作为按钮
     const langBtn = document.createElement('button');
     langBtn.id = 'language-switch-btn';
-    langBtn.innerText = t.language_switch;
+    langBtn.innerHTML = '<span class="material-icons" style="font-size: 20px; vertical-align: middle;">language</span>';
+    langBtn.setAttribute('title', t.language_switch);
     langBtn.style.cssText = `
         background: none;
         border: none;
         color: var(--accent-color);
         cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        margin: 0 10px;
         padding: 0;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+        transition: opacity 0.2s;
     `;
+    langBtn.onmouseenter = () => langBtn.style.opacity = '0.7';
+    langBtn.onmouseleave = () => langBtn.style.opacity = '1';
     
     const dropdown = document.createElement('div');
     dropdown.id = 'language-dropdown';
@@ -368,10 +471,11 @@ function createLanguageSelector() {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     `;
     
+    // 语言列表使用固定名称
     const languages = [
-        { code: 'zh-CN', name: t.language_simplified },
-        { code: 'zh-TW', name: t.language_traditional },
-        { code: 'en', name: t.language_english }
+        { code: 'zh-CN', name: '简体中文' },
+        { code: 'zh-TW', name: '繁體中文' },
+        { code: 'en', name: 'English' }
     ];
     
     languages.forEach(lang => {
@@ -400,12 +504,11 @@ function createLanguageSelector() {
         const isVisible = dropdown.style.display === 'block';
         dropdown.style.display = isVisible ? 'none' : 'block';
         
-        // 更新下拉菜单文字
+        // 更新下拉菜单文字（使用固定名称）
         const items = dropdown.querySelectorAll('div');
-        const t2 = translations[currentLanguage];
-        if (items[0]) items[0].innerText = t2.language_simplified;
-        if (items[1]) items[1].innerText = t2.language_traditional;
-        if (items[2]) items[2].innerText = t2.language_english;
+        if (items[0]) items[0].innerText = '简体中文';
+        if (items[1]) items[1].innerText = '繁體中文';
+        if (items[2]) items[2].innerText = 'English';
     };
     
     // 点击其他地方关闭下拉菜单
@@ -414,6 +517,23 @@ function createLanguageSelector() {
             dropdown.style.display = 'none';
         }
     });
+    
+    // 主题变化时更新下拉菜单背景和对话框
+    function updateThemeDependentStyles() {
+        const isDark = document.body.classList.contains('mdui-theme-dark');
+        dropdown.style.background = isDark ? 'rgba(28, 28, 35, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+        syncDialogTheme();
+    }
+    
+    const themeObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'class') {
+                updateThemeDependentStyles();
+            }
+        });
+    });
+    themeObserver.observe(document.body, { attributes: true });
+    updateThemeDependentStyles();
     
     langContainer.appendChild(langBtn);
     langContainer.appendChild(dropdown);
@@ -435,6 +555,8 @@ window.applyLanguage = applyLanguage;
 window.switchLanguage = switchLanguage;
 window.createLanguageSelector = createLanguageSelector;
 window.getLanguage = () => currentLanguage;
+window.getTranslatedCategory = getTranslatedCategory;
+window.translateStations = translateStations;
 
 // 自动初始化
 if (document.readyState === 'loading') {
