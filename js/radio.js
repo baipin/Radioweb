@@ -3,14 +3,14 @@
  */
 var radioStations = [
     // === 香港 ===
-    { name: "香港电台第一台", url: "https://rthkaudio1-lh.akamaihd.net/i/radio1_1@355864/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台第二台", url: "https://rthkaudio2-lh.akamaihd.net/i/radio2_1@355865/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台第三台", url: "https://rthkaudio3-lh.akamaihd.net/i/radio3_1@355866/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台第四台 (古典音乐)", url: "https://rthkaudio4-lh.akamaihd.net/i/radio4_1@355867/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台第五台", url: "https://rthkaudio5-lh.akamaihd.net/i/radio5_1@355868/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台第六台转播香港之声", url: "https://rthkradiocnrhk-live.akamaized.net/hls/live/2046111/radiocnrhk/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台普通话台", url: "https://rthkaudio6-lh.akamaihd.net/i/radiopth_1@355869/master.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
-    { name: "香港电台转播大湾区之声", url: "https://rthkradiocmgrgb-live.akamaized.net/hls/live/2046112/radiocmgrgb/index_64_a.m3u8", logo: "https://www.rthk.hk/favicon.ico", category: "香港" },
+    { name: "香港电台第一台", url: "https://rthkaudio1-lh.akamaihd.net/i/radio1_1@355864/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台第二台", url: "https://rthkaudio2-lh.akamaihd.net/i/radio2_1@355865/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台第三台", url: "https://rthkaudio3-lh.akamaihd.net/i/radio3_1@355866/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台第四台 (古典音乐)", url: "https://rthkaudio4-lh.akamaihd.net/i/radio4_1@355867/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台第五台", url: "https://rthkaudio5-lh.akamaihd.net/i/radio5_1@355868/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台第六台转播香港之声", url: "https://rthkradiocnrhk-live.akamaized.net/hls/live/2046111/radiocnrhk/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台普通话台", url: "https://rthkaudio6-lh.akamaihd.net/i/radiopth_1@355869/master.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
+    { name: "香港电台转播大湾区之声", url: "https://rthkradiocmgrgb-live.akamaized.net/hls/live/2046112/radiocmgrgb/index_64_a.m3u8", logo: "img/radio/rthk.jpg", category: "香港" },
 
     { name: "新城知讯台 (997)", url: "https://metroradio-lh.akamaihd.net/i/997_h@349799/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
     { name: "新城财经台 (104)", url: "https://metroradio-lh.akamaihd.net/i/104_h@349798/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
