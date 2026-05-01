@@ -6,151 +6,201 @@
     <title>Update / 更新 - Baipon Radio</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        /* 1. 定义色彩变量 (Light Mode) */
         :root {
-            --primary-color: #6200ee;
-            --play-green: #01875f;
+            --md-bg: #ffffff;
+            --md-surface: #f8f9fa;
+            --md-primary: #6200ee;
+            --md-play-green: #01875f;
             --text-main: #202124;
             --text-sub: #5f6368;
+            --border-color: #dadce0;
+        }
+
+        /* 2. 黑暗模式变量 (Media Query) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --md-bg: #121212;
+                --md-surface: #1e1e1e;
+                --md-primary: #bb86fc;
+                --md-play-green: #00c853;
+                --text-main: #e8eaed;
+                --text-sub: #9aa0a6;
+                --border-color: #3c4043;
+            }
+        }
+
+        /* 3. 手动切换模式的强制覆盖类 */
+        [data-theme="dark"] {
+            --md-bg: #121212;
+            --md-surface: #1e1e1e;
+            --md-primary: #bb86fc;
+            --md-play-green: #00c853;
+            --text-main: #e8eaed;
+            --text-sub: #9aa0a6;
+            --border-color: #3c4043;
+        }
+
+        [data-theme="light"] {
+            --md-bg: #ffffff;
+            --md-surface: #f8f9fa;
+            --md-primary: #6200ee;
+            --md-play-green: #01875f;
+            --text-main: #202124;
+            --text-sub: #5f6368;
+            --border-color: #dadce0;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', "Microsoft YaHei", sans-serif;
-            background-color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-bg);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            background: var(--md-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
         }
 
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 360px;
             padding: 24px;
             text-align: center;
         }
 
-        /* 顶部品牌装饰 */
         .brand-section {
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
         .brand-icon {
-            font-size: 72px;
-            color: var(--primary-color);
+            font-size: 80px;
+            color: var(--md-primary);
             margin-bottom: 12px;
         }
 
-        .brand-name {
-            font-size: 24px;
-            font-weight: 500;
-            color: var(--text-main);
-            margin: 0;
-        }
-
-        /* 按钮样式 */
         .btn {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 18px;
             margin-bottom: 20px;
-            border-radius: 12px;
+            border-radius: 16px;
             text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn:active {
-            transform: scale(0.98);
-            box-shadow: none;
-        }
+        .btn:active { transform: scale(0.96); }
 
-        /* APK 下载按钮 */
-        .btn-apk {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* Google Play 按钮 */
+        /* Google Play 按钮 - 置顶且高亮 */
         .btn-google {
-            background-color: white;
-            color: var(--play-green);
-            border: 2px solid var(--play-green);
+            background-color: var(--md-play-green);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(1, 135, 95, 0.3);
         }
 
-        .btn-label-en {
-            font-size: 16px;
-            font-weight: 600;
-            line-height: 1.2;
+        /* APK 下载按钮 - 边框样式 */
+        .btn-apk {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
         }
 
-        .btn-label-zh {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 2px;
-        }
-
-        .btn-icon {
-            margin-bottom: 4px;
-        }
+        .btn-label-en { font-size: 17px; font-weight: 600; }
+        .btn-label-zh { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+        .btn i { margin-bottom: 6px; font-size: 28px; }
 
         .footer {
-            position: fixed;
-            bottom: 24px;
+            margin-top: 40px;
             font-size: 12px;
             color: var(--text-sub);
-            letter-spacing: 1px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+    <i class="material-icons" id="theme-icon">brightness_auto</i>
+</button>
+
 <div class="container">
     <div class="brand-section">
-        <i class="material-icons brand-icon">radio</i>
-        <p class="brand-name">BAIPIN RADIO</p>
+        <i class="material-icons brand-icon">settings_input_antenna</i>
+        <h2 style="margin:0; letter-spacing: 1px;">BAIPON RADIO</h2>
     </div>
 
-    <a href="#" id="apk-link" class="btn btn-apk">
-        <i class="material-icons btn-icon">file_download</i>
-        <span class="btn-label-en">Download APK Directly</span>
-        <span class="btn-label-zh">直接下载 APK</span>
-    </a>
-
     <a href="https://play.google.com/store/apps/details?id=com.baipon.radio" class="btn btn-google">
-        <i class="material-icons btn-icon">shop</i>
+        <i class="material-icons">shop</i>
         <span class="btn-label-en">Update via Google Play</span>
         <span class="btn-label-zh">通过 Google Play 更新</span>
     </a>
 
+    <a href="#" id="apk-link" class="btn btn-apk">
+        <i class="material-icons">file_download</i>
+        <span class="btn-label-en">Download APK Directly</span>
+        <span class="btn-label-zh">直接下载 APK 文件</span>
+    </a>
+
     <div class="footer">
-        百品电台 · VERSION UPDATE
+        Baipon Radio · Edition 2026
     </div>
 </div>
 
 <script>
-    // 动态获取 android.json 中的 realdownUrl
-    async function fetchUpdateInfo() {
-        const apkBtn = document.getElementById('apk-link');
+    // 1. 动态获取 APK 链接
+    async function initApp() {
         try {
-            // 注意：请确保 android.json 与此页面同域或已配置 CORS
             const response = await fetch('./android.json');
             const data = await response.json();
             if (data.realdownUrl) {
-                apkBtn.href = data.realdownUrl;
+                document.getElementById('apk-link').href = data.realdownUrl;
             }
-        } catch (error) {
-            console.error('无法获取更新配置文件:', error);
-            // 容错处理：如果获取失败，可以指向一个备用链接
-            apkBtn.onclick = () => alert('Update link unavailable. Please try Google Play.');
+        } catch (e) {
+            console.error("JSON load failed", e);
         }
     }
 
-    // 页面加载时执行
-    window.onload = fetchUpdateInfo;
+    // 2. 主题切换逻辑
+    function toggleTheme() {
+        const body = document.documentElement;
+        const currentTheme = body.getAttribute('data-theme');
+        const icon = document.getElementById('theme-icon');
+        
+        if (currentTheme === 'dark') {
+            body.setAttribute('data-theme', 'light');
+            icon.innerText = 'light_mode';
+        } else if (currentTheme === 'light') {
+            body.setAttribute('data-theme', 'dark');
+            icon.innerText = 'dark_mode';
+        } else {
+            // 如果是初始自动状态，点击则根据当前系统色调反转
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            icon.innerText = isDark ? 'light_mode' : 'dark_mode';
+        }
+    }
+
+    window.onload = initApp;
 </script>
 
 </body>
