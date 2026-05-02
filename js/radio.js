@@ -3,13 +3,13 @@
  */
 var radioStations = [
     // === 香港 ===
-    { name: "香港电台第一台", url: "https://rthkaudio1-lh.akamaihd.net/i/radio1_1@355864/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
-    { name: "香港电台第二台", url: "https://rthkaudio2-lh.akamaihd.net/i/radio2_1@355865/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
-    { name: "香港电台第三台", url: "https://rthkaudio3-lh.akamaihd.net/i/radio3_1@355866/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
+    { name: "香港电台第一台 (RTHK1)", url: "https://rthkaudio1-lh.akamaihd.net/i/radio1_1@355864/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
+    { name: "香港电台第二台 (RTHK2)", url: "https://rthkaudio2-lh.akamaihd.net/i/radio2_1@355865/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
+    { name: "香港电台第三台 (RTHK3 EN)", url: "https://rthkaudio3-lh.akamaihd.net/i/radio3_1@355866/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
     { name: "香港电台第四台 (古典音乐)", url: "https://rthkaudio4-lh.akamaihd.net/i/radio4_1@355867/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
-    { name: "香港电台第五台", url: "https://rthkaudio5-lh.akamaihd.net/i/radio5_1@355868/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
+    { name: "香港电台第五台 (RTHK5)", url: "https://rthkaudio5-lh.akamaihd.net/i/radio5_1@355868/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
     { name: "香港电台第六台转播香港之声", url: "https://rthkradiocnrhk-live.akamaized.net/hls/live/2046111/radiocnrhk/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
-    { name: "香港电台普通话台", url: "https://rthkaudio6-lh.akamaihd.net/i/radiopth_1@355869/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
+    { name: "香港电台普通话台 (RTHK Putonghua)", url: "https://rthkaudio6-lh.akamaihd.net/i/radiopth_1@355869/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
     { name: "香港电台转播大湾区之声", url: "https://rthkradiocmgrgb-live.akamaized.net/hls/live/2046112/radiocmgrgb/index_64_a.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
 
     { name: "新城知讯台 (997)", url: "https://metroradio-lh.akamaihd.net/i/997_h@349799/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
@@ -26,11 +26,11 @@ var radioStations = [
     { name: "绿邨电台", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
-    { name: "中国之声", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "经济之声", url: "https://ngcdn002.cnr.cn/live/jjzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "音乐之声", url: "https://ngcdn003.cnr.cn/live/yyzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "经典音乐广播", url: "https://ngcdn004.cnr.cn/live/dszs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "中华之声", url: "https://ngcdn005.cnr.cn/live/zhzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "中国之声 (Voice of China)", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "经济之声 (Voice of Biz)", url: "https://ngcdn002.cnr.cn/live/jjzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "音乐之声 (Voice of Music)", url: "https://ngcdn003.cnr.cn/live/yyzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "经典音乐广播 (Golden Radio)", url: "https://ngcdn004.cnr.cn/live/dszs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "台海之声 Cross-Strait Radio", url: "https://ngcdn005.cnr.cn/live/zhzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "神州之声", url: "https://ngcdn006.cnr.cn/live/szzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "大湾区之声", url: "https://ngcdn007.cnr.cn/live/hxzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "香港之声", url: "https://ngcdn008.cnr.cn/live/xgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
@@ -243,7 +243,28 @@ var radioStations = [
     { name: "西藏藏语康巴方言", url: "https://satellitepull.cnr.cn/live/wxxzzykbfy/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xztv.ico", category: "内地" },
     { name: "西藏都市生活", url: "https://satellitepull.cnr.cn/live/wxxzdsshgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xztv.ico", category: "内地" },
     { name: "西藏对外交通", url: "https://satellitepull.cnr.cn/live/wxxzdwjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xztv.ico", category: "内地" },
-    { name: "西藏汉语广播", url: "https://satellitepull.cnr.cn/live/wxxzhygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xztv.ico", category: "内地" }
+    { name: "西藏汉语广播", url: "https://satellitepull.cnr.cn/live/wxxzhygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xztv.ico", category: "内地" },
+    { name: "江苏财经广播 (Jiangsu Finance Radio)", url: "https://satellitepull.cnr.cn/live/wx32jscjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏故事广播 (Jiangsu Story Radio)", url: "https://satellitepull.cnr.cn/live/wx32jsgsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏健康广播 (Jiangsu Health Radio)", url: "https://satellitepull.cnr.cn/live/wx32jsjkgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏交通广播 (Jiangsu Traffic Radio)", url: "https://satellitepull.cnr.cn/live/wx32jsjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏金陵之声 (Jiangsu Voice Of Jinling)", url: "https://satellitepull.cnr.cn/live/wx32jsqctp/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏经典流行音乐 (Jiangsu Classic Pop Music)", url: "https://satellitepull.cnr.cn/live/wx32jsjdlxyy/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏文艺广播 (Jiangsu Literature & Art Radio)", url: "https://satellitepull.cnr.cn/live/wx32jswygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏新闻广播 (Jiangsu News Radio)", url: "https://satellitepull.cnr.cn/live/wx32jsxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江苏音乐广播 (Jiangsu Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32jsyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jstv.ico", category: "内地" },
+    { name: "江西都市广播 (Jiangxi City Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxdsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "江西交通广播 (Jiangxi Traffic Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "江西民生广播 (Jiangxi Livelihood Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxmsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "江西农村广播 (Jiangxi Rural Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxncgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "江西新闻广播 (Jiangxi News Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "江西音乐广播 (Jiangxi Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32jiangxyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/jxtv.ico", category: "内地" },
+    { name: "湖南交通广播 (Hunan Traffic Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南金鹰之声 (Hunan Golden Eagle Voice)", url: "https://satellitepull.cnr.cn/live/wx32955/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南经济广播 (Hunan Economy Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南893芒果音乐台 (Hunan Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8"", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南潇湘之声 (Hunan Xiaoxiang Voice)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南新闻广播 (Hunan News Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" }
 ];
 
 console.log("Loaded at" + new Date().getTime());
