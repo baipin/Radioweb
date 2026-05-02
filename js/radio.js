@@ -99,7 +99,7 @@ var radioStations = [
     { name: "正声综合台", url: "http://flv.ccdntech.com/live/_definst_/mp4:vod117_Live/live2/playlist.m3u8", logo: "https://www.csbc.com.tw/wp-content/uploads/2019/05/02.app%E5%8D%80%E5%A1%8A.png", category: "台湾" },
     { name: "正声 104.1", url: "http://flv.ccdntech.com/live/_definst_/mp4:vod117_Live/live1/playlist.m3u8", logo: "https://www.csbc.com.tw/wp-content/uploads/2019/05/02.app%E5%8D%80%E5%A1%8A.png", category: "台湾" },
     { name: "UNI FM96.7 环宇广播电台", url: "https://n10.rcs.revma.com/srn5f9kmwxhvv", logo: "https://radio.baipon.com/img/radio/uni.ico", category: "台湾" },
-    { name: "汉声广播电台", url: "http://202.39.43.67:1935/live/RA000076/chunklist.m3u8", logo: "https://www.voh.com.tw/images/logo.png", category: "台湾" },
+    { name: "漢聲廣播電台", url: "http://202.39.43.67:1935/live/RA000076/chunklist.m3u8", logo: "https://radio.baipon.com/img/radio/voh.svg", category: "台湾" },
     { name: "国立教育广播电台/台北 101.7", url: "https://cast.ner.gov.tw/1", logo: "https://www.ner.gov.tw/icon.jpg", category: "台湾" },
     { name: "領袖廣播電台 FM93.7", url: "https://stream.rcs.revma.com/hpeqh9mkc6hvv", logo: "https://fm937fm.com/assets/images/icon-32x33.png", category: "台湾" },
     { name: "GoGoRadio 桃園 FM104.3", url: "https://stream.ginnet.cloud/live0119lo-p4rb/_definst_/fm1043/playlist.m3u8", logo: "https://gogoradiofm1043.com.tw/favicon.ico", category: "台湾" },
