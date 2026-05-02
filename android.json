@@ -1,7 +1,12 @@
 {
-  "versionCode": 8,
-  "versionName": "0.0.8",
-  "realdownUrl":"https://radio.baipon.com/app/0.0.8.apk",
+  "versionCode": 10,
+  "versionName": "0.0.9.1",
+  "realdownUrl": "https://radio.baipon.com/app/0.0.9.1.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
-  "updateLog": "修复多语言适配bug。Fixed a bug related to multilingual compatibility."
+  "updateLog": {
+    "zh-CN": "1.应用修复了Google Play桥接问题，今后更新APK和Play版本可以互认\n2.优化了 App 结构，显著缩小了应用安装包体积。\n3.更新了代码混淆策略，保护用户隐私与应用安全。",
+    "zh-TW": "1.修復了Google Play橋接問題，今後更新APK和Play版本可以互認\n2.改善了 App Bundle 結構，顯著縮小了應用程式安裝包體積。\n3.更新了程式碼混淆策略，保護用戶隱私與應用安全。",
+    "zh-HK": "1.修復了Google Play橋接問題，今後更新APK和Play版本可以互認\n2.改善了 App Bundle 結構，顯著縮小了應用程式安裝包體積。\n3.更新了程式碼混淆策略，保護用戶隱私與應用安全。",
+    "en": "1.Fixed a Google Play bridging issue, so future APK updates and Play Store versions will be mutually recognized.\n2.Optimized App structure to significantly reduce the app's installation size.\n3.Enhanced code obfuscation to better protect user privacy and application integrity."
+  }
 }
