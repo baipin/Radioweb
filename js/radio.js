@@ -262,7 +262,7 @@ var radioStations = [
     { name: "湖南交通广播 (Hunan Traffic Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南金鹰之声 (Hunan Golden Eagle Voice)", url: "https://satellitepull.cnr.cn/live/wx32955/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南经济广播 (Hunan Economy Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
-    { name: "湖南893芒果音乐台 (Hunan Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8"", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "湖南893芒果音乐台 (Hunan Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南潇湘之声 (Hunan Xiaoxiang Voice)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南新闻广播 (Hunan News Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" }
 ];
