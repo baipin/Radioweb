@@ -164,7 +164,39 @@ var radioStations = [
     { name: "Country 108 (德国网络音乐台)", url: "http://www.country108.com/listen.m3u", logo: "https://www.country108.com/favicon.png.pagespeed.ce.tuEDsXNmeM.png", category: "网络音乐" },
     { name: "Truckers.FM (全球卡车社区)", url: "https://live.truckers.fm/", logo: "https://truckers.fm/favicon.ico", category: "网络音乐" },
     { name: "BigRigFM (卡车乡村音乐专用)", url: "https://radio.bigrig.fm/", logo: "https://bigrig.fm/favicon.ico", category: "网络音乐" },
-    { name: "Simulator Radio (模拟飞行与卡车)", url: "https://stream.simulatorradio.com/stream.mp3", logo: "https://www.simulatorradio.com/favicon.ico", category: "网络音乐" }
+    { name: "Simulator Radio (模拟飞行与卡车)", url: "https://stream.simulatorradio.com/stream.mp3", logo: "https://www.simulatorradio.com/favicon.ico", category: "网络音乐" },
+
+    // ===内地地方===
+    { name: "安徽交通广播", url: "https://satellitepull.cnr.cn/live/wxahjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽经济广播", url: "https://satellitepull.cnr.cn/live/wxahjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽旅游广播", url: "https://satellitepull.cnr.cn/live/wxahlygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽农村广播", url: "https://satellitepull.cnr.cn/live/wxahncgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽生活广播", url: "https://satellitepull.cnr.cn/live/wxahshgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽戏曲广播", url: "https://satellitepull.cnr.cn/live/wxahxqgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽小说评书", url: "https://satellitepull.cnr.cn/live/wxahxspsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽音乐广播", url: "https://satellitepull.cnr.cn/live/wxahyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "安徽之声", url: "https://satellitepull.cnr.cn/live/wxahxxgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
+    { name: "广东城市之声", url: "https://satellitepull.cnr.cn/live/wxgdcszs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    
+    { name: "广东股市广播", url: "https://satellitepull.cnr.cn/live/wxgdgsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东南方生活广播 FM93.6", url: "http://live.xmcdn.com/live/249/64.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东南粤之声", url: "https://satellitepull.cnr.cn/live/wxnyzs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东文体广播", url: "https://satellitepull.cnr.cn/live/wxgdwtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东新闻广播", url: "https://satellitepull.cnr.cn/live/wxgdxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东新闻频道 FM91.4", url: "http://live.xmcdn.com/live/245/64.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东羊城交通广播 FM105.2", url: "http://live.xmcdn.com/live/248/64.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东音乐之声 FM99.3", url: "http://live.xmcdn.com/live/74/64.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东音乐之声", url: "https://satellitepull.cnr.cn/live/wxgdyyzs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东优悦广播(南粤) FM105.7", url: "http://ls.qingting.fm/live/470.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    { name: "广东珠江经济台 FM97.4", url: "http://live.xmcdn.com/live/252/64.m3u8", logo: "https://radio.baipon.com/img/radio/gdtv.ico", category: "内地" },
+    
+    { name: "上海东方广播", url: "https://satellitepull.cnr.cn/live/wx32dfgbdt/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
+    { name: "上海新闻广播", url: "https://satellitepull.cnr.cn/live/wx32shrmgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
+    
+    { name: "深圳飞扬971", url: "https://satellitepull.cnr.cn/live/wxszfy971/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
+    { name: "深圳交通频率", url: "https://satellitepull.cnr.cn/live/wxszjjpl/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
+    { name: "深圳快乐1062(交通广播)", url: "http://ls.qingting.fm/live/1272.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
+    { name: "深圳私家车", url: "https://satellitepull.cnr.cn/live/wxszsjcgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" }
 ];
 
 console.log("Loaded at" + new Date().getTime());
