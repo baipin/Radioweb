@@ -374,6 +374,22 @@ function applyLanguage() {
     if (copyright) {
         copyright.innerHTML = `&copy; 2026 百品电台 · ${t.footer_copyright}<br/>${t.footer_disclaimer}`;
     }
+
+    // --- 新增：处理示例对话框的翻译 ---
+    const exampleLink = document.getElementById('view-example-link');
+    if (exampleLink) exampleLink.innerText = t.btn_view_example;
+
+    const exDiagTitle = document.getElementById('ex-diag-title');
+    if (exDiagTitle) exDiagTitle.innerText = t.dialog_title_guide;
+
+    const exGuideLabel = document.getElementById('ex-guide-label');
+    if (exGuideLabel) exGuideLabel.innerText = t.guide_label;
+
+    const exGuideContent = document.getElementById('ex-guide-content');
+    if (exGuideContent) exGuideContent.innerHTML = t.guide_prompt;
+
+    const exCloseBtn = document.getElementById('ex-close-btn');
+    if (exCloseBtn) exCloseBtn.innerText = t.btn_cancel || t.btn_save; // 复用已有取消/保存文案或自定义
     
     // 设置语言切换按钮的标题
     const langBtn = document.getElementById('language-switch-btn');
