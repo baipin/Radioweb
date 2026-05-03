@@ -54,7 +54,7 @@ const translations = {
         'btn_view_example': '查看示例',
         'dialog_title_guide': '导入指引与示例',
         'guide_label': 'AI 转换指引：',
-        'guide_prompt': '可以让告诉 AI：<br>“请把我下面的直播源改成和示例一样的格式，logo 请在网上自己搜寻，favicon.ico 是最佳。”',
+        'guide_prompt': '可以告诉 AI：<br>“请把我下面的直播源改成和示例一样的格式，logo 请在网上自己搜寻，favicon.ico 是最佳。”',
         'search_placeholder': '搜索电台...',
         'search_result': '找到 {count} 个电台',
         // 语言切换
