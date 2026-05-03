@@ -234,14 +234,19 @@ function getUrlLanguage() {
 // 同步对话框主题
 function syncDialogTheme() {
     const isDark = document.body.classList.contains('mdui-theme-dark');
-    const dialog = document.getElementById('station-dialog');
-    if (dialog) {
-        if (isDark) {
-            dialog.setAttribute('theme', 'dark');
-        } else {
-            dialog.removeAttribute('theme');
+    // 获取两个对话框
+    const stationDialog = document.getElementById('station-dialog');
+    const exampleDialog = document.getElementById('example-dialog');
+    
+    [stationDialog, exampleDialog].forEach(dialog => {
+        if (dialog) {
+            if (isDark) {
+                dialog.setAttribute('theme', 'dark');
+            } else {
+                dialog.removeAttribute('theme');
+            }
         }
-    }
+    });
 }
 
 // 初始化语言
