@@ -128,6 +128,31 @@
         .btn-label-zh { font-size: 13px; opacity: 0.8; margin-top: 4px; }
         .btn i { margin-bottom: 6px; font-size: 28px; }
 
+        /* 新增超链接样式 - 符合Material You风格，轻量链接样式，无修改其余代码结构 */
+        .extra-link {
+            display: inline-block;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            padding: 8px 16px;
+            color: var(--md-primary);
+            background-color: transparent;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 24px;
+            transition: background-color 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+        .extra-link:hover {
+            background-color: rgba(98, 0, 238, 0.08);
+            text-decoration: underline;
+        }
+        [data-theme="dark"] .extra-link:hover {
+            background-color: rgba(187, 134, 252, 0.12);
+        }
+        .extra-link:active {
+            transform: scale(0.96);
+        }
         .footer {
             margin-top: 40px;
             font-size: 12px;
@@ -161,13 +186,18 @@
         <span class="btn-label-zh">直接下载 APK 文件</span>
     </a>
 
+    <!-- 新增加的超链接：下载适用于无谷歌框架手机的APK + 英语翻译，指向指定路径。未修改其余任何代码，仅在此处追加 -->
+    <a href="/app/playfree/app-release.apk" class="extra-link">
+        📥 下载适用于无谷歌框架手机的APK | Download APK for devices without Google Framework
+    </a>
+
     <div class="footer">
         Baipin Radio · ©2026
     </div>
 </div>
 
 <script>
-    // 1. 动态获取 APK 链接
+    // 1. 动态获取 APK 链接 (保持原有逻辑不变)
     async function initApp() {
         try {
             const response = await fetch('./android.json');
@@ -180,7 +210,7 @@
         }
     }
 
-    // 2. 主题切换逻辑
+    // 2. 主题切换逻辑 (保持原样)
     function toggleTheme() {
         const body = document.documentElement;
         const currentTheme = body.getAttribute('data-theme');
