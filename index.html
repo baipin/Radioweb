@@ -648,6 +648,7 @@
         }
 
         let searchKeyword = ''; // 添加搜索关键词变量
+        let currentRenderTask = null; // 用于取消上一次未完成的渲染
 
 function refresh() {
     const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
