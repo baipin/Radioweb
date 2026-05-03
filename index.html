@@ -319,7 +319,11 @@
             </div>
 
             <div id="batch-import-section" style="border-top: 1px solid rgba(128,128,128,0.2); padding-top: 16px;">
-                <mdui-button variant="outlined" id="show-import-area" style="margin-bottom: 8px;">批量导入 JSON</mdui-button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <mdui-button variant="outlined" id="show-import-area">批量导入 JSON</mdui-button>
+                    <!-- 动态语言链接 -->
+                    <a href="javascript:void(0)" id="view-example-link" style="color: var(--accent-color); font-size: 12px; text-decoration: none;">查看示例与指引</a>
+                </div>
                 <div id="import-area-wrapper" style="display: none;">
                     <mdui-text-field label="粘贴 JSON 数组" rows="8" id="import-area" placeholder='示例：[{"name": "示例", "url": "...", "category": "...", "logo": "..."}]'></mdui-text-field>
                 </div>
@@ -331,6 +335,26 @@
         <mdui-button slot="action" variant="filled" id="btn-save">保存</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始导入</mdui-button>
     </mdui-dialog>
+
+     <!-- 示例对话框 -->
+            <mdui-dialog id="example-dialog">
+                <span slot="headline" id="ex-diag-title">导入指引与示例</span>
+                <div style="font-size: 14px; line-height: 1.6;">
+                    <p><strong id="ex-guide-label">AI 转换指引：</strong></p>
+                    <blockquote id="ex-guide-content" style="background: rgba(128,128,128,0.1); padding: 10px; border-left: 4px solid var(--accent-color); margin: 10px 0;"></blockquote>
+                    <p><strong>JSON Format:</strong></p>
+                    <pre style="background: #2d2d2d; color: #ccc; padding: 12px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 12px;">
+            [
+              {
+                "name": "Station Name",
+                "url": "https://....m3u8",
+                "category": "Category",
+                "logo": "https://.../favicon.ico"
+              }
+            ]</pre>
+                </div>
+                <mdui-button slot="action" variant="text" onclick="document.getElementById('example-dialog').open = false" id="ex-close-btn">确定</mdui-button>
+            </mdui-dialog>
 
     <script>
         const audio = document.getElementById('audio-player');
