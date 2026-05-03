@@ -262,26 +262,6 @@
         background: rgba(255, 255, 255, 0.1);
     }
         
-        /* 搜索覆盖层样式 */
-        .search-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1099;  /* 降低层级，低于搜索栏但高于背景 */
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        pointer-events: none;  /* 关键：让覆盖层不拦截点击事件 */
-    }
-    
-    .search-overlay.active {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;  /* 激活时拦截点击（用于关闭） */
-    }
     
     .search-bar-container {
         position: fixed;
@@ -538,8 +518,6 @@
         </div>
     </div>
 
-        <!-- 搜索覆盖层 -->
-    <div class="search-overlay" id="search-overlay"></div>
     
     <!-- 搜索栏容器 -->
     <div class="search-bar-container" id="search-bar-container">
@@ -1198,7 +1176,6 @@ function loadSource(url, isM3U8) {
         function initSearchBar() {
             const searchToggleBtn = document.getElementById('search-toggle-btn');
             const searchContainer = document.getElementById('search-bar-container');
-            const searchOverlay = document.getElementById('search-overlay');
             const searchCloseBtn = document.getElementById('search-close-btn');
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
