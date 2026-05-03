@@ -1179,7 +1179,6 @@ function loadSource(url, isM3U8) {
             const searchCloseBtn = document.getElementById('search-close-btn');
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
-            const searchResultBadge = document.getElementById('search-result-badge');
             
             if (!searchToggleBtn || !searchContainer) return;
             
@@ -1187,7 +1186,6 @@ function loadSource(url, isM3U8) {
             function openSearch() {
                 searchExpanded = true;
                 searchContainer.classList.add('active');
-                searchOverlay.classList.add('active');
                 setTimeout(() => {
                     searchInput.focus();
                 }, 100);
@@ -1201,7 +1199,6 @@ function loadSource(url, isM3U8) {
             function closeSearch() {
                 searchExpanded = false;
                 searchContainer.classList.remove('active');
-                searchOverlay.classList.remove('active');
                 // 清空搜索
                 searchInput.value = '';
                 searchKeyword = '';
@@ -1226,7 +1223,6 @@ function loadSource(url, isM3U8) {
             if (searchCloseBtn) {
                 searchCloseBtn.onclick = closeSearch;
             }
-            
             
             // 初始化 placeholder 翻译
             updateSearchPlaceholder();
@@ -1282,32 +1278,6 @@ function loadSource(url, isM3U8) {
             searchInput.placeholder = t.search_placeholder || '搜索电台...';
         }
         
-        // 重写 updateSearchResultCount 函数，同时更新 badge
-        const originalUpdateSearchResultCount = updateSearchResultCount;
-        updateSearchResultCount = function(shown, total) {
-            const countEl = document.getElementById('search-result-count');
-            const badgeEl = document.getElementById('search-result-badge');
-            
-            if (searchKeyword.trim() !== '') {
-                const currentLang = window.currentLanguage || 'zh-CN';
-                const translations = window.translations || {};
-                const t = translations[currentLang] || translations['zh-CN'];
-                
-                let resultText = t.search_result || '找到 {count} 个电台';
-                resultText = resultText.replace('{count}', shown);
-                
-                if (countEl) {
-                    countEl.textContent = resultText;
-                    countEl.style.display = 'block';
-                }
-                if (badgeEl) {
-                    badgeEl.textContent = resultText;
-                }
-            } else {
-                if (countEl) countEl.style.display = 'none';
-                if (badgeEl) badgeEl.textContent = '';
-            }
-        };
         
 
         window.onload = () => {
