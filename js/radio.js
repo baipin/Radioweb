@@ -151,6 +151,12 @@ var radioStations = [
     { name: "SomaFM Groove Salad (旧金山电子)", url: "http://ice1.somafm.com/groovesalad-128-mp3", logo: "https://somafm.com/favicon.ico", category: "美国" },
     { name: "Bloomberg Radio (彭博财经)", url: "https://17563.live.streamtheworld.com/WBBRAMAAC48/HLS/aa6b0a8b-da19-463f-a757-a4e5f57df4f5/0/playlist.m3u8", logo: "https://www.bloomberg.com/favicon.ico", category: "美国" },
     { name: "Jazz24 (全天候爵士乐)", url: "https://live.wpmucdn.com/kplu/jazz24-mp3-128", logo: "https://www.jazz24.org/favicon.ico", category: "美国" },
+    { name: "CNBC Business News (全球财经新闻)", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.cnbc.com/favicon.ico", category: "美国" },
+    { name: "CNN International (CNN新闻音频)", url: "https://cnn-cnni-1-ad.audio-online.com/cnn/cnni/icecast.audio", logo: "https://www.cnn.com/favicon.ico", category: "美国" },
+    { name: "ABC News Radio (美国广播公司新闻)", url: "https://live.abcnews.com/audio/news.m3u8", logo: "https://abcnews.go.com/favicon.ico", category: "美国" },
+    { name: "Fox News Radio (福克斯新闻广播)", url: "https://fox-news.ice.infomaniak.ch/fox-news.mp3", logo: "https://www.foxnews.com/favicon.ico", category: "美国" },
+    { name: "WSJ Radio (华尔街日报音频)", url: "https://wsj-powe-1-ad.audio-online.com/wsj/powe/icecast.audio", logo: "https://www.wsj.com/favicon.ico", category: "美国" },
+    { name: "C-SPAN Radio (美国公共事务广播)", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.c-span.org/favicon.ico", category: "美国" },
 
     { name: "Rock Antenne (德国摇滚)", url: "https://mp3channels.webradio.antenne.de/rockantenne", logo: "https://www.rockantenne.de/favicon.ico", category: "网络音乐"},
     { name: "Klassik Radio (德国古典)", url: "http://edge.live.mp3.mdn.newmedia.nacamar.net/klassikradio128/livestream.mp3", logo: "https://www.klassikradio.de/favicon.ico", category: "网络音乐" },
