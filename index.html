@@ -970,5 +970,41 @@ function loadSource(url, isM3U8) {
 </footer>
 <!-- 引入多语言支持脚本 -->
 <script src="js/languages.js"></script>
+<script>
+    // 修复查看示例与指引链接点击事件
+    (function fixExampleLink() {
+        // 等待 DOM 加载完成
+        function initExampleLink() {
+            const exampleLink = document.getElementById('view-example-link');
+            const exampleDialog = document.getElementById('example-dialog');
+            
+            if (exampleLink && exampleDialog) {
+                // 移除可能存在的旧事件
+                const newLink = exampleLink.cloneNode(true);
+                exampleLink.parentNode.replaceChild(newLink, exampleLink);
+                
+                // 添加新的事件
+                newLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    exampleDialog.open = true;
+                });
+                
+                console.log('示例链接已修复，点击可打开对话框');
+            } else {
+                // 如果元素还没加载，稍后重试
+                console.log('等待元素加载...');
+                setTimeout(initExampleLink, 100);
+            }
+        }
+        
+        // 立即执行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initExampleLink);
+        } else {
+            initExampleLink();
+        }
+    })();
+</script>
 </body>
 </html>
