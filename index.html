@@ -373,12 +373,33 @@
 
     
     
-    /* 搜索结果计数在顶栏显示 */
+   /* 搜索结果徽章 - 修复手机端溢出问题 */
     .search-result-badge {
         font-size: 13px;
-        color: var(--text-sub);
+        color: #5f6368;
         padding: 0 8px;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+        flex-shrink: 1;
+    }
+    
+    .mdui-theme-dark .search-result-badge {
+        color: #9aa0a6;
+    }
+    
+    /* 小屏幕适配 */
+    @media (max-width: 480px) {
+        .search-result-badge {
+            max-width: 80px;
+            font-size: 11px;
+            padding: 0 4px;
+        }
+        
+        .search-bar-inner {
+            gap: 6px;
+        }
     }
     
         /* 修复白天模式搜索框文字颜色 */
