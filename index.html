@@ -564,9 +564,8 @@
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin: 32px 0 24px; flex-wrap: wrap; gap: 12px;">
         <div class="category-tabs" id="category-tabs" style="margin: 0; flex: 1;"></div>
-        <button id="refresh-btn-category" class="tab-btn" style="display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-            <span class="material-icons" style="font-size: 18px;">refresh</span>
-            <span>更新</span>
+        <button id="refresh-btn-category" class="tab-btn" onclick="forceReloadRadios()" style="display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+        <span class="material-icons" style="font-size: 18px;">refresh</span>
         </button>
         </div>
         <div class="radio-grid" id="station-list"></div>
