@@ -1,12 +1,12 @@
 {
-  "versionCode": 11,
-  "versionName": "0.0.10",
-  "realdownUrl": "https://radio.baipon.com/app/0.0.10.apk",
+  "versionCode": 12,
+  "versionName": "0.0.11",
+  "realdownUrl": "https://radio.baipon.com/app/0.0.11.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
-    "zh-CN": "1.新增搜索功能，支持快速查找电台。",
-    "zh-TW": "1.新增搜尋功能，支援快速查找電台。",
-    "zh-HK": "1.新增搜尋功能，支援快速查找電台。",
-    "en": "1.Added search functionality for quickly finding stations."
+    "zh-CN": "1.新增搜索功能，支持快速查找电台。\n2.修复检查更新的bug。",
+    "zh-TW": "1.新增搜尋功能，支援快速查找電台。\n2.修復檢查更新的bug。",
+    "zh-HK": "1.新增搜尋功能，支援快速查找電台。\n2.修復檢查更新的bug。",
+    "en": "1.Added search functionality for quickly finding stations.\n2.Fixed a bug related to checking for updates."
   }
 }
