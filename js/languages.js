@@ -401,6 +401,11 @@ function applyLanguage() {
 
     const exCloseBtn = document.getElementById('ex-close-btn');
     if (exCloseBtn) exCloseBtn.innerText = t.btn_cancel || t.btn_save; // 复用已有取消/保存文案或自定义
+
+    const searchInput = document.getElementById('search-input'); //搜索
+    if (searchInput) {
+        searchInput.placeholder = t.search_placeholder || '搜索电台...';
+    }
     
     // 设置语言切换按钮的标题
     const langBtn = document.getElementById('language-switch-btn');
