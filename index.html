@@ -261,6 +261,66 @@
     .mdui-theme-dark #language-dropdown div:hover {
         background: rgba(255, 255, 255, 0.1);
     }
+    
+        /* 搜索栏样式 */
+    .search-container {
+        margin: 20px 0 16px 0;
+        position: relative;
+        max-width: 400px;
+    }
+    .search-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 28px;
+        padding: 4px 16px;
+        border: 1px solid var(--glass-border);
+        transition: all 0.3s ease;
+    }
+    .mdui-theme-dark .search-input-wrapper {
+        background: rgba(40, 40, 48, 0.9);
+    }
+    .search-input-wrapper:focus-within {
+        box-shadow: 0 0 0 2px var(--accent-color);
+        border-color: transparent;
+    }
+    .search-icon {
+        color: var(--text-sub);
+        margin-right: 12px;
+    }
+    #search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: 12px 0;
+        font-size: 16px;
+        outline: none;
+        color: var(--text-main);
+    }
+    #search-input::placeholder {
+        color: var(--text-sub);
+        opacity: 0.7;
+    }
+    .clear-search {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-sub);
+        padding: 4px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        transition: background 0.2s;
+    }
+    .clear-search:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+    .search-result-count {
+        font-size: 13px;
+        color: var(--text-sub);
+        margin-top: 8px;
+        padding-left: 16px;
+    }
 
         /* Material Design 风格链接样式 - 修复查看示例与指引按钮 */
     #view-example-link {
@@ -377,6 +437,18 @@
         </div>
 
         <audio id="audio-player"></audio>
+                <!-- 搜索栏 -->
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" id="search-input" placeholder="搜索电台..." autocomplete="off">
+                <button class="clear-search" id="clear-search" style="display: none;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="search-result-count" id="search-result-count"></div>
+        </div>
+        <!--结束-->
         <div class="category-tabs" id="category-tabs"></div>
         <div class="radio-grid" id="station-list"></div>
     </div>
@@ -575,92 +647,137 @@
             return div;
         }
 
-        function refresh() {
-            const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
-            const combinedRaw = [...base, ...customData];
-            allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
+        let searchKeyword = ''; // 添加搜索关键词变量
+
+function refresh() {
+    const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
+    const combinedRaw = [...base, ...customData];
+    allStations = combinedRaw.filter(s => !deletedUrls.includes(s.url));
+    
+    if (sortOrder.length > 0) {
+        allStations.sort((a, b) => {
+            let idxA = sortOrder.indexOf(a.url);
+            let idxB = sortOrder.indexOf(b.url);
+            if (idxA === -1) idxA = 9999;
+            if (idxB === -1) idxB = 9999;
+            return idxA - idxB;
+        });
+    }
+   
+    let cats = ['全部'];
+    if(favorites.length > 0) cats.push('我的收藏');
+    const allCategories = allStations.map(s => s.category || '未分类').filter((v, i, self) => self.indexOf(v) === i).sort();
+    cats = [...cats, ...allCategories];
+
+    const tabBox = document.getElementById('category-tabs');
+    tabBox.innerHTML = '';
+    cats.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
+        btn.textContent = c;
+        btn.onclick = () => { 
+            currentFilter = c; 
+            searchKeyword = ''; // 切换分类时清空搜索
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            updateSearchResultCount(0, allStations.length);
+            refresh(); 
+        };
+        tabBox.appendChild(btn);
+    });
+
+    filterAndRender();
+    updateFavBtnState();
+}
+
+// 新增：过滤并渲染（支持搜索）
+function filterAndRender() {
+    let filtered = allStations;
+    
+    // 先按分类过滤
+    if(currentFilter === '我的收藏') {
+        filtered = filtered.filter(s => favorites.includes(s.url));
+    } else if(currentFilter !== '全部') {
+        filtered = filtered.filter(s => (s.category || '未分类') === currentFilter);
+    }
+    
+    // 再按搜索关键词过滤（不区分大小写）
+    if (searchKeyword.trim() !== '') {
+        const keyword = searchKeyword.toLowerCase();
+        filtered = filtered.filter(s => 
+            s.name.toLowerCase().includes(keyword) ||
+            (s.category && s.category.toLowerCase().includes(keyword))
+        );
+    }
+    
+    // 更新搜索结果计数
+    updateSearchResultCount(filtered.length, allStations.length);
+    
+    renderListWithFilter(filtered);
+}
+
+// 新增：带过滤参数的渲染
+function renderListWithFilter(filteredStations) {
+    lazyObserver.disconnect();
+    listDiv.innerHTML = '';
+    
+    if (currentRenderTask) {
+        cancelAnimationFrame(currentRenderTask);
+    }
+
+    const chunkSize = 20;
+    let index = 0;
+
+    const renderChunk = () => {
+        const limit = Math.min(index + chunkSize, filteredStations.length);
+        const fragment = document.createDocumentFragment();
+
+        for (; index < limit; index++) {
+            const s = filteredStations[index];
+            const item = document.createElement('div');
+            item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
+            item.style.animationDelay = `${(index % chunkSize) * 0.05}s`;
+            item.dataset.info = JSON.stringify(s);
+            item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
+            item.onclick = () => play(s, item);
             
-            if (sortOrder.length > 0) {
-                allStations.sort((a, b) => {
-                    let idxA = sortOrder.indexOf(a.url);
-                    let idxB = sortOrder.indexOf(b.url);
-                    if (idxA === -1) idxA = 9999;
-                    if (idxB === -1) idxB = 9999;
-                    return idxA - idxB;
-                });
-            }
-           
-            let cats = ['全部'];
-            if(favorites.length > 0) cats.push('我的收藏');
-            const allCategories = allStations.map(s => s.category || '未分类').filter((v, i, self) => self.indexOf(v) === i).sort();
-            cats = [...cats, ...allCategories];
-
-            const tabBox = document.getElementById('category-tabs');
-            tabBox.innerHTML = '';
-            cats.forEach(c => {
-                const btn = document.createElement('button');
-                btn.className = `tab-btn ${currentFilter === c ? 'active' : ''}`;
-                btn.textContent = c;
-                btn.onclick = () => { currentFilter = c; refresh(); };
-                tabBox.appendChild(btn);
-            });
-
-            renderList();
-            updateFavBtnState();
+            fragment.appendChild(item);
+            lazyObserver.observe(item);
         }
 
-        let currentRenderTask = null; // 用于取消上一次未完成的渲染
+        listDiv.appendChild(fragment);
 
-        function renderList() {
-            lazyObserver.disconnect();
-            listDiv.innerHTML = '';
-            
-            // 取消正在进行的渲染任务防止冲突
-            if (currentRenderTask) {
-                cancelAnimationFrame(currentRenderTask);
-            }
-
-            let filtered = allStations;
-            if(currentFilter === '我的收藏') {
-                filtered = allStations.filter(s => favorites.includes(s.url));
-            } else if(currentFilter !== '全部') {
-                filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
-            }
-
-            // --- 升级：分批渲染逻辑 ---
-            const chunkSize = 20; // 每帧渲染的数量
-            let index = 0;
-
-            const renderChunk = () => {
-                const limit = Math.min(index + chunkSize, filtered.length);
-                const fragment = document.createDocumentFragment();
-
-                for (; index < limit; index++) {
-                    const s = filtered[index];
-                    const item = document.createElement('div');
-                    item.className = `radio-item ${currentUrl === s.url ? 'active' : ''}`;
-                    // 设置动画延迟，形成交错入场效果
-                    item.style.animationDelay = `${(index % chunkSize) * 0.05}s`;
-                    item.dataset.info = JSON.stringify(s);
-                    item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
-                    item.onclick = () => play(s, item);
-                    
-                    fragment.appendChild(item);
-                    lazyObserver.observe(item);
-                }
-
-                listDiv.appendChild(fragment);
-
-                if (index < filtered.length) {
-                    currentRenderTask = requestAnimationFrame(renderChunk);
-                } else {
-                    currentRenderTask = null;
-                }
-            };
-
-            renderChunk();
-            // --- 升级结束 ---
+        if (index < filteredStations.length) {
+            currentRenderTask = requestAnimationFrame(renderChunk);
+        } else {
+            currentRenderTask = null;
         }
+    };
+
+    renderChunk();
+}
+
+// 新增：更新搜索结果计数显示（支持多语言）
+function updateSearchResultCount(shown, total) {
+    const countEl = document.getElementById('search-result-count');
+    if (!countEl) return;
+    
+    if (searchKeyword.trim() !== '') {
+        // 获取当前语言
+        const currentLang = window.currentLanguage || 'zh-CN';
+        const translations = window.translations || {};
+        const t = translations[currentLang] || translations['zh-CN'];
+        
+        // 使用翻译模板，替换 {count}
+        let resultText = t.search_result || '找到 {count} 个电台';
+        resultText = resultText.replace('{count}', shown);
+        countEl.textContent = resultText;
+        countEl.style.display = 'block';
+    } else {
+        countEl.style.display = 'none';
+    }
+}
+
 
         // 兼容原有的手动移动功能
         function moveStation(url, direction) {
@@ -941,6 +1058,84 @@ function loadSource(url, isM3U8) {
         };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
 
+                // ==================== 搜索栏功能 ====================
+        function initSearchBar() {
+            const searchInput = document.getElementById('search-input');
+            const clearBtn = document.getElementById('clear-search');
+            
+            if (!searchInput) return;
+            
+            // 初始化 placeholder 翻译
+            updateSearchPlaceholder();
+            
+            // 监听语言切换事件（如果有）
+            window.addEventListener('languageChanged', function() {
+                updateSearchPlaceholder();
+                // 重新刷新搜索结果计数文字
+                if (searchKeyword.trim() !== '') {
+                    // 重新计算当前搜索结果数量
+                    let filtered = allStations;
+                    if(currentFilter === '我的收藏') {
+                        filtered = allStations.filter(s => favorites.includes(s.url));
+                    } else if(currentFilter !== '全部') {
+                        filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
+                    }
+                    if (searchKeyword.trim() !== '') {
+                        const keyword = searchKeyword.toLowerCase();
+                        filtered = filtered.filter(s => 
+                            s.name.toLowerCase().includes(keyword) ||
+                            (s.category && s.category.toLowerCase().includes(keyword))
+                        );
+                    }
+                    updateSearchResultCount(filtered.length, allStations.length);
+                }
+            });
+            
+            // 输入事件（防抖）
+            let debounceTimer;
+            searchInput.addEventListener('input', function(e) {
+                clearBtn.style.display = this.value ? 'flex' : 'none';
+                
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    searchKeyword = this.value;
+                    filterAndRender();
+                }, 300);
+            });
+            
+            // 清空按钮
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    searchKeyword = '';
+                    clearBtn.style.display = 'none';
+                    filterAndRender();
+                    searchInput.focus();
+                });
+            }
+            
+            // 回车键刷新
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(debounceTimer);
+                    searchKeyword = this.value;
+                    filterAndRender();
+                }
+            });
+        }
+        
+        // 更新搜索框 placeholder 翻译
+        function updateSearchPlaceholder() {
+            const searchInput = document.getElementById('search-input');
+            if (!searchInput) return;
+            
+            const currentLang = window.currentLanguage || 'zh-CN';
+            const translations = window.translations || {};
+            const t = translations[currentLang] || translations['zh-CN'];
+            searchInput.placeholder = t.search_placeholder || '搜索电台...';
+        }
+        
+
         window.onload = () => {
             // 检查数据是否加载，如果没有，等待 500ms 再试
             const checkData = setInterval(() => {
@@ -952,6 +1147,9 @@ function loadSource(url, isM3U8) {
             
             // 5秒后如果还没加载就停止，防止死循环
             setTimeout(() => clearInterval(checkData), 5000);
+        
+            // 初始化搜索栏
+            initSearchBar();
         };
     </script>
     <footer class="main-footer">
