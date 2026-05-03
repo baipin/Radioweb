@@ -223,13 +223,11 @@ var radioStations = [
     { name: "深圳快乐1062(交通广播)", url: "http://ls.qingting.fm/live/1272.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
     { name: "深圳私家车", url: "https://satellitepull.cnr.cn/live/wxszsjcgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
 
-    { name: "新疆故事广播 FM102.8 (Xinjiang Story Radio)", url: "http://ls.qingting.fm/live/1911.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆哈语广播 (Xinjiang Kazakh Radio)", url: "https://satellitepull.cnr.cn/live/wxxjhygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆交通广播 (Xinjiang Traffic Radio)", url: "https://satellitepull.cnr.cn/live/wxxjjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆柯尔克孜语广播 (Xinjiang Kyrgyz Radio)", url: "https://satellitepull.cnr.cn/live/wxxjkygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆绿色广播 (Xinjiang Green Radio)", url: "https://satellitepull.cnr.cn/live/wxxjlsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆蒙语广播 (Xinjiang Mongolian Radio)", url: "https://satellitepull.cnr.cn/live/wxxjmygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
-    { name: "新疆民生广播 FM92.4 (Xinjiang Livelihood Radio)", url: "http://ls.qingting.fm/live/76186.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆私家车广播 (Xinjiang Private Car Radio)", url: "https://satellitepull.cnr.cn/live/wxxjsjcgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆维吾尔语交通文艺广播 (Xinjiang Uyghur Traffic & Arts Radio)", url: "https://satellitepull.cnr.cn/live/wxxjwyjtwygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
     { name: "新疆维语综合广播 (Xinjiang Uyghur Comprehensive Radio)", url: "https://satellitepull.cnr.cn/live/wxxjwyzhgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/xjtv.ico", category: "内地" },
