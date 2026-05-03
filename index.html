@@ -261,34 +261,68 @@
     .mdui-theme-dark #language-dropdown div:hover {
         background: rgba(255, 255, 255, 0.1);
     }
-    
-        /* 搜索栏样式 */
-    .search-container {
-        margin: 20px 0 16px 0;
-        position: relative;
-        max-width: 400px;
-    }
-    .search-input-wrapper {
-        display: flex;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 28px;
-        padding: 4px 16px;
-        border: 1px solid var(--glass-border);
+        
+        /* 搜索覆盖层样式 */
+    .search-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1100;
+        opacity: 0;
+        visibility: hidden;
         transition: all 0.3s ease;
     }
-    .mdui-theme-dark .search-input-wrapper {
-        background: rgba(40, 40, 48, 0.9);
+    
+    .search-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
-    .search-input-wrapper:focus-within {
+    
+    .search-bar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        z-index: 1101;
+        transform: translateY(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 8px 16px;
+    }
+    
+    .search-bar-container.active {
+        transform: translateY(0);
+    }
+    
+    .search-bar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .search-bar-inner .search-input-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        background: rgba(128, 128, 128, 0.12);
+        border-radius: 28px;
+        padding: 4px 16px;
+        transition: all 0.2s;
+    }
+    
+    .search-bar-inner .search-input-wrapper:focus-within {
+        background: rgba(128, 128, 128, 0.2);
         box-shadow: 0 0 0 2px var(--accent-color);
-        border-color: transparent;
     }
-    .search-icon {
-        color: var(--text-sub);
-        margin-right: 12px;
-    }
-    #search-input {
+    
+    .search-bar-inner #search-input {
         flex: 1;
         border: none;
         background: transparent;
@@ -297,29 +331,55 @@
         outline: none;
         color: var(--text-main);
     }
-    #search-input::placeholder {
+    
+    .search-bar-inner #search-input::placeholder {
         color: var(--text-sub);
         opacity: 0.7;
     }
-    .clear-search {
+    
+    .search-bar-inner .clear-search {
         background: none;
         border: none;
         cursor: pointer;
         color: var(--text-sub);
-        padding: 4px;
+        padding: 8px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         transition: background 0.2s;
     }
-    .clear-search:hover {
+    
+    .search-bar-inner .clear-search:hover {
         background: rgba(0, 0, 0, 0.1);
     }
-    .search-result-count {
+    
+    .search-close-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-main);
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        transition: background 0.2s;
+    }
+    
+    .search-close-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 隐藏原来的搜索栏 */
+    .search-container {
+        display: none;
+    }
+    
+    /* 搜索结果计数在顶栏显示 */
+    .search-result-badge {
         font-size: 13px;
         color: var(--text-sub);
-        margin-top: 8px;
-        padding-left: 16px;
+        padding: 0 8px;
+        white-space: nowrap;
     }
 
         /* Material Design 风格链接样式 - 修复查看示例与指引按钮 */
@@ -404,11 +464,32 @@
             <img src="img/logo.png" class="nav-logo" alt="百品电台" onerror="this.style.display='none';">
             <span style="font-weight: 900; font-size: 1.3rem;">百品电台</span>
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                <mdui-button-icon icon="search" id="search-toggle-btn" title="搜索"></mdui-button-icon>
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台 / 批量导入"></mdui-button-icon>
                 <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道"></mdui-button-icon>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode" title="切换深色模式"></mdui-button-icon>
             </div>
+        </div>
+    </div>
+
+        <!-- 搜索覆盖层 -->
+    <div class="search-overlay" id="search-overlay"></div>
+    
+    <!-- 搜索栏容器 -->
+    <div class="search-bar-container" id="search-bar-container">
+        <div class="search-bar-inner">
+            <div class="search-input-wrapper">
+                <span class="material-icons" style="color: var(--text-sub); margin-right: 12px;">search</span>
+                <input type="text" id="search-input" placeholder="搜索电台..." autocomplete="off">
+                <button class="clear-search" id="clear-search" style="display: none;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <span class="search-result-badge" id="search-result-badge"></span>
+            <button class="search-close-btn" id="search-close-btn">
+                <span class="material-icons">close</span>
+            </button>
         </div>
     </div>
 
@@ -437,18 +518,6 @@
         </div>
 
         <audio id="audio-player"></audio>
-                <!-- 搜索栏 -->
-        <div class="search-container">
-            <div class="search-input-wrapper">
-                <span class="material-icons search-icon">search</span>
-                <input type="text" id="search-input" placeholder="搜索电台..." autocomplete="off">
-                <button class="clear-search" id="clear-search" style="display: none;">
-                    <span class="material-icons">close</span>
-                </button>
-            </div>
-            <div class="search-result-count" id="search-result-count"></div>
-        </div>
-        <!--结束-->
         <div class="category-tabs" id="category-tabs"></div>
         <div class="radio-grid" id="station-list"></div>
     </div>
@@ -758,24 +827,23 @@ function renderListWithFilter(filteredStations) {
     renderChunk();
 }
 
-// 新增：更新搜索结果计数显示（支持多语言）
+// 新的 updateSearchResultCount 函数（只使用 badge，不使用旧元素）
 function updateSearchResultCount(shown, total) {
-    const countEl = document.getElementById('search-result-count');
-    if (!countEl) return;
+    const badgeEl = document.getElementById('search-result-badge');
     
     if (searchKeyword.trim() !== '') {
-        // 获取当前语言
         const currentLang = window.currentLanguage || 'zh-CN';
         const translations = window.translations || {};
         const t = translations[currentLang] || translations['zh-CN'];
         
-        // 使用翻译模板，替换 {count}
         let resultText = t.search_result || '找到 {count} 个电台';
         resultText = resultText.replace('{count}', shown);
-        countEl.textContent = resultText;
-        countEl.style.display = 'block';
+        
+        if (badgeEl) {
+            badgeEl.textContent = resultText;
+        }
     } else {
-        countEl.style.display = 'none';
+        if (badgeEl) badgeEl.textContent = '';
     }
 }
 
@@ -1059,38 +1127,71 @@ function loadSource(url, isM3U8) {
         };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
 
-                // ==================== 搜索栏功能 ====================
+               // ==================== 顶部搜索栏功能 ====================
+        let searchExpanded = false;
+        
         function initSearchBar() {
+            const searchToggleBtn = document.getElementById('search-toggle-btn');
+            const searchContainer = document.getElementById('search-bar-container');
+            const searchOverlay = document.getElementById('search-overlay');
+            const searchCloseBtn = document.getElementById('search-close-btn');
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
+            const searchResultBadge = document.getElementById('search-result-badge');
             
-            if (!searchInput) return;
+            if (!searchToggleBtn || !searchContainer) return;
+            
+            // 打开搜索
+            function openSearch() {
+                searchExpanded = true;
+                searchContainer.classList.add('active');
+                searchOverlay.classList.add('active');
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 100);
+                // 通知 Android 搜索已打开（可选）
+                if (window.AndroidBridge && window.AndroidBridge.onSearchOpen) {
+                    window.AndroidBridge.onSearchOpen();
+                }
+            }
+            
+            // 关闭搜索
+            function closeSearch() {
+                searchExpanded = false;
+                searchContainer.classList.remove('active');
+                searchOverlay.classList.remove('active');
+                // 清空搜索
+                searchInput.value = '';
+                searchKeyword = '';
+                if (clearBtn) clearBtn.style.display = 'none';
+                filterAndRender();
+                // 通知 Android 搜索已关闭
+                if (window.AndroidBridge && window.AndroidBridge.onSearchClose) {
+                    window.AndroidBridge.onSearchClose();
+                }
+            }
+            
+            // 切换搜索
+            searchToggleBtn.onclick = () => {
+                if (searchExpanded) {
+                    closeSearch();
+                } else {
+                    openSearch();
+                }
+            };
+            
+            // 关闭按钮
+            if (searchCloseBtn) {
+                searchCloseBtn.onclick = closeSearch;
+            }
+            
+            // 点击覆盖层关闭
+            if (searchOverlay) {
+                searchOverlay.onclick = closeSearch;
+            }
             
             // 初始化 placeholder 翻译
             updateSearchPlaceholder();
-            
-            // 监听语言切换事件（如果有）
-            window.addEventListener('languageChanged', function() {
-                updateSearchPlaceholder();
-                // 重新刷新搜索结果计数文字
-                if (searchKeyword.trim() !== '') {
-                    // 重新计算当前搜索结果数量
-                    let filtered = allStations;
-                    if(currentFilter === '我的收藏') {
-                        filtered = allStations.filter(s => favorites.includes(s.url));
-                    } else if(currentFilter !== '全部') {
-                        filtered = allStations.filter(s => (s.category || '未分类') === currentFilter);
-                    }
-                    if (searchKeyword.trim() !== '') {
-                        const keyword = searchKeyword.toLowerCase();
-                        filtered = filtered.filter(s => 
-                            s.name.toLowerCase().includes(keyword) ||
-                            (s.category && s.category.toLowerCase().includes(keyword))
-                        );
-                    }
-                    updateSearchResultCount(filtered.length, allStations.length);
-                }
-            });
             
             // 输入事件（防抖）
             let debounceTimer;
@@ -1115,12 +1216,19 @@ function loadSource(url, isM3U8) {
                 });
             }
             
-            // 回车键刷新
+            // 回车键
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     clearTimeout(debounceTimer);
                     searchKeyword = this.value;
                     filterAndRender();
+                }
+            });
+            
+            // ESC 键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && searchExpanded) {
+                    closeSearch();
                 }
             });
         }
@@ -1135,6 +1243,33 @@ function loadSource(url, isM3U8) {
             const t = translations[currentLang] || translations['zh-CN'];
             searchInput.placeholder = t.search_placeholder || '搜索电台...';
         }
+        
+        // 重写 updateSearchResultCount 函数，同时更新 badge
+        const originalUpdateSearchResultCount = updateSearchResultCount;
+        updateSearchResultCount = function(shown, total) {
+            const countEl = document.getElementById('search-result-count');
+            const badgeEl = document.getElementById('search-result-badge');
+            
+            if (searchKeyword.trim() !== '') {
+                const currentLang = window.currentLanguage || 'zh-CN';
+                const translations = window.translations || {};
+                const t = translations[currentLang] || translations['zh-CN'];
+                
+                let resultText = t.search_result || '找到 {count} 个电台';
+                resultText = resultText.replace('{count}', shown);
+                
+                if (countEl) {
+                    countEl.textContent = resultText;
+                    countEl.style.display = 'block';
+                }
+                if (badgeEl) {
+                    badgeEl.textContent = resultText;
+                }
+            } else {
+                if (countEl) countEl.style.display = 'none';
+                if (badgeEl) badgeEl.textContent = '';
+            }
+        };
         
 
         window.onload = () => {
