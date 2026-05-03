@@ -15,10 +15,13 @@ var radioStations = [
     { name: "新城知讯台 (997)", url: "https://metroradio-lh.akamaihd.net/i/997_h@349799/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
     { name: "新城财经台 (104)", url: "https://metroradio-lh.akamaihd.net/i/104_h@349798/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
     { name: "新城采讯台 (Metro Plus AM1044)", url: "http://162.220.162.10:8011/stream?n=16c3fc38112458291459", logo: "https://www.metroradio.com.hk/SuperHome/2022/images/img_logo_metro-app2023.svg", category: "香港" },
-
+    
     { name: "雷霆881 商业一台", url: "https://d2agljdoug3z0j.cloudfront.net/radio-HTTP/cr1-hd.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
     { name: "叱咤903 商业二台", url: "https://d2agljdoug3z0j.cloudfront.net/radio-HTTP/cr2-hd.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
     { name: "豁达864", url: "https://d3ca3xccq5z5hu.cloudfront.net/radio-HTTP/am864.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
+
+    { name: "Radio Lantau", url: "https://radio.dripfeed.net/listen/radiolantau/radio.mp3", logo: "https://radiolantau.com/favicon.ico", category: "香港" },
+
 
     // === 澳门 ===
     { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://live5.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
