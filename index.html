@@ -512,7 +512,7 @@
                 <mdui-button-icon icon="search" id="search-toggle-btn" title="搜索"></mdui-button-icon>
                 <mdui-button-icon icon="settings" id="toggle-admin" title="管理模式"></mdui-button-icon>
                 <mdui-button-icon icon="add" id="open-add" title="添加电台 / 批量导入"></mdui-button-icon>
-                <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道" hidden></mdui-button-icon>
+                <mdui-button-icon icon="refresh" id="refresh" onclick="forceReloadRadios()" title="更新电台频道" style="display: none;"></mdui-button-icon>
                 <mdui-button-icon id="theme-toggle" icon="dark_mode" title="切换深色模式"></mdui-button-icon>
             </div>
         </div>
@@ -561,9 +561,13 @@
         </div>
 
         <audio id="audio-player"></audio>
+        
         <div style="display: flex; align-items: center; justify-content: space-between; margin: 32px 0 24px; flex-wrap: wrap; gap: 12px;">
         <div class="category-tabs" id="category-tabs" style="margin: 0; flex: 1;"></div>
-        <mdui-button-icon icon="refresh" id="refresh-mobile" onclick="forceReloadRadios()" title="更新电台频道" variant="tonal" style="flex-shrink: 0;"></mdui-button-icon>
+        <button id="refresh-btn-category" class="tab-btn" style="display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+            <span class="material-icons" style="font-size: 18px;">refresh</span>
+            <span>更新</span>
+        </button>
         </div>
         <div class="radio-grid" id="station-list"></div>
     </div>
