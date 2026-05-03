@@ -562,12 +562,7 @@
 
         <audio id="audio-player"></audio>
         
-        <div style="display: flex; align-items: center; gap: 12px; margin: 32px 0 24px; flex-wrap: wrap;">
-        <div class="category-tabs" id="category-tabs" style="margin: 0; flex: 1; min-width: 0;"></div>
-        <button id="refresh-btn-category" class="tab-btn" style="display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0;">
-        <span class="material-icons" style="font-size: 18px;">refresh</span>
-        </button>
-        </div>
+        <div class="category-tabs" id="category-tabs"></div>
         <div class="radio-grid" id="station-list"></div>
     </div>
 
@@ -804,6 +799,19 @@ function refresh() {
         };
         tabBox.appendChild(btn);
     });
+
+    // 在这段代码后面添加以下内容，添加刷新按钮作为最后一个"标签"
+    const refreshBtn = document.createElement('button');
+    refreshBtn.className = 'tab-btn';
+    refreshBtn.innerHTML = '<span class="material-icons" style="font-size: 18px; vertical-align: middle;">refresh</span>';
+    refreshBtn.style.display = 'inline-flex';
+    refreshBtn.style.alignItems = 'center';
+    refreshBtn.style.gap = '4px';
+    refreshBtn.onclick = (e) => {
+        e.stopPropagation();
+        forceReloadRadios();
+    };
+    tabBox.appendChild(refreshBtn);
 
     filterAndRender();
     updateFavBtnState();
