@@ -142,6 +142,8 @@ var radioStations = [
     { name: "Big B Korean 韩语流行", url: "https://antares.dribbcast.com/proxy/kpop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
     { name: "Big B Japanese 日语流行", url: "https://antares.dribbcast.com/proxy/jpop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
     { name: "Big B Radio Aisa 亚洲流行", url: "https://antares.dribbcast.com/proxy/apop?mp=/s", logo: "https://bigbradio.net/sites/default/files/favicon.ico", category: "网络音乐" },
+    { name: "Chinese Music World 中国古典音乐", url: "http://radio.chinesemusicworld.com/listen.pls", logo: "https://chinesemusicworld.com/wp-content/uploads/2012/03/logo.png", category: "网络音乐" },
+
     
     // === 美国 (USA) ===
     { name: "NPR News (美国全国公共广播)", url: "https://npr-ice.streamguys1.com/live.mp3", logo: "https://www.npr.org/favicon.ico", category: "美国" },
