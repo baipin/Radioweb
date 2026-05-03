@@ -38,9 +38,9 @@ var radioStations = [
     { name: "文艺之声 Voice of Art", url: "https://ngcdn010.cnr.cn/live/wyzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "中国交通广播 China Traffic Radio", url: "https://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
 
-    { name: "华语环球广播 (CRI)", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
+    { name: "华语环球广播 Global Chinese Radio", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "环球资讯广播 Global News Radio", url: "http://sk.cri.cn/905.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
-    { name: "英语资讯广播 (China Plus)", url: "http://cnlive.cnr.cn/hls/yyzxgb.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
+    { name: "英语资讯广播 (China Plus)", url: "https://sk.cri.cn/am846.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "世界华声 Chinese Dialect Radio", url: "http://sk.cri.cn/hxfh.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
 
     // === 台湾 ===
