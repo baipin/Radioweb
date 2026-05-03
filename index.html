@@ -263,22 +263,24 @@
     }
         
         /* 搜索覆盖层样式 */
-    .search-overlay {
+        .search-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 1100;
+        z-index: 1099;  /* 降低层级，低于搜索栏但高于背景 */
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
+        pointer-events: none;  /* 关键：让覆盖层不拦截点击事件 */
     }
     
     .search-overlay.active {
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;  /* 激活时拦截点击（用于关闭） */
     }
     
     .search-bar-container {
@@ -368,11 +370,8 @@
     .search-close-btn:hover {
         background: rgba(0, 0, 0, 0.1);
     }
+
     
-    /* 隐藏原来的搜索栏 */
-    .search-container {
-        display: none;
-    }
     
     /* 搜索结果计数在顶栏显示 */
     .search-result-badge {
@@ -380,6 +379,51 @@
         color: var(--text-sub);
         padding: 0 8px;
         white-space: nowrap;
+    }
+    
+        /* 修复白天模式搜索框文字颜色 */
+    .search-bar-inner .search-input-wrapper .material-icons:first-child {
+        color: #5f6368 !important;  /* 搜索图标颜色 */
+    }
+    
+    .search-bar-inner #search-input {
+        color: #202124 !important;  /* 输入文字颜色 */
+    }
+    
+    .search-bar-inner #search-input::placeholder {
+        color: #9aa0a6 !important;  /* 占位文字颜色 */
+    }
+    
+    .search-bar-inner .clear-search .material-icons,
+    .search-close-btn .material-icons {
+        color: #5f6368 !important;  /* 关闭按钮图标颜色 */
+    }
+    
+    /* 深色模式下的搜索框文字颜色 */
+    .mdui-theme-dark .search-bar-inner .search-input-wrapper .material-icons:first-child {
+        color: #e8eaed !important;
+    }
+    
+    .mdui-theme-dark .search-bar-inner #search-input {
+        color: #e8eaed !important;
+    }
+    
+    .mdui-theme-dark .search-bar-inner #search-input::placeholder {
+        color: #9aa0a6 !important;
+    }
+    
+    .mdui-theme-dark .search-bar-inner .clear-search .material-icons,
+    .mdui-theme-dark .search-close-btn .material-icons {
+        color: #e8eaed !important;
+    }
+    
+    /* 搜索结果徽章文字颜色 */
+    .search-result-badge {
+        color: var(--text-sub);
+    }
+    
+    .mdui-theme-dark .search-result-badge {
+        color: #9aa0a6;
     }
 
         /* Material Design 风格链接样式 - 修复查看示例与指引按钮 */
