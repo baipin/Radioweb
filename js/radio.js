@@ -21,7 +21,7 @@ var radioStations = [
     { name: "豁达864", url: "https://d3ca3xccq5z5hu.cloudfront.net/radio-HTTP/am864.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
 
     { name: "Radio Lantau", url: "https://radio.dripfeed.net/listen/radiolantau/radio.mp3", logo: "https://radiolantau.com/templates/radiowave/favicon.ico", category: "香港" },
-    { name: "遠東廣播 良友電台", url: "https://a.listenz.net/ly729_a", logo: "https://729ly.net/images/ly_favicon.png", category: "香港"}
+    { name: "遠東廣播 良友電台", url: "https://a.listenz.net/ly729_a", logo: "https://729ly.net/images/ly_favicon.png", category: "香港"},
 
     // === 澳门 ===
     { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://live5.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
