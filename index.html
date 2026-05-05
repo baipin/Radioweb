@@ -850,7 +850,12 @@ function renderListWithFilter(filteredStations) {
 function updateSearchResultCount(shown, total) {
     const badgeEl = document.getElementById('search-result-badge');
     if (searchKeyword.trim() !== '') {
-        if (badgeEl) badgeEl.textContent = `找到 ${shown} 个电台`;
+        const currentLang = window.currentLanguage || 'zh-CN';
+        const translations = window.translations || {};
+        const t = translations[currentLang] || translations['zh-CN'];
+        let resultText = t.search_result || '找到 {count} 个电台';
+        resultText = resultText.replace('{count}', shown);
+        if (badgeEl) badgeEl.textContent = resultText;
     } else {
         if (badgeEl) badgeEl.textContent = '';
     }
@@ -1041,6 +1046,7 @@ function loadSource(url, isM3U8) {
             try {
                 const imported = JSON.parse(document.getElementById('import-area').value);
                 if (!Array.isArray(imported)) throw new Error("不是数组");
+                // 批量导入时，避免重复添加相同的url（可选，但保持原逻辑）
                 customData = [...customData, ...imported];
                 localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
                 diag.open = false;
@@ -1048,7 +1054,7 @@ function loadSource(url, isM3U8) {
             } catch (e) { alert("JSON 格式错误: " + e.message); }
         };
 
-        // 修复取消按钮：使用正确的id并绑定关闭事件
+        // 【修复1】取消按钮绑定关闭事件
         const cancelBtn = document.getElementById('cancel-dialog-btn');
         if(cancelBtn) {
             cancelBtn.onclick = () => { diag.open = false; };
@@ -1060,6 +1066,7 @@ function loadSource(url, isM3U8) {
             sortable.option("disabled", !isAdmin);
         };
 
+        // --- 兼容性增强版播放控制 ---
         const togglePlay = () => {
             if (!audio.src || audio.src === window.location.href) {
                 statusText.innerText = "请先选择电台";
@@ -1089,8 +1096,11 @@ function loadSource(url, isM3U8) {
             togglePlay();
         };
         
+        // 【完整保留多语言播放状态文字】
         audio.onplaying = () => { 
-            statusText.innerText = "正在直播"; 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_playing 
+                : "正在直播"; 
             masterBtn.icon = "pause"; 
             waveAnim.style.display = "flex"; 
         };
@@ -1098,15 +1108,21 @@ function loadSource(url, isM3U8) {
         audio.onpause = () => { 
             masterBtn.icon = "play_arrow"; 
             waveAnim.style.display = "none"; 
-            statusText.innerText = "已暂停"; 
+            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
+                ? window.translations[window.currentLanguage].status_paused 
+                : "已暂停"; 
         };
                 
         audio.onabort = () => {
             masterBtn.icon = "play_arrow";
             waveAnim.style.display = "none";
         };
+        
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
 
+        // ==================== 顶部搜索栏功能 ====================
+        let searchExpanded = false;
+        
         function initSearchBar() {
             const searchToggleBtn = document.getElementById('search-toggle-btn');
             const searchContainer = document.getElementById('search-bar-container');
@@ -1114,11 +1130,16 @@ function loadSource(url, isM3U8) {
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
             if (!searchToggleBtn || !searchContainer) return;
+            
             function openSearch() {
                 searchExpanded = true;
                 searchContainer.classList.add('active');
                 setTimeout(() => { searchInput.focus(); }, 100);
+                if (window.AndroidBridge && window.AndroidBridge.onSearchOpen) {
+                    window.AndroidBridge.onSearchOpen();
+                }
             }
+            
             function closeSearch() {
                 searchExpanded = false;
                 searchContainer.classList.remove('active');
@@ -1126,10 +1147,26 @@ function loadSource(url, isM3U8) {
                 searchKeyword = '';
                 if (clearBtn) clearBtn.style.display = 'none';
                 filterAndRender();
+                if (window.AndroidBridge && window.AndroidBridge.onSearchClose) {
+                    window.AndroidBridge.onSearchClose();
+                }
             }
-            let searchExpanded = false;
-            searchToggleBtn.onclick = () => { if (searchExpanded) closeSearch(); else openSearch(); };
+            
+            searchToggleBtn.onclick = () => {
+                if (searchExpanded) closeSearch();
+                else openSearch();
+            };
+            
             if (searchCloseBtn) searchCloseBtn.onclick = closeSearch;
+            
+            function updateSearchPlaceholder() {
+                const currentLang = window.currentLanguage || 'zh-CN';
+                const translations = window.translations || {};
+                const t = translations[currentLang] || translations['zh-CN'];
+                searchInput.placeholder = t.search_placeholder || '搜索电台...';
+            }
+            updateSearchPlaceholder();
+            
             let debounceTimer;
             searchInput.addEventListener('input', function(e) {
                 clearBtn.style.display = this.value ? 'flex' : 'none';
@@ -1139,6 +1176,7 @@ function loadSource(url, isM3U8) {
                     filterAndRender();
                 }, 300);
             });
+            
             if (clearBtn) {
                 clearBtn.addEventListener('click', function() {
                     searchInput.value = '';
@@ -1148,6 +1186,15 @@ function loadSource(url, isM3U8) {
                     searchInput.focus();
                 });
             }
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(debounceTimer);
+                    searchKeyword = this.value;
+                    filterAndRender();
+                }
+            });
+            
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && searchExpanded) closeSearch();
             });
