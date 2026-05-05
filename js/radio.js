@@ -12,8 +12,8 @@ var radioStations = [
     { name: "香港电台普通话台 (RTHK Mandarin)", url: "https://rthkaudio6-lh.akamaihd.net/i/radiopth_1@355869/master.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
     { name: "香港电台转播大湾区之声", url: "https://rthkradiocmgrgb-live.akamaized.net/hls/live/2046112/radiocmgrgb/index_64_a.m3u8", logo: "https://radio.baipon.com/img/radio/rthk.ico", category: "香港" },
 
-    { name: "新城知讯台 (997)", url: "https://metroradio-lh.akamaihd.net/i/997_h@349799/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
-    { name: "新城财经台 (104)", url: "https://metroradio-lh.akamaihd.net/i/104_h@349798/master.m3u8", logo: "https://www.metroradio.com.hk/favicon.ico", category: "香港" },
+    { name: "新城知讯台 (997)", url: "https://1603884249.rsc.cdn77.org/1603884249/index.m3u8", logo: "https://www.metroradio.com.hk/SuperHome/2022/images/img_logo_metro-app2023.svg", category: "香港" },
+    { name: "新城财经台 (104)", url: "https://1716664847.rsc.cdn77.org/1716664847/index.m3u8", logo: "https://www.metroradio.com.hk/SuperHome/2022/images/img_logo_metro-app2023.svg", category: "香港" },
     { name: "新城采讯台 (Metro Plus AM1044)", url: "http://162.220.162.10:8011/stream?n=16c3fc38112458291459", logo: "https://www.metroradio.com.hk/SuperHome/2022/images/img_logo_metro-app2023.svg", category: "香港" },
     
     { name: "雷霆881 商业一台", url: "https://d2agljdoug3z0j.cloudfront.net/radio-HTTP/cr1-hd.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
