@@ -240,7 +240,6 @@ function getUrlLanguage() {
 // 同步对话框主题
 function syncDialogTheme() {
     const isDark = document.body.classList.contains('mdui-theme-dark');
-    // 获取两个对话框
     const stationDialog = document.getElementById('station-dialog');
     const exampleDialog = document.getElementById('example-dialog');
     
@@ -257,7 +256,6 @@ function syncDialogTheme() {
 
 // 初始化语言
 function initLanguage() {
-    // 优先级：URL参数 > localStorage > 默认
     const urlLang = getUrlLanguage();
     if (urlLang) {
         currentLanguage = urlLang;
@@ -267,7 +265,6 @@ function initLanguage() {
         if (savedLang && translations[savedLang]) {
             currentLanguage = savedLang;
         } else {
-            // 根据浏览器语言自动检测
             const browserLang = navigator.language || navigator.userLanguage;
             if (browserLang === 'zh-TW' || browserLang === 'zh-HK' || browserLang === 'zh-MO') {
                 currentLanguage = 'zh-TW';
@@ -279,24 +276,22 @@ function initLanguage() {
         }
     }
     
-    // 保存到localStorage
     localStorage.setItem('bp_language', currentLanguage);
     
-    // 翻译电台分类
+    // 同步全局变量
+    window.currentLanguage = currentLanguage;
+    window.translations = translations;
+    
     translateStations(currentLanguage);
-    
-    // 设置页面语言
     applyLanguage();
-    
-    // 同步对话框主题
     syncDialogTheme();
     
-    // 刷新电台列表（如果有refresh函数）
+    // 延迟一点确保DOM和refresh函数都已就绪
     setTimeout(function() {
         if (typeof refresh === 'function') {
             refresh();
         }
-    }, 100);
+    }, 150);
     
     return currentLanguage;
 }
@@ -332,6 +327,12 @@ function applyLanguage() {
             add: t.dialog_title_add,
             edit: t.dialog_title_edit
         };
+        // 如果当前对话框是打开状态且是添加模式，更新标题
+        if (diagTitle.innerText === '添加电台' || diagTitle.innerText === '新增電台' || diagTitle.innerText === 'Add Station') {
+            diagTitle.innerText = t.dialog_title_add;
+        } else if (diagTitle.innerText === '编辑电台' || diagTitle.innerText === '編輯電台' || diagTitle.innerText === 'Edit Station') {
+            diagTitle.innerText = t.dialog_title_edit;
+        }
     }
     
     const diagDesc = document.querySelector('#station-dialog span[slot="description"]');
@@ -386,9 +387,12 @@ function applyLanguage() {
         copyright.innerHTML = `&copy; 2026 百品电台 · ${t.footer_copyright}<br/>${t.footer_disclaimer}`;
     }
 
-    // --- 新增：处理示例对话框的翻译 ---
+    // 处理示例对话框的翻译
     const exampleLink = document.getElementById('view-example-link');
-    if (exampleLink) exampleLink.innerText = t.btn_view_example;
+    if (exampleLink) {
+        const spanText = exampleLink.querySelector('span:last-child');
+        if (spanText) spanText.innerText = t.btn_view_example;
+    }
 
     const exDiagTitle = document.getElementById('ex-diag-title');
     if (exDiagTitle) exDiagTitle.innerText = t.dialog_title_guide;
@@ -400,9 +404,10 @@ function applyLanguage() {
     if (exGuideContent) exGuideContent.innerHTML = t.guide_prompt;
 
     const exCloseBtn = document.getElementById('ex-close-btn');
-    if (exCloseBtn) exCloseBtn.innerText = t.btn_cancel || t.btn_save; // 复用已有取消/保存文案或自定义
-
-    const searchInput = document.getElementById('search-input'); //搜索
+    if (exCloseBtn) exCloseBtn.innerText = t.btn_cancel;
+    
+    // 设置搜索框 placeholder
+    const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.placeholder = t.search_placeholder || '搜索电台...';
     }
@@ -413,23 +418,64 @@ function applyLanguage() {
         langBtn.setAttribute('title', t.language_switch);
     }
     
+    // 更新分类标签中的文字（如果已经渲染）
+    updateCategoryTabsText(t);
+    
     console.log('语言已切换为: ' + currentLanguage);
 }
 
-// 切换语言
+// 更新分类标签文字
+function updateCategoryTabsText(t) {
+    const tabBox = document.getElementById('category-tabs');
+    if (!tabBox) return;
+    
+    const tabs = tabBox.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        const tabText = tab.textContent.trim();
+        if (tabText === '全部' || tabText === 'All' || tabText === '全部') {
+            tab.textContent = t.tab_all;
+        } else if (tabText === '我的收藏' || tabText === 'My Favorites' || tabText === '我的收藏') {
+            tab.textContent = t.tab_favorites;
+        }
+    });
+}
+
+// 【核心修复】切换语言 - 确保频道正确重新加载
 function switchLanguage(lang) {
     if (translations[lang] && lang !== currentLanguage) {
         currentLanguage = lang;
         localStorage.setItem('bp_language', lang);
         
+        // 同步全局变量
+        window.currentLanguage = lang;
+        
         // 重新翻译电台分类
         translateStations(lang);
         
+        // 应用界面文字翻译
         applyLanguage();
         
-        // 刷新分类标签和电台列表
+        // 【关键修复1】清空搜索关键词，避免残留
+        if (typeof searchKeyword !== 'undefined') {
+            window.searchKeyword = '';
+        }
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
+        
+        // 【关键修复2】刷新电台列表 - 这是核心
         if (typeof refresh === 'function') {
             refresh();
+        } else {
+            // 如果 refresh 还未定义，延迟重试
+            let retryCount = 0;
+            const waitForRefresh = setInterval(function() {
+                if (typeof refresh === 'function') {
+                    refresh();
+                    clearInterval(waitForRefresh);
+                }
+                retryCount++;
+                if (retryCount > 20) clearInterval(waitForRefresh);
+            }, 100);
         }
         
         // 同步对话框主题
@@ -459,12 +505,11 @@ function switchLanguage(lang) {
     }
 }
 
-// 创建语言选择器下拉菜单（使用地球图标）
+// 创建语言选择器下拉菜单
 function createLanguageSelector() {
     const footerLinks = document.querySelector('.footer-links');
     if (!footerLinks) return;
     
-    // 检查是否已存在
     if (document.getElementById('language-selector')) return;
     
     const t = translations[currentLanguage];
@@ -476,7 +521,6 @@ function createLanguageSelector() {
     langContainer.style.margin = '0 10px';
     langContainer.style.verticalAlign = 'middle';
     
-    // 使用 Material Icons 地球图标作为按钮
     const langBtn = document.createElement('button');
     langBtn.id = 'language-switch-btn';
     langBtn.innerHTML = '<span class="material-icons" style="font-size: 20px; vertical-align: middle;">language</span>';
@@ -515,7 +559,6 @@ function createLanguageSelector() {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     `;
     
-    // 语言列表使用固定名称
     const languages = [
         { code: 'zh-CN', name: '简体中文' },
         { code: 'zh-TW', name: '繁體中文' },
@@ -547,22 +590,14 @@ function createLanguageSelector() {
         e.stopPropagation();
         const isVisible = dropdown.style.display === 'block';
         dropdown.style.display = isVisible ? 'none' : 'block';
-        
-        // 更新下拉菜单文字（使用固定名称）
-        const items = dropdown.querySelectorAll('div');
-        if (items[0]) items[0].innerText = '简体中文';
-        if (items[1]) items[1].innerText = '繁體中文';
-        if (items[2]) items[2].innerText = 'English';
     };
     
-    // 点击其他地方关闭下拉菜单
     document.addEventListener('click', function(e) {
         if (!langContainer.contains(e.target)) {
             dropdown.style.display = 'none';
         }
     });
     
-    // 主题变化时更新下拉菜单背景和对话框
     function updateThemeDependentStyles() {
         const isDark = document.body.classList.contains('mdui-theme-dark');
         dropdown.style.background = isDark ? 'rgba(28, 28, 35, 0.95)' : 'rgba(255, 255, 255, 0.95)';
@@ -582,7 +617,6 @@ function createLanguageSelector() {
     langContainer.appendChild(langBtn);
     langContainer.appendChild(dropdown);
     
-    // 插入到捐赠链接之后
     const donateLink = footerLinks.children[1];
     if (donateLink) {
         footerLinks.insertBefore(langContainer, donateLink.nextSibling);
