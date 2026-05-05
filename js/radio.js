@@ -20,7 +20,7 @@ var radioStations = [
     { name: "叱咤903 商业二台", url: "https://d2agljdoug3z0j.cloudfront.net/radio-HTTP/cr2-hd.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
     { name: "豁达864", url: "https://d3ca3xccq5z5hu.cloudfront.net/radio-HTTP/am864.3gp/chunklist.m3u8", logo: "https://www.881903.com/favicon.ico", category: "香港" },
 
-    { name: "Radio Lantau", url: "https://radio.dripfeed.net/listen/radiolantau/radio.mp3", logo: "https://radiolantau.com/favicon.ico", category: "香港" },
+    { name: "Radio Lantau", url: "https://radio.dripfeed.net/listen/radiolantau/radio.mp3", logo: "https://radiolantau.com/templates/radiowave/favicon.ico", category: "香港" },
     { name: "遠東廣播 良友電台", url: "https://a.listenz.net/ly729_a", logo: "https://729ly.net/images/ly_favicon.png", category: "香港"}
 
     // === 澳门 ===
