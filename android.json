@@ -5,8 +5,8 @@
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
     "zh-CN": "1. 修复初次进入App无法根据系统语言自动适配的bug\n2. 修复菜单在深色模式下仍显示黑色图标的bug\n3. 将所有图标更新为现代风格的Material Icon\n4. 优化播放器稳定性，提升播放体验\n5. 修复部分设备上的兼容性问题\n6. 改进Edge-to-Edge显示效果",
-    "zh-TW": "1. 修復初次進入App無法根據系統語言自動適配的bug\n2. 修復選單在深色模式下仍顯示黑色圖標的bug\n3. 將所有圖標更新為現代風格的Material Icon\n4. 優化播放器穩定性，提升播放體驗\n5. 修復部分Android 15設備上的相容性問題\n6. 改進Edge-to-Edge顯示效果",
-    "zh-HK": "1. 修復初次進入App無法根據系統語言自動適配的bug\n2. 修復選單在深色模式下仍顯示黑色圖標的bug\n3. 將所有圖標更新為現代風格的Material Icon\n4. 優化播放器穩定性，提升播放體驗\n5. 修復部分Android 15設備上的相容性問題\n6. 改進Edge-to-Edge顯示效果",
+    "zh-TW": "1. 修復初次進入App無法根據系統語言自動適配的bug\n2. 修復選單在深色模式下仍顯示黑色圖標的bug\n3. 將所有圖標更新為現代風格的Material Icon\n4. 優化播放器穩定性，提升播放體驗\n5. 修復部分設備上的相容性問題\n6. 改進Edge-to-Edge顯示效果",
+    "zh-HK": "1. 修復初次進入App無法根據系統語言自動適配的bug\n2. 修復選單在深色模式下仍顯示黑色圖標的bug\n3. 將所有圖標更新為現代風格的Material Icon\n4. 優化播放器穩定性，提升播放體驗\n5. 修復部分設備上的相容性問題\n6. 改進Edge-to-Edge顯示效果",
     "en": "1. Fixed bug where app wouldn't adapt to system language on first launch\n2. Fixed bug where menu icons remained black in dark mode\n3. Updated all icons to modern Material Icons\n4. Improved player stability and playback experience\n5. Fixed compatibility issues on some devices\n6. Improved Edge-to-Edge display effect"
   }
 }
