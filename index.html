@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>百品电台 - 网络收音机</title>
     <link rel="icon" type="image/png" href="img/logo.png">
 
@@ -73,19 +73,14 @@
     .main-footer {
         margin-top: auto;
         padding: 30px 20px;
-        /* 背景半透明：0.4 表示 40% 不透明度 */
         background: rgba(255, 255, 255, 0.4); 
-        /* 核心：毛玻璃模糊效果 */
         backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px); /* 兼容 Safari */
-        
-        /* 边框增加质感：上边框稍微亮一点，模拟高光 */
+        -webkit-backdrop-filter: blur(15px);
         border-top: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
         transition: background 0.3s, backdrop-filter 0.3s;
     }
     
-    /* 深色模式下的毛玻璃适配 */
     .mdui-theme-dark .main-footer {
         background: rgba(30, 30, 35, 0.4);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -106,7 +101,6 @@
         font-size: 14px;
         margin: 0 10px;
         font-weight: 500;
-        /* 给文字增加一点点阴影，防止在复杂背景下看不清 */
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
@@ -179,7 +173,7 @@
         transition: 0.3s;
         position: relative;
         border: 2px solid transparent;
-        animation: fadeInScale 0.4s ease forwards; /* 应用动画 */
+        animation: fadeInScale 0.4s ease forwards;
     }
     .mdui-theme-dark .radio-item {
         background: rgba(45,45,55,0.95) !important;
@@ -582,7 +576,7 @@
         </div>
 
         <mdui-button slot="action" variant="tonal" id="btn-delete-station" style="color: #ff5252; margin-right: auto; display: none;">删除此电台</mdui-button>
-        <mdui-button slot="action" variant="text" onclick="closeDialog()">取消</mdui-button>
+        <mdui-button slot="action" variant="text" id="cancel-dialog-btn">取消</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-save">保存</mdui-button>
         <mdui-button slot="action" variant="filled" id="btn-do-import" style="display:none;">开始导入</mdui-button>
     </mdui-dialog>
@@ -632,28 +626,21 @@
         let editingUrl = null;
 
         // ==================== 黑暗模式管理 ====================
-        // 初始化黑暗模式：优先读取用户设置，如无设置则跟随系统
         function initThemeMode() {
             const savedTheme = localStorage.getItem('bp_theme_mode');
-            
             if (savedTheme === 'dark') {
-                // 用户明确选择了深色模式
                 applyDarkMode(true);
             } else if (savedTheme === 'light') {
-                // 用户明确选择了浅色模式
                 applyDarkMode(false);
             } else {
-                // 自动跟随系统设置
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 applyDarkMode(prefersDark);
             }
         }
 
-        // 应用黑暗模式
         function applyDarkMode(isDark) {
             const body = document.body;
             const themeToggleBtn = document.getElementById('theme-toggle');
-            
             if (isDark) {
                 body.classList.add('mdui-theme-dark');
                 themeToggleBtn.icon = 'light_mode';
@@ -663,23 +650,19 @@
             }
         }
 
-        // 监听系统主题变化（当用户未设置偏好时）
         function setupSystemThemeListener() {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             mediaQuery.addEventListener('change', (e) => {
                 const savedTheme = localStorage.getItem('bp_theme_mode');
-                // 只有在用户没有明确设置主题时，才跟随系统变化
                 if (savedTheme === null) {
                     applyDarkMode(e.matches);
                 }
             });
         }
 
-        // 切换黑暗模式按钮
         document.getElementById('theme-toggle').onclick = () => {
             const isDark = document.body.classList.toggle('mdui-theme-dark');
             const themeToggleBtn = document.getElementById('theme-toggle');
-            
             if (isDark) {
                 themeToggleBtn.icon = 'light_mode';
                 localStorage.setItem('bp_theme_mode', 'dark');
@@ -689,7 +672,6 @@
             }
         };
 
-        // 页面加载时初始化主题
         window.addEventListener('DOMContentLoaded', () => {
             initThemeMode();
             setupSystemThemeListener();
@@ -704,11 +686,11 @@
                     const stationData = JSON.parse(item.dataset.info);
                     item.innerHTML = `
                         <div style="width:52px;height:52px;">${getLogoHTML(stationData.logo, stationData.name)}</div>
-                        <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${stationData.name}</span>
+                        <span style="font-weight:600; margin-top:12px; text-align:center; font-size:0.9rem;">${escapeHtml(stationData.name)}</span>
                         <div class="admin-actions">
-                            <mdui-button-icon icon="edit" size="small" onclick="openEdit('${stationData.url}'); event.stopPropagation();"></mdui-button-icon>
-                            <mdui-button-icon icon="keyboard_arrow_up" size="small" onclick="moveStation('${stationData.url}', -1); event.stopPropagation();"></mdui-button-icon>
-                            <mdui-button-icon icon="keyboard_arrow_down" size="small" onclick="moveStation('${stationData.url}', 1); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="edit" size="small" onclick="openEdit('${stationData.url.replace(/'/g, "\\'")}'); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_up" size="small" onclick="moveStation('${stationData.url.replace(/'/g, "\\'")}', -1); event.stopPropagation();"></mdui-button-icon>
+                            <mdui-button-icon icon="keyboard_arrow_down" size="small" onclick="moveStation('${stationData.url.replace(/'/g, "\\'")}', 1); event.stopPropagation();"></mdui-button-icon>
                         </div>
                     `;
                     lazyObserver.unobserve(item);
@@ -720,13 +702,14 @@
         const sortable = new Sortable(listDiv, {
             animation: 150,
             ghostClass: 'sortable-ghost',
-            disabled: true, // 初始禁用，仅在管理模式开启
+            disabled: true,
             onEnd: function() {
                 const newOrder = Array.from(listDiv.querySelectorAll('.radio-item')).map(el => {
                     return JSON.parse(el.dataset.info).url;
                 });
                 sortOrder = newOrder;
                 localStorage.setItem('bp_radios_sort_order', JSON.stringify(sortOrder));
+                refresh();
             }
         });
 
@@ -740,7 +723,7 @@
 
         function getLogoHTML(logo, name) {
             if (logo && logo.trim() !== '') {
-                return `<img src="${logo}" class="dynamic-logo" onerror="this.outerHTML = createPlaceholder('${name.replace(/'/g, "\\'")}').outerHTML">`;
+                return `<img src="${logo}" class="dynamic-logo" onerror="this.outerHTML = createPlaceholder('${escapeHtml(name)}').outerHTML">`;
             }
             return createPlaceholder(name).outerHTML;
         }
@@ -755,9 +738,11 @@
             div.innerText = char;
             return div;
         }
+        
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
 
-        let searchKeyword = ''; // 添加搜索关键词变量
-        let currentRenderTask = null; // 用于取消上一次未完成的渲染
+        let searchKeyword = '';
+        let currentRenderTask = null;
 
 function refresh() {
     const base = (typeof radioStations !== 'undefined' && Array.isArray(radioStations)) ? radioStations : [];
@@ -787,7 +772,7 @@ function refresh() {
         btn.textContent = c;
         btn.onclick = () => { 
             currentFilter = c; 
-            searchKeyword = ''; // 切换分类时清空搜索
+            searchKeyword = '';
             const searchInput = document.getElementById('search-input');
             if (searchInput) searchInput.value = '';
             updateSearchResultCount(0, allStations.length);
@@ -796,7 +781,6 @@ function refresh() {
         tabBox.appendChild(btn);
     });
 
-    // 在这段代码后面添加以下内容，添加刷新按钮作为最后一个"标签"
     const refreshBtn = document.createElement('button');
     refreshBtn.className = 'tab-btn';
     refreshBtn.innerHTML = '<span class="material-icons" style="font-size: 18px; vertical-align: middle;">refresh</span>';
@@ -813,18 +797,13 @@ function refresh() {
     updateFavBtnState();
 }
 
-// 新增：过滤并渲染（支持搜索）
 function filterAndRender() {
     let filtered = allStations;
-    
-    // 先按分类过滤
     if(currentFilter === '我的收藏') {
         filtered = filtered.filter(s => favorites.includes(s.url));
     } else if(currentFilter !== '全部') {
         filtered = filtered.filter(s => (s.category || '未分类') === currentFilter);
     }
-    
-    // 再按搜索关键词过滤（不区分大小写）
     if (searchKeyword.trim() !== '') {
         const keyword = searchKeyword.toLowerCase();
         filtered = filtered.filter(s => 
@@ -832,29 +811,21 @@ function filterAndRender() {
             (s.category && s.category.toLowerCase().includes(keyword))
         );
     }
-    
-    // 更新搜索结果计数
     updateSearchResultCount(filtered.length, allStations.length);
-    
     renderListWithFilter(filtered);
 }
 
-// 新增：带过滤参数的渲染
 function renderListWithFilter(filteredStations) {
     lazyObserver.disconnect();
     listDiv.innerHTML = '';
-    
     if (currentRenderTask) {
         cancelAnimationFrame(currentRenderTask);
     }
-
     const chunkSize = 20;
     let index = 0;
-
     const renderChunk = () => {
         const limit = Math.min(index + chunkSize, filteredStations.length);
         const fragment = document.createDocumentFragment();
-
         for (; index < limit; index++) {
             const s = filteredStations[index];
             const item = document.createElement('div');
@@ -863,45 +834,28 @@ function renderListWithFilter(filteredStations) {
             item.dataset.info = JSON.stringify(s);
             item.innerHTML = `<div style="width:52px;height:52px;" class="dynamic-logo">...</div>`;
             item.onclick = () => play(s, item);
-            
             fragment.appendChild(item);
             lazyObserver.observe(item);
         }
-
         listDiv.appendChild(fragment);
-
         if (index < filteredStations.length) {
             currentRenderTask = requestAnimationFrame(renderChunk);
         } else {
             currentRenderTask = null;
         }
     };
-
     renderChunk();
 }
 
-// 新的 updateSearchResultCount 函数（只使用 badge，不使用旧元素）
 function updateSearchResultCount(shown, total) {
     const badgeEl = document.getElementById('search-result-badge');
-    
     if (searchKeyword.trim() !== '') {
-        const currentLang = window.currentLanguage || 'zh-CN';
-        const translations = window.translations || {};
-        const t = translations[currentLang] || translations['zh-CN'];
-        
-        let resultText = t.search_result || '找到 {count} 个电台';
-        resultText = resultText.replace('{count}', shown);
-        
-        if (badgeEl) {
-            badgeEl.textContent = resultText;
-        }
+        if (badgeEl) badgeEl.textContent = `找到 ${shown} 个电台`;
     } else {
         if (badgeEl) badgeEl.textContent = '';
     }
 }
 
-
-        // 兼容原有的手动移动功能
         function moveStation(url, direction) {
             let currentOrder = allStations.map(s => s.url);
             let index = currentOrder.indexOf(url);
@@ -934,12 +888,9 @@ function play(s, el) {
     loadSource(targetUrl, s.url.includes('.m3u8'));
     updateFavBtnState();
 
-    // 通知 App 频道名称 ---
     if (window.AndroidBridge) {
-        // 需要在 WebView 中注入了名为 AndroidBridge 的对象
         window.AndroidBridge.onStationChanged(s.name, s.url, s.logo || "");
     }
-    // ----------------------------
 }
 
 audio.onerror = async function() {
@@ -985,27 +936,16 @@ function loadSource(url, isM3U8) {
 
         function forceReloadRadios() {
             const btnIcon = document.querySelector('#refresh');
-            // 注意：mdui v2 使用的是图标名，这里确保选择器正确
             if(btnIcon) btnIcon.classList.add('rotate-anim'); 
-        
             const script = document.createElement('script');
             script.src = `js/radio.js?t=${Date.now()}`;
-        
             script.onload = function() {
                 if(btnIcon) btnIcon.classList.remove('rotate-anim');
-                
-                // 关键：脚本加载后，先手动刷新一下全局变量（如果需要）
-                // 然后执行 refresh() 重新构建 DOM
                 refresh();
-        
-                mdui.snackbar({
-                    message: '电台频道已同步',
-                    position: 'right-top'
-                });
-    };
-    document.head.appendChild(script);
-}
-         // 结束
+                mdui.snackbar({ message: '电台频道已同步', position: 'right-top' });
+            };
+            document.head.appendChild(script);
+        }
 
         document.getElementById('fav-btn-main').onclick = () => {
             if (!currentUrl) return;
@@ -1100,32 +1040,32 @@ function loadSource(url, isM3U8) {
         document.getElementById('btn-do-import').onclick = () => {
             try {
                 const imported = JSON.parse(document.getElementById('import-area').value);
+                if (!Array.isArray(imported)) throw new Error("不是数组");
                 customData = [...customData, ...imported];
                 localStorage.setItem('bp_radios_custom', JSON.stringify(customData));
                 diag.open = false;
                 refresh();
-            } catch (e) { alert("JSON 格式错误"); }
+            } catch (e) { alert("JSON 格式错误: " + e.message); }
         };
 
-        function closeDialog() { diag.open = false; }
+        // 修复取消按钮：使用正确的id并绑定关闭事件
+        const cancelBtn = document.getElementById('cancel-dialog-btn');
+        if(cancelBtn) {
+            cancelBtn.onclick = () => { diag.open = false; };
+        }
 
         document.getElementById('toggle-admin').onclick = () => {
             const isAdmin = document.body.classList.toggle('is-admin-mode');
             document.getElementById('toggle-admin').icon = isAdmin ? 'check_circle' : 'settings';
-            sortable.option("disabled", !isAdmin); // 只有管理模式允许拖拽
+            sortable.option("disabled", !isAdmin);
         };
 
-       // --- 兼容性增强版播放控制 ---
-
-        // 统一的播放/暂停逻辑
         const togglePlay = () => {
             if (!audio.src || audio.src === window.location.href) {
                 statusText.innerText = "请先选择电台";
                 return;
             }
-        
             if (audio.paused) {
-                // 播放逻辑
                 const playPromise = audio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
@@ -1134,14 +1074,8 @@ function loadSource(url, isM3U8) {
                     });
                 }
             } else {
-                // 暂停逻辑：针对 Safari 优化
                 audio.pause();
-                
-                // 如果是直播流，暂停后重置 src 往往能解决恢复播放时的卡死问题
-                // 但为了不删除无关代码，我们通过判断原生 HLS 还是 hls.js 来处理
                 if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
-                    // Safari 原生 HLS 环境下，暂停直播建议"停止加载"
-                    // 这样下次播放会重新拉取最新切片，防止卡死在旧进度
                     const currentSrc = audio.src;
                     audio.src = ''; 
                     audio.load();
@@ -1150,17 +1084,13 @@ function loadSource(url, isM3U8) {
             }
         };
         
-        // 绑定按钮
         masterBtn.onclick = (e) => {
             e.preventDefault();
             togglePlay();
         };
         
-                // 增加对音频对象的事件监听兼容性
         audio.onplaying = () => { 
-            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
-                ? window.translations[window.currentLanguage].status_playing 
-                : "正在直播"; 
+            statusText.innerText = "正在直播"; 
             masterBtn.icon = "pause"; 
             waveAnim.style.display = "flex"; 
         };
@@ -1168,88 +1098,47 @@ function loadSource(url, isM3U8) {
         audio.onpause = () => { 
             masterBtn.icon = "play_arrow"; 
             waveAnim.style.display = "none"; 
-            statusText.innerText = (window.translations && window.translations[window.currentLanguage]) 
-                ? window.translations[window.currentLanguage].status_paused 
-                : "已暂停"; 
+            statusText.innerText = "已暂停"; 
         };
                 
-        // 修复 Safari 锁屏或控制中心操作导致的同步问题
         audio.onabort = () => {
             masterBtn.icon = "play_arrow";
             waveAnim.style.display = "none";
         };
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
 
-               // ==================== 顶部搜索栏功能 ====================
-        let searchExpanded = false;
-        
         function initSearchBar() {
             const searchToggleBtn = document.getElementById('search-toggle-btn');
             const searchContainer = document.getElementById('search-bar-container');
             const searchCloseBtn = document.getElementById('search-close-btn');
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
-            
             if (!searchToggleBtn || !searchContainer) return;
-            
-            // 打开搜索
             function openSearch() {
                 searchExpanded = true;
                 searchContainer.classList.add('active');
-                setTimeout(() => {
-                    searchInput.focus();
-                }, 100);
-                // 通知 Android 搜索已打开（可选）
-                if (window.AndroidBridge && window.AndroidBridge.onSearchOpen) {
-                    window.AndroidBridge.onSearchOpen();
-                }
+                setTimeout(() => { searchInput.focus(); }, 100);
             }
-            
-            // 关闭搜索
             function closeSearch() {
                 searchExpanded = false;
                 searchContainer.classList.remove('active');
-                // 清空搜索
                 searchInput.value = '';
                 searchKeyword = '';
                 if (clearBtn) clearBtn.style.display = 'none';
                 filterAndRender();
-                // 通知 Android 搜索已关闭
-                if (window.AndroidBridge && window.AndroidBridge.onSearchClose) {
-                    window.AndroidBridge.onSearchClose();
-                }
             }
-            
-            // 切换搜索
-            searchToggleBtn.onclick = () => {
-                if (searchExpanded) {
-                    closeSearch();
-                } else {
-                    openSearch();
-                }
-            };
-            
-            // 关闭按钮
-            if (searchCloseBtn) {
-                searchCloseBtn.onclick = closeSearch;
-            }
-            
-            // 初始化 placeholder 翻译
-            updateSearchPlaceholder();
-            
-            // 输入事件（防抖）
+            let searchExpanded = false;
+            searchToggleBtn.onclick = () => { if (searchExpanded) closeSearch(); else openSearch(); };
+            if (searchCloseBtn) searchCloseBtn.onclick = closeSearch;
             let debounceTimer;
             searchInput.addEventListener('input', function(e) {
                 clearBtn.style.display = this.value ? 'flex' : 'none';
-                
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => {
                     searchKeyword = this.value;
                     filterAndRender();
                 }, 300);
             });
-            
-            // 清空按钮
             if (clearBtn) {
                 clearBtn.addEventListener('click', function() {
                     searchInput.value = '';
@@ -1259,50 +1148,19 @@ function loadSource(url, isM3U8) {
                     searchInput.focus();
                 });
             }
-            
-            // 回车键
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    clearTimeout(debounceTimer);
-                    searchKeyword = this.value;
-                    filterAndRender();
-                }
-            });
-            
-            // ESC 键关闭
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && searchExpanded) {
-                    closeSearch();
-                }
+                if (e.key === 'Escape' && searchExpanded) closeSearch();
             });
         }
-        
-        // 更新搜索框 placeholder 翻译
-        function updateSearchPlaceholder() {
-            const searchInput = document.getElementById('search-input');
-            if (!searchInput) return;
-            
-            const currentLang = window.currentLanguage || 'zh-CN';
-            const translations = window.translations || {};
-            const t = translations[currentLang] || translations['zh-CN'];
-            searchInput.placeholder = t.search_placeholder || '搜索电台...';
-        }
-        
-        
 
         window.onload = () => {
-            // 检查数据是否加载，如果没有，等待 500ms 再试
             const checkData = setInterval(() => {
                 if (typeof radioStations !== 'undefined') {
                     refresh();
                     clearInterval(checkData);
                 }
             }, 100);
-            
-            // 5秒后如果还没加载就停止，防止死循环
             setTimeout(() => clearInterval(checkData), 5000);
-        
-            // 初始化搜索栏
             initSearchBar();
         };
     </script>
@@ -1320,37 +1178,24 @@ function loadSource(url, isM3U8) {
         </div>
     </div>
 </footer>
-<!-- 引入多语言支持脚本 -->
 <script src="js/languages.js"></script>
 <script>
-    // 修复查看示例与指引链接点击事件
     (function fixExampleLink() {
-        // 等待 DOM 加载完成
         function initExampleLink() {
             const exampleLink = document.getElementById('view-example-link');
             const exampleDialog = document.getElementById('example-dialog');
-            
             if (exampleLink && exampleDialog) {
-                // 移除可能存在的旧事件
                 const newLink = exampleLink.cloneNode(true);
                 exampleLink.parentNode.replaceChild(newLink, exampleLink);
-                
-                // 添加新的事件
                 newLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     exampleDialog.open = true;
                 });
-                
-                console.log('示例链接已修复，点击可打开对话框');
             } else {
-                // 如果元素还没加载，稍后重试
-                console.log('等待元素加载...');
                 setTimeout(initExampleLink, 100);
             }
         }
-        
-        // 立即执行
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initExampleLink);
         } else {
