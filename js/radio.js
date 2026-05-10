@@ -47,7 +47,7 @@ var radioStations = [
 
     { name: "华语环球广播 Global Chinese Radio", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "环球资讯广播 Global News Radio", url: "http://sk.cri.cn/905.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
-    { name: "英语资讯广播 (China Plus)", url: "https://sk.cri.cn/am846.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
+    { name: "英语资讯广播 (CGTN Radio)", url: "https://sk.cri.cn/am846.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "世界华声 Chinese Dialect Radio", url: "http://sk.cri.cn/hxfh.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
 
     // === 台湾 ===
