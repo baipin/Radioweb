@@ -227,6 +227,7 @@ var radioStations = [
     { name: "福建私家车广播 FM98.7 (Fujian Private Car Radio)", url: "http://live.xmcdn.com/live/793/64.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建新闻广播 (Fujian News Radio)", url: "https://satellitepull.cnr.cn/live/wx32fjxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建音乐广播 FM91.3 (Fujian Music Radio)", url: "http://ls.qingting.fm/live/4585.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
+    { name: "海南音乐广播 Hainan Music", url: "https://satellitepull.cnr.cn/live/wxhainyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hnmusic.ico", category: "内地" },
     
     { name: "上海东方广播 Shanghai East Radio", url: "https://satellitepull.cnr.cn/live/wx32dfgbdt/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
     { name: "上海新闻广播 Shanghai News Radio", url: "https://satellitepull.cnr.cn/live/wx32shrmgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
