@@ -163,8 +163,7 @@ var radioStations = [
     { name: "CNBC Business News", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.cnbc.com/favicon.ico", category: "美国" },
     { name: "CNN International", url: "https://radio13.servidorderadio.net:7034/stream", logo: "https://www.cnn.com/favicon.ico", category: "美国" },
     { name: "ABC News Radio", url: "http://live-radio02.mediahubaustralia.com/PBW/mp3/;", logo: "https://abcnews.go.com/favicon.ico", category: "美国" },
-    { name: "Fox News Radio", url: "https://fox-news.ice.infomaniak.ch/fox-news.mp3", logo: "https://www.foxnews.com/favicon.ico", category: "美国" },
-    { name: "WSJ Radio", url: "https://wsj-powe-1-ad.audio-online.com/wsj/powe/icecast.audio", logo: "https://www.wsj.com/favicon.ico", category: "美国" },
+    { name: "Fox News Radio", url: "https://prod-54-86-8-179.amperwave.net/foxnewsradio-foxnewsradioaac-imc?session-id=5ac631347bd8726df027e928c287b215", logo: "https://www.foxnews.com/favicon.ico", category: "美国" },
     { name: "C-SPAN Radio (美国公共事务广播)", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.c-span.org/favicon.ico", category: "美国" },
 
     { name: "Rock Antenne (德国摇滚)", url: "https://mp3channels.webradio.antenne.de/rockantenne", logo: "https://www.rockantenne.de/favicon.ico", category: "网络音乐"},
