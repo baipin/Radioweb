@@ -218,6 +218,8 @@ var radioStations = [
     
     { name: "上海东方广播 Shanghai East Radio", url: "https://satellitepull.cnr.cn/live/wx32dfgbdt/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
     { name: "上海新闻广播 Shanghai News Radio", url: "https://satellitepull.cnr.cn/live/wx32shrmgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
+    { name: "上海动感101 Shanghai FM101", url: "https://ytcast.radio.cn/64/radios/21311/index_21311.m3u8?type=1&key=22dd7c4e685bf3fc9ae69703acb33d27&time=6a002f32", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
+    { name: "上海流行音乐 Love Radio", url: "https://ytcast.radio.cn/64/radios/21313/index_21313.m3u8?type=1&key=62206c363d23c334a9581f56f89ff9d2&time=6a000eea", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
     
     { name: "深圳飞扬971", url: "https://satellitepull.cnr.cn/live/wxszfy971/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
     { name: "深圳交通频率", url: "https://satellitepull.cnr.cn/live/wxszjjpl/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/szmg.ico", category: "内地" },
