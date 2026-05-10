@@ -197,7 +197,6 @@ var radioStations = [
     { name: "北京新闻广播 (Beijing News Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm945.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "北京音乐广播 (Beijing Music Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm974.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "北京体育广播 (Beijing Sports Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm1025.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
-    { name: "北京青年广播 (Beijing Youth Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm982.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "安徽交通广播 Anhui Traffic", url: "https://satellitepull.cnr.cn/live/wxahjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
     { name: "安徽经济广播 Anhui Biz", url: "https://satellitepull.cnr.cn/live/wxahjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
     { name: "安徽旅游广播 Anhui Travel", url: "https://satellitepull.cnr.cn/live/wxahlygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/ahtv.ico", category: "内地" },
@@ -306,7 +305,15 @@ var radioStations = [
     { name: "湖南经济广播 (Hunan Economy Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南893芒果音乐台 (Hunan Music Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
     { name: "湖南潇湘之声 (Hunan Xiaoxiang Voice)", url: "https://satellitepull.cnr.cn/live/wx32hunyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
-    { name: "湖南新闻广播 (Hunan News Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" }
+    { name: "湖南新闻广播 (Hunan News Radio)", url: "https://satellitepull.cnr.cn/live/wx32hunxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hntv.ico", category: "内地" },
+    { name: "内蒙古音乐之声 Inner Mongolia Music", url: "https://satellitepull.cnr.cn/live/wx32nmgyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古交通之声 Inner Mongolia Traffic", url: "https://satellitepull.cnr.cn/live/wx32nmgjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古对外广播 Inner Mongolia External", url: "https://satellitepull.cnr.cn/live/wx32nmgdwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古汉语广播 Inner Mongolia Chinese", url: "https://satellitepull.cnr.cn/live/wx32nmghyzhxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古经济生活 Inner Mongolia Economy & Life", url: "https://satellitepull.cnr.cn/live/wx32nmgjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古绿野之声 Green Field Radio", url: "https://satellitepull.cnr.cn/live/wx32nmglyzs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古蒙古语广播 Inner Mongolia Mongolian", url: "https://satellitepull.cnr.cn/live/wx32nmgmygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
+    { name: "内蒙古评书曲艺 Storytelling & Arts", url: "https://satellitepull.cnr.cn/live/wx32nmgpsqy/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" }
 ];
 
 console.log("Loaded at" + new Date().getTime());
