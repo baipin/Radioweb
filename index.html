@@ -714,9 +714,12 @@
         });
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 40) {
+            // 向下滚动较多时才收缩变小（避开高度骤变区）
+            if (window.scrollY > 85) {
                 stickyWrapper.classList.add('is-sticky');
-            } else {
+            } 
+            // 向上滚动回到很顶部时才恢复原状
+            else if (window.scrollY < 20) {
                 stickyWrapper.classList.remove('is-sticky');
             }
         });
