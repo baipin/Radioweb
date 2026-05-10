@@ -189,8 +189,7 @@ var radioStations = [
 
     // ===内地地方===
     { name: "北京城市广播 (Beijing Public Service Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm1073.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
-    { name: "北京房山经典音乐 FM96.9 (Beijing Fangshan Classic Music)", url: "http://live.xmcdn.com/live/963/64.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
-    { name: "北京好音乐 FM95.9 (Beijing Hao Music)", url: "http://live.xmcdn.com/live/964/64.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
+    { name: "北京房山经典音乐 FM96.9 (Beijing Fangshan Classic Music)", url: "http://ls.qingting.fm/live/2131011.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "北京交通广播 (Beijing Traffic Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm1039.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "北京经典调频 (Beijing Classic FM)", url: "http://live.funhillrm.com/4/sd/live.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
     { name: "北京文艺广播 FM87.6 (Beijing Literature & Art Radio)", url: "https://brtv-radiolive.rbc.cn/alive/fm876.m3u8", logo: "https://radio.baipon.com/img/radio/btv.ico", category: "内地" },
