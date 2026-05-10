@@ -45,9 +45,12 @@ var radioStations = [
     { name: "维吾尔语广播 Uyghur Radio", url: "https://ngcdn013.cnr.cn/live/wygb/index.m3u8?key=7078d737fa71ebff7703bc45434c7279&time=1778415945", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "哈萨克语广播 Kazakh Radio", url: "https://ngcdn025.cnr.cn/live/hygb/index.m3u8?key=1171022a341c4263e4fb6e8eaf084f7c&time=1778415945", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "中国交通广播（北京） China Traffic Radio (Beijing)", url: "https://ytcast2.radio.cn/110/radios/40653/index_40653.m3u8?type=1&key=51be591d8703993abd474301d3ec558f&time=6a0050bb", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
-    { name: "中国交通广播（河北雄安） China Traffic Radio (Xiong'an)", url: "https://ytcast.radio.cn/79/radios/21453/index_21453.m3u8?type=1&key=e68ebcfedc79219a2cea8c5fe02998ab&time=6a0060d8", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（雄安） China Traffic Radio (Xiong'an)", url: "https://ytcast.radio.cn/79/radios/21453/index_21453.m3u8?type=1&key=e68ebcfedc79219a2cea8c5fe02998ab&time=6a0060d8", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
     { name: "中国交通广播（安徽） China Traffic Radio (Anhui)", url: "https://living.muzhifm.com/muzhifm/ygfm_new1.m3u8?auth_key=1846585491-0-0-a10b9d81b90d22215bafbfbcd4d92958", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
     { name: "中国交通广播（湖南） China Traffic Radio (Hunan)", url: "http://living.muzhifm.com/muzhifm/ygfm_hn_fm905.m3u8?auth_key=1846587185-0-0-42f1728e48105df7491171fb8fcf67e5", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（四川） China Traffic Radio (Sichuan)", url: "http://living.muzhifm.com/muzhifm/bjnew_fm996.m3u8?auth_key=1786424188-0-0-6c56d523be4a13ebd6e8f425f6f6b8ae", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（江西） China Traffic Radio (Jiangxi)", url: "http://living.muzhifm.com/muzhifm/yangguang_fm1075.m3u8?auth_key=1846585491-0-0-dc02582dd9ae9eaef6ca2dc2c5371b67", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（河北） China Traffic Radio (Jiangxi)", url: "http://living.muzhifm.com/muzhifm/ygfm_hb_fm1012.m3u8?auth_key=1846585491-0-0-5f9c1d2ea695ec9ca5893bf38d136332", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
 
 
     { name: "华语环球广播 Global Chinese Radio", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
