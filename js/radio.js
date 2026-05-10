@@ -234,7 +234,6 @@ var radioStations = [
     { name: "海南音乐广播 Hainan Music", url: "https://satellitepull.cnr.cn/live/wxhainyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hnmusic.ico", category: "内地" },
     { name: "广西北部湾之声 Beibu Gulf Radio", url: "http://ls.qingting.fm/live/1757.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西交通广播 Guangxi Traffic", url: "https://satellitepull.cnr.cn/live/wx32gxjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
-    { name: "广西教育生活 Guangxi Education & Life", url: "https://satellitepull.cnr.cn/live/wx32gbjyshgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西经济广播 Guangxi Economy", url: "https://satellitepull.cnr.cn/live/wx32gxjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西女主播电台 Female Anchors Radio", url: "http://ls.qingting.fm/live/1754.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西私家车930 Private Car", url: "http://ls.qingting.fm/live/1756.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
