@@ -39,8 +39,11 @@ var radioStations = [
     { name: "香港之声 Voice of Hong Kong", url: "https://rthkradiocnrhk-live.akamaized.net/hls/live/2046111/radiocnrhk/master.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "民族之声 Minority Language Radio", url: "https://ytcast2.radio.cn/110/radios/40647/index_40647.m3u8?type=1&key=1229998199c4111fe2bd72c9eec60c8f&time=6a0050bb", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "文艺之声 Voice of Art", url: "https://ytcast2.radio.cn/110/radios/40648/index_40648.m3u8?type=1&key=70958b3c72bd92d4a1113251e207eb3a&time=6a0050bb", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "中国交通广播（北京） China Traffic Radio", url: "https://ytcast2.radio.cn/110/radios/40653/index_40653.m3u8?type=1&key=51be591d8703993abd474301d3ec558f&time=6a0050bb", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
-    { name: "中国交通广播（河北雄安） China Traffic Radio", url: "https://ytcast.radio.cn/79/radios/21453/index_21453.m3u8?type=1&key=e68ebcfedc79219a2cea8c5fe02998ab&time=6a0060d8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "中国交通广播（北京） China Traffic Radio (Beijing)", url: "https://ytcast2.radio.cn/110/radios/40653/index_40653.m3u8?type=1&key=51be591d8703993abd474301d3ec558f&time=6a0050bb", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（河北雄安） China Traffic Radio (Xiong'an)", url: "https://ytcast.radio.cn/79/radios/21453/index_21453.m3u8?type=1&key=e68ebcfedc79219a2cea8c5fe02998ab&time=6a0060d8", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（安徽） China Traffic Radio (Anhui)", url: "https://living.muzhifm.com/muzhifm/ygfm_new1.m3u8?auth_key=1846585491-0-0-a10b9d81b90d22215bafbfbcd4d92958", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+    { name: "中国交通广播（湖南） China Traffic Radio (Hunan)", url: "http://living.muzhifm.com/muzhifm/ygfm_hn_fm905.m3u8?auth_key=1846587185-0-0-42f1728e48105df7491171fb8fcf67e5", logo: "https://radio.baipon.com/img/radio/CNTR.ico", category: "内地" },
+
 
     { name: "华语环球广播 Global Chinese Radio", url: "http://sk.cri.cn/hyhq.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
     { name: "环球资讯广播 Global News Radio", url: "http://sk.cri.cn/905.m3u8", logo: "https://www.cri.cn/favicon.ico", category: "内地" },
