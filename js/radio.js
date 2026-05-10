@@ -231,6 +231,7 @@ var radioStations = [
     { name: "福建私家车广播 FM98.7 (Fujian Private Car Radio)", url: "http://live.xmcdn.com/live/793/64.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建新闻广播 (Fujian News Radio)", url: "https://satellitepull.cnr.cn/live/wx32fjxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建音乐广播 FM91.3 (Fujian Music Radio)", url: "http://ls.qingting.fm/live/4585.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
+    { name: "厦门音乐广播 FM90.9 (Xiamen Music Radio)", url: "https://ytcast.radio.cn/74/radios/21897/index_21897.m3u8?type=1&key=9df9e9899a57eea311ee51d6a6262cb3&time=6a008482", logo: "https://radio.baipon.com/img/radio/xiamen.ico", category: "内地" },
     { name: "海南音乐广播 Hainan Music", url: "https://satellitepull.cnr.cn/live/wxhainyygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/hnmusic.ico", category: "内地" },
     { name: "广西北部湾之声 Beibu Gulf Radio", url: "http://ls.qingting.fm/live/1757.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西交通广播 Guangxi Traffic", url: "https://satellitepull.cnr.cn/live/wx32gxjtgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
