@@ -26,7 +26,7 @@ var radioStations = [
     // === 澳门 ===
     { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://globallive.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
     { name: "澳门电台 (葡文) Macau Radio (Portuguese)", url: "https://globallive.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
-    { name: "绿邨电台 Radio Vilaverde Limitada", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
+    { name: "绿邨电台 Radio Vilaverde", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
     { name: "中国之声 (Voice of China)", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
