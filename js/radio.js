@@ -26,7 +26,7 @@ var radioStations = [
     // === 澳门 ===
     { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://globallive.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
     { name: "澳门电台 (葡文) Macau Radio (Portuguese)", url: "https://globallive.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
-    { name: "绿邨电台", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
+    { name: "绿邨电台 Radio Vilaverde Limitada", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
     { name: "中国之声 (Voice of China)", url: "https://ngcdn001.cnr.cn/live/zgzs/index.m3u8", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
@@ -235,9 +235,8 @@ var radioStations = [
     { name: "广西交通广播 Guangxi Traffic", url: "https://stream.bbrtv.com:10443/hls/scGbVLJGR/scGbVLJGR_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西经济广播（女主播电台） Guangxi Female Host Radio", url: "https://stream.bbrtv.com:10443/hls/wrr24LJGR/wrr24LJGR_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西私家车930 教育广播", url: "https://stream.bbrtv.com:10443/hls/I7LJVL1Gg/I7LJVL1Gg_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
-    { name: "广西文艺广播 Guangxi Arts", url: "https://stream.bbrtv.com:10443/hls/rCjJ4Y1MR/rCjJ4Y1MR_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
+    { name: "广西文艺广播 Guangxi Music", url: "https://stream.bbrtv.com:10443/hls/rCjJ4Y1MR/rCjJ4Y1MR_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     { name: "广西新闻910 Guangxi News", url: "https://stream.bbrtv.com:10443/hls/sIoyCf1Gg/sIoyCf1Gg_live.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
-    { name: "广西音乐广播 Guangxi Music Radio", url: "http://ls.qingting.fm/live/4875.m3u8", logo: "https://radio.baipon.com/img/radio/gxtv.ico", category: "内地" },
     
     { name: "上海东方广播 Shanghai East Radio", url: "https://satellitepull.cnr.cn/live/wx32dfgbdt/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
     { name: "上海新闻广播 Shanghai News Radio", url: "https://satellitepull.cnr.cn/live/wx32shrmgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/smg.ico", category: "内地" },
@@ -310,8 +309,7 @@ var radioStations = [
     { name: "内蒙古汉语广播 Inner Mongolia Mandarin", url: "https://satellitepull.cnr.cn/live/wx32nmghyzhxwgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
     { name: "内蒙古经济生活 Inner Mongolia Economy & Life", url: "https://satellitepull.cnr.cn/live/wx32nmgjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
     { name: "内蒙古绿野之声 Green Field Radio", url: "https://satellitepull.cnr.cn/live/wx32nmglyzs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
-    { name: "内蒙古蒙古语广播 Inner Mongolia Mongolian", url: "https://satellitepull.cnr.cn/live/wx32nmgmygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
-    { name: "天津滨海广播 私家车878 Car Music", url: "http://radio-bd.wisetv.com.cn/tjradio/BINHAI.m3u8?_bd_session_id=fd1d7b2efd07229140c9e4d241da2bae&GUID=8e40c827711ba2f73b7d564028371a2b&timestamp=1778432265&secret=421015d7167d6bdc852069232c04abc7", logo: "https://radio.baipon.com/img/radio/tjtv.ico", category: "内地" }
+    { name: "内蒙古蒙古语广播 Inner Mongolia Mongolian", url: "https://satellitepull.cnr.cn/live/wx32nmgmygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" }
 ];
 
 console.log("Loaded at" + new Date().getTime());
