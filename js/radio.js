@@ -29,7 +29,7 @@ var radioStations = [
     { name: "绿邨电台 Radio Vilaverde", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
-    { name: "中国之声 (Voice of China)", url: "https://radioback.baipon.com/api/live?name=中国之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "中国之声 (Voice of China)", url: "https://radioback.baipon.com/api/live?name=中国之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地", needResolve: true},
     { name: "经济之声 (Voice of Biz)", url: "https://radioback.baipon.com/api/live?name=经济之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "音乐之声 (Voice of Music)", url: "https://radioback.baipon.com/api/live?name=音乐之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "经典音乐广播 (Golden Radio)", url: "https://radioback.baipon.com/api/live?name=经典音乐广播", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
@@ -313,5 +313,158 @@ var radioStations = [
     { name: "内蒙古绿野之声 Green Field Radio", url: "https://satellitepull.cnr.cn/live/wx32nmglyzs/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" },
     { name: "内蒙古蒙古语广播 Inner Mongolia Mongolian", url: "https://satellitepull.cnr.cn/live/wx32nmgmygb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/nmtv.ico", category: "内地" }
 ];
+
+// ==================== 自动解析重定向 URL 的核心代码 ====================
+// 用于缓存解析后的 URL
+const resolvedUrlCache = new Map();
+
+// 解析单个 URL（获取 302 重定向后的最终地址）
+async function resolveRedirectUrl(url) {
+    // 检查缓存
+    if (resolvedUrlCache.has(url)) {
+        console.log(`[Resolve] 使用缓存: ${url} -> ${resolvedUrlCache.get(url)}`);
+        return resolvedUrlCache.get(url);
+    }
+    
+    try {
+        console.log(`[Resolve] 正在解析: ${url}`);
+        
+        // 使用 fetch 获取重定向后的最终 URL
+        const response = await fetch(url, {
+            method: 'HEAD',  // 只获取头信息，不下载内容
+            redirect: 'follow',  // 自动跟随重定向
+            cache: 'no-cache',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        });
+        
+        // 获取最终 URL（重定向后的地址）
+        const finalUrl = response.url;
+        
+        if (finalUrl && finalUrl !== url) {
+            console.log(`[Resolve] 解析成功: ${url} -> ${finalUrl}`);
+            resolvedUrlCache.set(url, finalUrl);
+            return finalUrl;
+        } else {
+            console.warn(`[Resolve] 无重定向或解析失败: ${url}`);
+            return url;
+        }
+    } catch (error) {
+        console.error(`[Resolve] 解析失败: ${url}`, error);
+        return url;  // 失败时返回原 URL
+    }
+}
+
+// 批量解析所有需要解析的电台
+async function resolveAllStations(stations) {
+    const needResolve = stations.filter(s => s.needResolve === true);
+    
+    if (needResolve.length === 0) {
+        console.log('[Resolve] 没有需要解析的电台');
+        return stations;
+    }
+    
+    console.log(`[Resolve] 开始解析 ${needResolve.length} 个电台...`);
+    
+    // 并发解析（限制并发数避免过载）
+    const concurrency = 3;  // 同时解析 3 个
+    const results = [];
+    
+    for (let i = 0; i < needResolve.length; i += concurrency) {
+        const batch = needResolve.slice(i, i + concurrency);
+        const batchResults = await Promise.all(
+            batch.map(async (station) => {
+                const resolvedUrl = await resolveRedirectUrl(station.url);
+                return {
+                    ...station,
+                    url: resolvedUrl,
+                    needResolve: false  // 解析后标记为不需要再次解析
+                };
+            })
+        );
+        results.push(...batchResults);
+        
+        // 批次间稍作延迟
+        if (i + concurrency < needResolve.length) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+    
+    // 合并结果：解析过的 + 不需要解析的
+    const unchanged = stations.filter(s => !s.needResolve);
+    const finalStations = [...unchanged, ...results];
+    
+    console.log(`[Resolve] 解析完成！共 ${finalStations.length} 个电台`);
+    return finalStations;
+}
+
+// 导出解析后的电台数据（供主程序使用）
+let resolvedRadioStations = null;
+
+// 初始化函数：在页面加载时自动解析
+async function initResolvedStations() {
+    if (resolvedRadioStations) {
+        return resolvedRadioStations;
+    }
+    
+    // 显示加载提示
+    console.log('[百品电台] 正在解析电台地址，请稍候...');
+    
+    resolvedRadioStations = await resolveAllStations(radioStations);
+    
+    // 将解析后的数据保存到 localStorage（可选）
+    try {
+        localStorage.setItem('bp_resolved_stations', JSON.stringify({
+            data: resolvedRadioStations,
+            timestamp: Date.now()
+        }));
+    } catch (e) {
+        console.warn('保存缓存失败:', e);
+    }
+    
+    console.log('[百品电台] 地址解析完成！');
+    return resolvedRadioStations;
+}
+
+// 获取解析后的电台列表（优先从缓存加载）
+async function getRadioStations() {
+    // 尝试从 localStorage 读取缓存（1小时有效）
+    try {
+        const cached = localStorage.getItem('bp_resolved_stations');
+        if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            if (Date.now() - timestamp < 3600000) {  // 1小时缓存
+                console.log('[百品电台] 使用缓存的解析结果');
+                resolvedRadioStations = data;
+                return data;
+            }
+        }
+    } catch (e) {
+        console.warn('读取缓存失败:', e);
+    }
+    
+    // 没有缓存或缓存过期，重新解析
+    return await initResolvedStations();
+}
+
+// 覆盖全局 radioStations（用于兼容原有代码）
+// 注意：由于异步特性，原有直接引用 radioStations 的代码需要等待解析完成
+
+// 启动自动解析
+(async function autoResolve() {
+    const resolved = await getRadioStations();
+    // 如果全局 radioStations 被其他地方引用，可以在这里更新
+    if (typeof window !== 'undefined') {
+        window.radioStationsResolved = resolved;
+        window.dispatchEvent(new CustomEvent('radioStationsResolved', { detail: resolved }));
+    }
+    console.log('[百品电台] 自动解析完成，共', resolved.length, '个电台');
+})();
+
+// 导出（兼容不同环境）
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { radioStations, getRadioStations, initResolvedStations };
+}
 
 console.log("Loaded at" + new Date().getTime());
