@@ -29,7 +29,7 @@ var radioStations = [
     { name: "绿邨电台 Radio Vilaverde", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
-    { name: "中国之声 (Voice of China)", url: "https://radioback.baipon.com/api/live?name=中国之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地",
+    { name: "中国之声 (Voice of China)", url: "https://radioback.baipon.com/api/live?name=中国之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "经济之声 (Voice of Biz)", url: "https://radioback.baipon.com/api/live?name=经济之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "音乐之声 (Voice of Music)", url: "https://radioback.baipon.com/api/live?name=音乐之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "经典音乐广播 (Golden Radio)", url: "https://radioback.baipon.com/api/live?name=经典音乐广播", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
