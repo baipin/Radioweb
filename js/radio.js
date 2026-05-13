@@ -41,6 +41,7 @@ var radioStations = [
     { name: "文艺之声 Voice of Art", url: "https://radioback.baipon.com/api/live?name=文艺之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "老年之声 Voice of Old", url: "https://radioback.baipon.com/api/live?name=老年之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "中国乡村之声 China Countryside Radio", url: "https://radioback.baipon.com/api/live?name=中国乡村之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
+    { name: "南海之声 Voice of South China Sea", url: "https://radioback.baipon.com/api/live?name=南海之声", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "藏语广播 Tibetan Radio", url: "https://radioback.baipon.com/api/live?name=藏语广播", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "维吾尔语广播 Uyghur Radio", url: "https://radioback.baipon.com/api/live?name=维吾尔语广播", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
     { name: "哈萨克语广播 Kazakh Radio", url: "https://radioback.baipon.com/api/live?name=哈萨克语广播", logo: "https://radio.baipon.com/img/radio/cnr.ico", category: "内地" },
