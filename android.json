@@ -1,7 +1,7 @@
 {
-  "versionCode": 16,
-  "versionName": "0.0.14",
-  "realdownUrl": "https://radio.baipon.com/app/0.0.14.apk",
+  "versionCode": 17,
+  "versionName": "0.0.15",
+  "realdownUrl": "https://radio.baipon.com/app/0.0.15.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
     "zh-CN": "针对电台串流源的适配性更新，请及时更新到此版本以确保所有电台都可正常播放。",
