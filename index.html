@@ -1218,13 +1218,33 @@ function loadSource(url, isM3U8) {
         }
 
         window.onload = () => {
-            const checkData = setInterval(() => {
-                if (typeof radioStations !== 'undefined') {
+            let retryCount = 0;
+            const maxRetries = 50; // 最多尝试5秒（每100ms一次）
+            
+            function tryRefresh() {
+                if (typeof radioStations !== 'undefined' && Array.isArray(radioStations) && radioStations.length > 0) {
+                    console.log('电台数据已加载，共', radioStations.length, '个电台');
                     refresh();
-                    clearInterval(checkData);
+                    // 额外延迟一下，确保数据稳定后再刷新一次
+                    setTimeout(() => refresh(), 500);
+                    return true;
                 }
+                return false;
+            }
+            
+            const interval = setInterval(() => {
+                if (tryRefresh()) {
+                    clearInterval(interval);
+                } else if (retryCount >= maxRetries) {
+                    console.warn('电台数据加载超时，使用空列表');
+                    // 即使没有数据也执行 refresh，显示空列表
+                    refresh();
+                    clearInterval(interval);
+                }
+                retryCount++;
             }, 100);
-            setTimeout(() => clearInterval(checkData), 5000);
+            
+            // 初始化搜索栏
             initSearchBar();
         };
     </script>
