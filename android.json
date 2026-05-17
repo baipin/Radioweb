@@ -1,7 +1,7 @@
 {
-  "versionCode": 19,
-  "versionName": "1.0.1",
-  "realdownUrl": "https://radio.baipon.com/app/1.0.1.apk",
+  "versionCode": 20,
+  "versionName": "1.0.2",
+  "realdownUrl": "https://radio.baipon.com/app/1.0.2.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
     "zh-CN": "修复部分电台无法播放的bug。",
