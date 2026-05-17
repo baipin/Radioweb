@@ -1224,18 +1224,23 @@ function loadSource(url, isM3U8) {
             });
         }
 
+        let hasLoaded = false; // 添加标志位
+        
         window.onload = () => {
             const checkData = setInterval(() => {
                 if (typeof radioStations !== 'undefined' && radioStations && radioStations.length > 0) {
-                    refresh();
+                    if (!hasLoaded) {
+                        refresh();
+                        hasLoaded = true;
+                    }
                     clearInterval(checkData);
                 }
             }, 100);
             setTimeout(() => {
                 clearInterval(checkData);
-                // 超时后强制刷新一次，确保内容显示
-                if (typeof radioStations !== 'undefined') {
+                if (typeof radioStations !== 'undefined' && !hasLoaded) {
                     refresh();
+                    hasLoaded = true;
                 }
             }, 5000);
             initSearchBar();
