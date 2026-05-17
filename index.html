@@ -881,27 +881,48 @@ function updateSearchResultCount(shown, total) {
 
         let isRetrying = false; 
 
+let isSwitching = false;   // 新增：切换状态锁
+
 function play(s, el) {
     let targetUrl = s.url;
-    isRetrying = false; 
+    isRetrying = false;
+    isSwitching = true;        // 标记正在切换
 
     if (targetUrl.startsWith('http://')) {
         targetUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
-        isRetrying = true; 
+        isRetrying = true;
     }
 
     currentUrl = targetUrl;
+    
+    // UI立即更新
     document.querySelectorAll('.radio-item').forEach(i => i.classList.remove('active'));
-    if(el) el.classList.add('active');
+    if (el) el.classList.add('active');
     document.getElementById('current-name').innerText = s.name;
     document.getElementById('player-logo').innerHTML = getLogoHTML(s.logo, s.name);
-    statusText.innerText = "缓冲中...";
-    loadSource(targetUrl, s.url.includes('.m3u8'));
+    
+    statusText.innerText = "缓冲中...";   // 强制显示缓冲中
+    masterBtn.icon = "pause";              // 切换时先显示暂停图标（表示正在加载）
+    waveAnim.style.display = "none";
+
+    // 先停止当前播放
+    if (!audio.paused) {
+        audio.pause();
+    }
+    if (hls) {
+        hls.destroy();
+        hls = null;
+    }
+
+    loadSource(targetUrl, s.url.includes('.m3u8') || targetUrl.includes('.m3u8'));
     updateFavBtnState();
 
     if (window.AndroidBridge) {
         window.AndroidBridge.onStationChanged(s.name, s.url, s.logo || "");
     }
+
+    // 短暂延迟后解除切换锁（防止事件误触发）
+    setTimeout(() => { isSwitching = false; }, 800);
 }
 
 audio.onerror = async function() {
@@ -1099,31 +1120,47 @@ function loadSource(url, isM3U8) {
         
         // 新增：统一的UI状态更新函数
         function updatePlayUI(isPlaying) {
+            if (isSwitching) return;   // 切换时不让它覆盖
+            
             if (isPlaying) {
                 masterBtn.icon = "pause";
                 waveAnim.style.display = "flex";
-                const lang = window.currentLanguage || 'zh-CN';
-                if (window.translations && window.translations[lang]) {
-                    statusText.innerText = window.translations[lang].status_playing;
-                } else {
-                    statusText.innerText = "正在直播";
-                }
+                statusText.innerText = (window.translations?.[window.currentLanguage || 'zh-CN']?.status_playing) || "正在直播";
             } else {
                 masterBtn.icon = "play_arrow";
                 waveAnim.style.display = "none";
-                const lang = window.currentLanguage || 'zh-CN';
-                if (window.translations && window.translations[lang]) {
-                    statusText.innerText = window.translations[lang].status_paused;
-                } else {
-                    statusText.innerText = "已暂停";
-                }
+                statusText.innerText = (window.translations?.[window.currentLanguage || 'zh-CN']?.status_paused) || "已暂停";
             }
         }
         
         // 增强 audio 事件监听
-        audio.onplaying = () => { updatePlayUI(true); };
-        audio.onpause = () => { updatePlayUI(false); };
-        audio.onabort = () => { updatePlayUI(false); };
+        audio.onplaying = () => {
+            isSwitching = false;
+            updatePlayUI(true);
+        };
+        
+        audio.onpause = () => {
+            if (isSwitching) return;   // 切换过程中忽略 pause 事件
+            updatePlayUI(false);
+        };
+        
+        audio.onabort = audio.onemptied = () => {
+            if (isSwitching) return;
+            updatePlayUI(false);
+        };
+        
+        // 加载中事件（更早显示缓冲）
+        audio.onwaiting = () => {
+            if (!isSwitching) {
+                statusText.innerText = "缓冲中...";
+            }
+        };
+        
+        audio.oncanplay = () => {
+            if (isSwitching) {
+                statusText.innerText = "缓冲中...";
+            }
+        };
         
         // 额外添加时间更新监听，确保在播放过程中状态正确
         audio.ontimeupdate = () => {
