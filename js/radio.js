@@ -183,7 +183,7 @@ var radioStations = [
     { name: "Germany WDR 1Live", url: "https://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3", logo: "https://www1.wdr.de/favicon.ico", category: "欧洲" },
     { name: "Switzerland SRF 3", url: "https://stream.srg-ssr.ch/m/srf3/mp3_128", logo: "https://www.srf.ch/favicon.ico", category: "欧洲" },
     { name: "Netherlands Radio 538", url: "https://25533.live.streamtheworld.com/RADIO538.mp3", logo: "https://www.538.nl/favicon.ico", category: "欧洲" },
-    { name: "France Inter", url: "https://stream.radiofrance.fr/franceinter/franceinter_midfi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/franceinter.ico, category: "欧洲" },
+    { name: "France Inter", url: "https://stream.radiofrance.fr/franceinter/franceinter_midfi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/franceinter.ico", category: "欧洲" },
     { name: "France Info", url: "https://stream.radiofrance.fr/franceinfo/franceinfo_lofi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/franceinfo.ico", category: "欧洲" },
     { name: "France Culture", url: "https://stream.radiofrance.fr/franceculture/franceculture_hifi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/franceculture.ico", category: "欧洲" },
     { name: "France Musique", url: "https://stream.radiofrance.fr/francemusique/francemusique.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/francemusique.ico", category: "欧洲" },
