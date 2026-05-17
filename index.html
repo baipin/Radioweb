@@ -677,6 +677,22 @@
         window.addEventListener('DOMContentLoaded', () => {
             initThemeMode();
             setupSystemThemeListener();
+            // ======== 核心修复：确保数据加载后自动刷新列表 ========
+            // 如果 radio.js 已经加载好，直接刷新
+            if (typeof radioStations !== 'undefined') {
+                refresh();
+            } else {
+                // 如果还没加载好，等待 radio.js 的脚本加载完成再刷新
+                const radioScript = document.querySelector('script[src="js/radio.js"]');
+                if (radioScript) {
+                    radioScript.onload = () => {
+                        refresh();
+                    };
+                } else {
+                    // 兜底策略：如果都没检测到，延迟 300 毫秒强制刷新
+                    setTimeout(refresh, 300);
+                }
+            }
         });
         // ==================== 黑暗模式管理结束 ====================
 
