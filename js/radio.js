@@ -177,8 +177,8 @@ var radioStations = [
     { name: "C-SPAN Radio (美国公共事务广播)", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.c-span.org/favicon.ico", category: "美国" },
 
     // === 欧洲 ===
-    { name: "Czech Evropa 2", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/EVROPA2AAC.aac", logo: "https://radio.baipon.com/img/radio/evropa2.ico", category: "欧洲" },
-    { name: "Czech Hitradio City", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/HITRADIO_CITY_PRAHA.aac", logo: "https://radio.baipon.com/img/radio/hitradio.ico", category: "欧洲" },
+    { name: "Czech Evropa 2", url: "https://29093.live.streamtheworld.com/EVROPA2AAC.aac", logo: "https://radio.baipon.com/img/radio/evropa2.ico", category: "欧洲" },
+    { name: "Czech Hitradio City", url: "https://22183.live.streamtheworld.com/HITRADIO_CITY_PRAHA.aac", logo: "https://radio.baipon.com/img/radio/hitradio.ico", category: "欧洲" },
     { name: "Germany Antenne Bayern", url: "https://stream.antenne.de/antenne", logo: "https://www.antenne.de/favicon.ico", category: "欧洲" },
     { name: "Germany WDR 1", url: "https://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3", logo: "https://www1.wdr.de/favicon.ico", category: "欧洲" },
     { name: "Switzerland SRF 3", url: "https://stream.srg-ssr.ch/m/srf3/mp3_128", logo: "https://www.srf.ch/favicon.ico", category: "欧洲" },
