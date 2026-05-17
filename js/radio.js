@@ -180,7 +180,7 @@ var radioStations = [
     { name: "Czech Evropa 2", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/EVROPA2AAC.aac", logo: "https://radio.baipon.com/img/radio/evropa2.ico", category: "欧洲" },
     { name: "Czech Hitradio City", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/HITRADIO_CITY_PRAHA.aac", logo: "https://radio.baipon.com/img/radio/hitradio.ico", category: "欧洲" },
     { name: "Germany Antenne Bayern", url: "https://stream.antenne.de/antenne", logo: "https://www.antenne.de/favicon.ico", category: "欧洲" },
-    { name: "Germany WDR 1Live", url: "https://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3", logo: "https://www1.wdr.de/favicon.ico", category: "欧洲" },
+    { name: "Germany WDR 1", url: "https://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3", logo: "https://www1.wdr.de/favicon.ico", category: "欧洲" },
     { name: "Switzerland SRF 3", url: "https://stream.srg-ssr.ch/m/srf3/mp3_128", logo: "https://www.srf.ch/favicon.ico", category: "欧洲" },
     { name: "Netherlands Radio 538", url: "https://25533.live.streamtheworld.com/RADIO538.mp3", logo: "https://www.538.nl/favicon.ico", category: "欧洲" },
     { name: "France Inter", url: "https://stream.radiofrance.fr/franceinter/franceinter_midfi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/franceinter.ico", category: "欧洲" },
