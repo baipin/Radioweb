@@ -175,6 +175,12 @@ var radioStations = [
     { name: "ABC News Radio", url: "http://live-radio02.mediahubaustralia.com/PBW/mp3/;", logo: "https://abcnews.go.com/favicon.ico", category: "美国" },
     { name: "Fox News Radio", url: "https://prod-54-86-8-179.amperwave.net/foxnewsradio-foxnewsradioaac-imc?session-id=5ac631347bd8726df027e928c287b215", logo: "https://www.foxnews.com/favicon.ico", category: "美国" },
     { name: "C-SPAN Radio (美国公共事务广播)", url: "https://vpr.streamguys1.com/vpr64.mp3", logo: "https://www.c-span.org/favicon.ico", category: "美国" },
+    { name: "Canada Fairchid Radio 加拿大中文電台", url: "https://stream.eseenet.com/radio/am1430.stream/chunklist_w1528612212.m3u8", logo: "https://www.am1430.com/favicon.ico", category: "美国" },
+    { name: "US Chinese Radio (Seattle) 美國中文電台（西雅圖）", url: "https://stream.eseenet.com/radio/am1430.stream/chunklist_w1528612212.m3u8", logo: "https://static.wixstatic.com/media/8a3185_3c8a42561e2c462a955a0136261cba84~mv2.jpg", category: "美国" },
+    { name: "US Chinese Radio (San Francisco) 美國中文電台（舊金山）", url: "http://radiokest.serverroom.us:6670/;?type=http&nocache=3295", logo: "https://static.wixstatic.com/media/8a3185_3c8a42561e2c462a955a0136261cba84~mv2.jpg", category: "美国" },
+    { name: "WZRC AM1480 Cantonese 紐約華語廣播（廣東話）", url: "https://video1.getstreamhosting.com:8288/stream", logo: "https://nysino.com/am1480/wp-content/uploads/2021/03/am1480logo.png", category: "美国" },
+    { name: "WZRC AM1380 Mandarin 紐約華語廣播（普通話）", url: "https://video1.getstreamhosting.com:8292/stream", logo: "https://www.nysino.com/am1380/wp-content/uploads/2022/06/am1380-logo.png", category: "美国" },
+
 
     // === 欧洲 ===
     { name: "Czech Evropa 2", url: "https://29093.live.streamtheworld.com/EVROPA2AAC.aac", logo: "https://radio.baipon.com/img/radio/evropa2.ico", category: "欧洲" },
