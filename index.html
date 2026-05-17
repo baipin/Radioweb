@@ -1072,6 +1072,7 @@ function loadSource(url, isM3U8) {
         };
 
         // --- 兼容性增强版播放控制 ---
+                // 替换原有的 togglePlay 函数（约第528行附近）：
         const togglePlay = () => {
             if (!audio.src || audio.src === window.location.href) {
                 statusText.innerText = "请先选择电台";
@@ -1080,19 +1081,57 @@ function loadSource(url, isM3U8) {
             if (audio.paused) {
                 const playPromise = audio.play();
                 if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.error("Safari 播放拦截:", error);
+                    playPromise.then(() => {
+                        // 播放成功，手动更新UI
+                        updatePlayUI(true);
+                    }).catch(error => {
+                        console.error("播放拦截:", error);
                         statusText.innerText = "点击图标以激活播放";
                     });
                 }
             } else {
                 audio.pause();
-                if (!hls && audio.canPlayType('application/vnd.apple.mpegurl')) {
-                    const currentSrc = audio.src;
-                    audio.src = ''; 
-                    audio.load();
-                    audio.src = currentSrc;
+                // 暂停后立即更新UI
+                updatePlayUI(false);
+            }
+        };
+        
+        // 新增：统一的UI状态更新函数
+        function updatePlayUI(isPlaying) {
+            if (isPlaying) {
+                masterBtn.icon = "pause";
+                waveAnim.style.display = "flex";
+                const lang = window.currentLanguage || 'zh-CN';
+                if (window.translations && window.translations[lang]) {
+                    statusText.innerText = window.translations[lang].status_playing;
+                } else {
+                    statusText.innerText = "正在直播";
                 }
+            } else {
+                masterBtn.icon = "play_arrow";
+                waveAnim.style.display = "none";
+                const lang = window.currentLanguage || 'zh-CN';
+                if (window.translations && window.translations[lang]) {
+                    statusText.innerText = window.translations[lang].status_paused;
+                } else {
+                    statusText.innerText = "已暂停";
+                }
+            }
+        }
+        
+        // 增强 audio 事件监听
+        audio.onplaying = () => { updatePlayUI(true); };
+        audio.onpause = () => { updatePlayUI(false); };
+        audio.onabort = () => { updatePlayUI(false); };
+        
+        // 额外添加时间更新监听，确保在播放过程中状态正确
+        audio.ontimeupdate = () => {
+            if (!audio.paused && masterBtn.icon !== "pause") {
+                masterBtn.icon = "pause";
+                waveAnim.style.display = "flex";
+            } else if (audio.paused && masterBtn.icon !== "play_arrow") {
+                masterBtn.icon = "play_arrow";
+                waveAnim.style.display = "none";
             }
         };
         
@@ -1218,33 +1257,19 @@ function loadSource(url, isM3U8) {
         }
 
         window.onload = () => {
-            let retryCount = 0;
-            const maxRetries = 50; // 最多尝试5秒（每100ms一次）
-            
-            function tryRefresh() {
-                if (typeof radioStations !== 'undefined' && Array.isArray(radioStations) && radioStations.length > 0) {
-                    console.log('电台数据已加载，共', radioStations.length, '个电台');
+            const checkData = setInterval(() => {
+                if (typeof radioStations !== 'undefined' && radioStations && radioStations.length > 0) {
                     refresh();
-                    // 额外延迟一下，确保数据稳定后再刷新一次
-                    setTimeout(() => refresh(), 500);
-                    return true;
+                    clearInterval(checkData);
                 }
-                return false;
-            }
-            
-            const interval = setInterval(() => {
-                if (tryRefresh()) {
-                    clearInterval(interval);
-                } else if (retryCount >= maxRetries) {
-                    console.warn('电台数据加载超时，使用空列表');
-                    // 即使没有数据也执行 refresh，显示空列表
-                    refresh();
-                    clearInterval(interval);
-                }
-                retryCount++;
             }, 100);
-            
-            // 初始化搜索栏
+            setTimeout(() => {
+                clearInterval(checkData);
+                // 超时后强制刷新一次，确保内容显示
+                if (typeof radioStations !== 'undefined') {
+                    refresh();
+                }
+            }, 5000);
             initSearchBar();
         };
     </script>
