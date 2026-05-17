@@ -181,6 +181,7 @@ var radioStations = [
     { name: "WZRC AM1480 Cantonese 紐約華語廣播（廣東話）", url: "https://video1.getstreamhosting.com:8288/stream", logo: "https://nysino.com/am1480/wp-content/uploads/2021/03/am1480logo.png", category: "美国" },
     { name: "WZRC AM1380 Mandarin 紐約華語廣播（普通話）", url: "https://video1.getstreamhosting.com:8292/stream", logo: "https://www.nysino.com/am1380/wp-content/uploads/2022/06/am1380-logo.png", category: "美国" },
     { name: "1150 AM KKNW （中文廣播時間：UTC-8 9pm-12am（6pm Fri.-Sun.））", url: "https://16643.live.streamtheworld.com/KKNWAMAAC.aac", logo: "https://kknwamsite.wpenginepowered.com/wp-content/uploads/2020/08/cropped-kknw_logo_default.png", category: "美国" },
+    { name: "2CR澳洲中文廣播電台", url: "https://streaming.shoutcast.com/2cr-chinese-radio", logo: "https://d1cce5idf8ce8i.cloudfront.net/wp-content/themes/woo/images/favicon.jpg", category: "美国" },
 
 
     // === 欧洲 ===
