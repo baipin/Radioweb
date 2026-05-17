@@ -182,6 +182,7 @@ const categoryTranslations = {
         '新加坡': '新加坡',
         '国际': '国际',
         '网络音乐': '网络音乐',
+        '欧洲': '欧洲',
         '美国': '美国'
     },
     'zh-TW': {
@@ -192,6 +193,7 @@ const categoryTranslations = {
         '新加坡': '新加坡',
         '国际': '國際',
         '网络音乐': '網路音樂',
+        '欧洲': '歐洲',
         '美国': '美國'
     },
     'en': {
@@ -202,6 +204,7 @@ const categoryTranslations = {
         '新加坡': 'Singapore',
         '国际': 'International',
         '网络音乐': 'Online Music',
+        '欧洲': 'Europe',
         '美国': 'USA'
     }
 };
