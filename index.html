@@ -1140,39 +1140,6 @@ function loadSource(url, isM3U8) {
             togglePlay();
         };
         
-        // 【完整保留多语言播放状态文字】
-        audio.onplaying = () => { 
-            // 1. 先更新 UI 核心状态（优先级最高）
-            masterBtn.icon = "pause"; 
-            waveAnim.style.display = "flex"; 
-            
-            // 2. 再尝试更新文字
-            const lang = window.currentLanguage || 'zh-CN';
-            if (window.translations && window.translations[lang]) {
-                statusText.innerText = window.translations[lang].status_playing;
-            } else {
-                statusText.innerText = "正在直播";
-            }
-        };
-        
-        audio.onpause = () => { 
-            // 1. 先更新 UI 核心状态
-            masterBtn.icon = "play_arrow"; 
-            waveAnim.style.display = "none"; 
-            
-            // 2. 再尝试更新文字
-            const lang = window.currentLanguage || 'zh-CN';
-            if (window.translations && window.translations[lang]) {
-                statusText.innerText = window.translations[lang].status_paused;
-            } else {
-                statusText.innerText = "已暂停";
-            }
-        };
-                
-        audio.onabort = () => {
-            masterBtn.icon = "play_arrow";
-            waveAnim.style.display = "none";
-        };
         
         document.getElementById('volume-slider').oninput = (e) => audio.volume = e.target.value / 100;
 
