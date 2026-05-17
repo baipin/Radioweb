@@ -1,12 +1,12 @@
 {
-  "versionCode": 17,
-  "versionName": "0.0.15",
-  "realdownUrl": "https://radio.baipon.com/app/0.0.15.apk",
+  "versionCode": 18,
+  "versionName": "1.0.0",
+  "realdownUrl": "https://radio.baipon.com/app/1.0.0.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
-    "zh-CN": "针对电台串流源的适配性更新，请及时更新到此版本以确保所有电台都可正常播放。",
-    "zh-TW": "針對電台串流源的適配性更新，請及時更新至此版本以確保所有電台都可正常播放。",
-    "zh-HK": "針對電台串流源的適配性更新，請及時更新至此版本以確保所有電台都可正常播放。",
-    "en": "This update includes compatibility updates for radio streaming sources. Please update to this version promptly to ensure that all radio stations can be played correctly."
+    "zh-CN": "这个版本是第一个正式版，在最后一个测试版本的基础上更新了依赖库。",
+    "zh-TW": "這個版本是第一個正式版，在最後一個測試版本的基礎上更新了依賴函式庫。",
+    "zh-HK": "這個版本是第一個正式版，在最後一個測試版本的基礎上更新了依賴函式庫。",
+    "en": "This is the first formal release, and it updates the dependency libraries based on the last test version."
   }
 }
