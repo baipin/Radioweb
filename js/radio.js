@@ -201,6 +201,9 @@ var radioStations = [
     { name: "France Bleu(ICI) 100% années 80", url: "https://stream.radiofrance.fr/fb100pour100annees80/fb100pour100annees80_hifi.m3u8?id=radiofrance", logo: "https://radio.baipon.com/img/radio/ici.ico", category: "欧洲" },
     { name: "Klassik Radio", url: "https://stream.klassikradio.de/national/aac-128/select?aggregator=select&metaid=85f19f80-d068-4f41-8a64-85b37009a39e&rmsid=select-web", logo: "https://klassikradioplus.de/build/images/apple-touch-icon.png", category: "欧洲" },
     { name: "欧洲华语广播电台 Radio Mandarin d'Europe", url: "http://rme.stream.dicast.fr:8000/rme-192.mp3", logo: "https://www.radiomandarin.fr/images/logo.png", category: "欧洲" },
+    { name: "Germany Radio Essen", url: "https://edge69.streamonkey.net/wf-radioessen/stream/mp3?aggregator=eigeneweb&t=1779030264761", logo: "https://logos-der-nrwlokalradios.s3.eu-central-1.amazonaws.com/015f-35-39.png", category: "欧洲" },
+    
+    
     { name: "BBC - Radio 1", url: "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8", logo: "https://radio.baipon.com/img/radio/bbc.ico", category: "欧洲" },
     { name: "BBC - Radio 1Xtra", url: "http://as-hls-ww-live.akamaized.net/pool_92079267/live/ww/bbc_1xtra/bbc_1xtra.isml/bbc_1xtra-audio%3d96000.norewind.m3u8", logo: "https://radio.baipon.com/img/radio/bbc.ico", category: "欧洲" },
     { name: "BBC - Radio 1Dance", url: "http://as-hls-ww-live.akamaized.net/pool_62063831/live/ww/bbc_radio_one_dance/bbc_radio_one_dance.isml/bbc_radio_one_dance-audio%3d96000.norewind.m3u8", logo: "https://radio.baipon.com/img/radio/bbc.ico", category: "欧洲" },
