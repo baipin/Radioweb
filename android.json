@@ -1,12 +1,12 @@
 {
-  "versionCode": 20,
-  "versionName": "1.0.2",
-  "realdownUrl": "https://radio.baipon.com/app/1.0.2.apk",
+  "versionCode": 21,
+  "versionName": "1.0.3",
+  "realdownUrl": "https://radio.baipon.com/app/1.0.3.apk",
   "downloadUrl": "https://radio.baipon.com/update.html",
   "updateLog": {
-    "zh-CN": "修复部分电台无法播放的bug。",
-    "zh-TW": "修復部分電台無法播放的bug。",
-    "zh-HK": "修復部分電台無法播放的bug。",
-    "en": "Fixed a bug where some radio stations could not be played."
+    "zh-CN": "新增可以选择强制使用服务器代理的功能。",
+    "zh-TW": "新增可以選擇強制使用伺服器代理的功能。",
+    "zh-HK": "新增可以選擇強制使用伺服器代理的功能。",
+    "en": "Added the option to force the use of a server proxy."
   }
 }
