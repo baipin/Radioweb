@@ -24,8 +24,8 @@ var radioStations = [
     { name: "遠東廣播 良友電台", url: "https://a.listenz.net/ly729_a", logo: "https://729ly.net/images/ly_favicon.png", category: "香港"},
 
     // === 澳门 ===
-    { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://globallive.tdm.com.mo/live/rch2.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
-    { name: "澳门电台 (葡文) Macau Radio (Portuguese)", url: "https://globallive.tdm.com.mo/live/rch1.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
+    { name: "澳门电台 (中文) Macau Radio (Chinese)", url: "https://globallive.tdm.com.mo/live/rch2a.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
+    { name: "澳门电台 (葡文) Macau Radio (Portuguese)", url: "https://globallive.tdm.com.mo/live/rch1a.live/playlist.m3u8", logo: "https://cdn2.tdm.com.mo/uploads/media/web_images/tdm new app logo.png", category: "澳门" },
     { name: "绿邨电台 Radio Vilaverde", url: "https://fm995.ddns.net/hls1/fm995.m3u8", logo: "https://mfm995.com/wp-content/uploads/2022/09/cropped-icon20220930_1.png", category: "澳门" },
 
     // === 内地 (CNR / CMG / CRI) ===
