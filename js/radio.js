@@ -145,6 +145,7 @@ var radioStations = [
     { name: "NHK 世界广播 (中文)", url: "https://nhkworld-radio.nhkworld.jp/hls/live/nhkworld-radio-rs1/index_rs1.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
     { name: "NHK World TV (Audio)", url: "https://media-tyo.hls.nhkworld.jp/hls/w/live/1/sig/b95e9aa9a33513b4d3416b7a201ec82c0d5e59c711f7fb0191d49f299d05b62e/a1.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
     { name: "VOA Global English", url: "http://voa-ingest.akamaized.net/hls/live/2035200/161_352R/playlist.m3u8", logo: "https://www.voachinese.com/Content/responsive/VOA/zh-CN/img/logo.svg", category: "国际" },
+    { name: "KBS World Radio", url: "https://radioback.baipon.com/api/kbs?type=hls", logo: "https://world.kbs.co.kr/service/common/images/icon_kbsworldradio_60.png", category: "国际" },
 
     // === 网络音乐 ===
     { name: "V2BEAT", url: "https://stream.v2beat.live/icecast.audio?t=file.mp3", logo: "", category: "网络音乐" },
