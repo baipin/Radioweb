@@ -139,7 +139,7 @@ var radioStations = [
     { name: "Power 98 Love Songs", url: "https://28093.live.streamtheworld.com/POWER98_LOVESONGS_SC", logo: "https://radio.baipon.com/img/radio/power98.ico", category: "新加坡" },
 
     // === 国际 / 其他 ===
-    { name: "BBC World Service", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", logo: "https://www.bbc.com/favicon.ico", category: "国际" },
+    { name: "BBC World Service", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", logo: "https://radio.baipon.com/img/radio/bbc.ico", category: "国际" },
     { name: "半岛电视台 (Al Jazeera English)", url: "https://live-hls-audio-web-aje.getaj.net/VOICE-AJE/01.m3u8", logo: "https://www.aljazeera.com/favicon.ico", category: "国际" },
     { name: "Linn Jazz", url: "http://radio.linn.co.uk:8003/autodj", logo: "https://small.linncdn.com/website/responsive/images/favicon.ico", category: "国际" },
     { name: "NHK 世界广播 (中文)", url: "https://nhkworld-radio.nhkworld.jp/hls/live/nhkworld-radio-rs1/index_rs1.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
