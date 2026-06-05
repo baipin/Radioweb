@@ -142,7 +142,8 @@ var radioStations = [
     { name: "BBC World Service", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service", logo: "https://www.bbc.com/favicon.ico", category: "国际" },
     { name: "半岛电视台 (Al Jazeera English)", url: "https://live-hls-audio-web-aje.getaj.net/VOICE-AJE/01.m3u8", logo: "https://www.aljazeera.com/favicon.ico", category: "国际" },
     { name: "Linn Jazz", url: "http://89.16.185.174:8004/stream", logo: "https://small.linncdn.com/website/responsive/images/favicon.ico", category: "国际" },
-    { name: "NHK 世界广播 (中文)", url: "https://nhkworld.webcdn.stream.ne.jp/www11/radiojapan/all/263948/live_s.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
+    { name: "NHK 世界广播 (中文)", url: "https://nhkworld-radio.nhkworld.jp/hls/live/nhkworld-radio-rs1/index_rs1.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
+    { name: "NHK World TV (Audio)", url: "https://media-tyo.hls.nhkworld.jp/hls/w/live/1/sig/b95e9aa9a33513b4d3416b7a201ec82c0d5e59c711f7fb0191d49f299d05b62e/a1.m3u8", logo: "https://www.nhk.or.jp/favicon.ico", category: "国际" },
     { name: "VOA Global English", url: "http://voa-ingest.akamaized.net/hls/live/2035200/161_352R/playlist.m3u8", logo: "https://www.voachinese.com/Content/responsive/VOA/zh-CN/img/logo.svg", category: "国际" },
 
     // === 网络音乐 ===
