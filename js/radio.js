@@ -322,6 +322,8 @@ var radioStations = [
     { name: "广州花都广播 Canton Huadu Radio", url: "http://ls.qingting.fm/live/1263.m3u8", logo: "https://radio.baipon.com/img/radio/gzb.ico", category: "内地" },
     { name: "广州交通广播 Canton Traffic", url: "http://ls.qingting.fm/live/4955.m3u8", logo: "https://radio.baipon.com/img/radio/gzb.ico", category: "内地" },
     { name: "广州汽车音乐电台 Car Music Radio", url: "http://live.xmcdn.com/live/257/64.m3u8", logo: "https://radio.baipon.com/img/radio/gzb.ico", category: "内地" },
+    { name: "梅州综合广播", url: "http://ls.qingting.fm/live/24173.m3u8", logo: "https://radio.baipon.com/img/radio/mzzh.ico", category: "内地" },
+    { name: "梅州交通广播", url: "http://ls.qingting.fm/live/24195.m3u8", logo: "https://radio.baipon.com/img/radio/mzjt.ico", category: "内地" },
     { name: "福建财经961 (Fujian Finance Radio 961)", url: "https://satellitepull.cnr.cn/live/wx32fjdnjjgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建东南广播 (Fujian Southeast Radio)", url: "https://satellitepull.cnr.cn/live/wx32fjdngb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
     { name: "福建都市广播 (Fujian City Radio)", url: "https://satellitepull.cnr.cn/live/wx32fjdndsgb/playlist.m3u8", logo: "https://radio.baipon.com/img/radio/fjtv.ico", category: "内地" },
