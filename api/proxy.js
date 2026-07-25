@@ -1,5 +1,7 @@
+import { Readable } from 'node:stream';
+
 export const config = {
-  runtime: 'edge',
+  maxDuration: 60,
 };
 
 const CORS_HEADERS = {
@@ -21,11 +23,34 @@ const HOP_BY_HOP_HEADERS = [
   'content-encoding',
 ];
 
-function corsResponse(body = null, init = {}) {
-  const headers = new Headers(init.headers);
+function getRequestHeader(req, name) {
+  if (req.headers?.get) {
+    return req.headers.get(name);
+  }
+
+  const value = req.headers?.[name.toLowerCase()];
+  return Array.isArray(value) ? value.join(', ') : value || null;
+}
+
+function getRequestUrl(req) {
+  try {
+    return new URL(req.url);
+  } catch {
+    const host = getRequestHeader(req, 'host') || 'localhost';
+    const protocol = getRequestHeader(req, 'x-forwarded-proto') || 'https';
+    return new URL(req.url, `${protocol}://${host}`);
+  }
+}
+
+function applyCorsHeaders(headers) {
   for (const [key, value] of Object.entries(CORS_HEADERS)) {
     headers.set(key, value);
   }
+  return headers;
+}
+
+function corsResponse(body = null, init = {}) {
+  const headers = applyCorsHeaders(new Headers(init.headers));
   return new Response(body, { ...init, headers });
 }
 
@@ -78,13 +103,13 @@ function rewriteM3U8(text, finalUrl, proxyBase) {
 function buildUpstreamHeaders(req, target) {
   const headers = new Headers();
 
-  headers.set('User-Agent', req.headers.get('user-agent') || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-  headers.set('Accept', req.headers.get('accept') || '*/*');
-  headers.set('Accept-Language', req.headers.get('accept-language') || 'zh-CN,zh;q=0.9,en;q=0.8');
+  headers.set('User-Agent', getRequestHeader(req, 'user-agent') || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+  headers.set('Accept', getRequestHeader(req, 'accept') || '*/*');
+  headers.set('Accept-Language', getRequestHeader(req, 'accept-language') || 'zh-CN,zh;q=0.9,en;q=0.8');
   headers.set('Cache-Control', 'no-cache');
   headers.set('Referer', target.origin);
 
-  const range = req.headers.get('range');
+  const range = getRequestHeader(req, 'range');
   if (range) {
     headers.set('Range', range);
   }
@@ -101,15 +126,12 @@ function buildResponseHeaders(response) {
 
   headers.delete('content-security-policy');
   headers.delete('content-security-policy-report-only');
-
-  for (const [key, value] of Object.entries(CORS_HEADERS)) {
-    headers.set(key, value);
-  }
+  applyCorsHeaders(headers);
 
   return headers;
 }
 
-export default async function handler(req) {
+async function createProxyResponse(req) {
   if (req.method === 'OPTIONS') {
     return corsResponse(null, { status: 204 });
   }
@@ -118,7 +140,7 @@ export default async function handler(req) {
     return corsResponse('Method not allowed', { status: 405 });
   }
 
-  const requestUrl = new URL(req.url);
+  const requestUrl = getRequestUrl(req);
   const targetUrl = requestUrl.searchParams.get('url');
 
   if (!targetUrl) {
@@ -183,4 +205,31 @@ export default async function handler(req) {
     console.error('Proxy error:', error);
     return corsResponse(`Proxy request failed: ${error.message}`, { status: 502 });
   }
+}
+
+async function sendNodeResponse(webResponse, res) {
+  res.statusCode = webResponse.status;
+  res.statusMessage = webResponse.statusText;
+
+  webResponse.headers.forEach((value, key) => {
+    res.setHeader(key, value);
+  });
+
+  if (!webResponse.body) {
+    res.end();
+    return;
+  }
+
+  Readable.fromWeb(webResponse.body).pipe(res);
+}
+
+export default async function handler(req, res) {
+  const response = await createProxyResponse(req);
+
+  if (res?.setHeader) {
+    await sendNodeResponse(response, res);
+    return;
+  }
+
+  return response;
 }
