@@ -104,7 +104,7 @@ var radioStations = [
     { name: "台北流行廣播POP Radio", url: "http://202.39.43.67:1935/live/RA000080/chunklist.m3u8", logo: "https://www.pop917.com/images/logo_2025.png", category: "台湾" },
     { name: "台北愛樂电台", url: "http://202.39.43.67:1935/live/RA000018/chunklist.m3u8", logo: "https://www.e-classical.com.tw/img/favicon.ico", category: "台湾" },
     { name: "幸福电台 FM102.5", url: "http://61.218.61.251:8080", logo: "https://www.tr幸福广播.tw/favicon.ico", category: "台湾" },
-    { name: "世新广播电台 88.1", url: "https://stream.ginnet.cloud/live0115lo-89xv/_definst_/fm881/playlist.m3u8", logo: "https://shrs.shu.edu.tw/wp-content/uploads/2021/04/logo.png", category: "台湾" },
+    { name: "世新广播电台 88.1", url: "https://stream.ginnet.cloud/live0115lo-89xv/_definst_/fm881/playlist.m3u8", logo: "https://shrs.shu.edu.tw/wp-content/uploads/2020/06/cropped-shrs-icon_520px-192x192.png", category: "台湾" },
     { name: "台艺之声 88.3", url: "https://votastream.ntua.edu.tw:8443/vota", logo: "https://vota.ntua.edu.tw/member/vota88_3/upload_file/vota88_3/461/16159474612.png", category: "台湾" },
     { name: "辅大之声 88.5", url: "http://fjuvoice885.fju.edu.tw:8000/fjuvoice885.mp3", logo: "https://www.fjucomm.com/fjuvoice885/wp-content/uploads/2017/07/logo%E7%99%BD%E5%B0%8F-01.png", category: "台湾" },
     { name: "政大之声 88.7", url: "http://vnccuonair.nccu.edu.tw:8000/ade.taiwan.mp3", logo: "https://vnccu.nccu.edu.tw/assets/images/style70/kv-small1.jpg", category: "台湾" },
